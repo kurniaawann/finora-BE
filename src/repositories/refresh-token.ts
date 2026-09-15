@@ -37,15 +37,48 @@ export const revokeRefreshToken = async (
   });
 };
 
-export const revokeRefreshTokenByHash = async (
-  tokenHash: string,
+export const replaceRefreshToken = async (
+  oldTokenId: string,
+  newTokenId: string,
 ) => {
   return prisma.refreshToken.update({
     where: {
-      token_hash: tokenHash,
+      id: oldTokenId,
     },
     data: {
       revoked_at: new Date(),
+      replaced_by_token_id: newTokenId,
     },
+  });
+};
+
+export const rotateRefreshToken = async (data: {
+  oldTokenId: string;
+  newToken: {
+    userId: string;
+    tokenHash: string;
+    expiresAt: Date;
+  };
+}) => {
+  return prisma.$transaction(async (tx) => {
+    const newToken = await tx.refreshToken.create({
+      data: {
+        user_id: data.newToken.userId,
+        token_hash: data.newToken.tokenHash,
+        expires_at: data.newToken.expiresAt,
+      },
+    });
+
+    await tx.refreshToken.update({
+      where: {
+        id: data.oldTokenId,
+      },
+      data: {
+        revoked_at: new Date(),
+        replaced_by_token_id: newToken.id,
+      },
+    });
+
+    return newToken;
   });
 };

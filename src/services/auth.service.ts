@@ -1,4 +1,4 @@
-import { createRefreshToken, findRefreshToken, revokeRefreshTokenByHash } from '../repositories/refresh-token.js';
+import { createRefreshToken, findRefreshToken, revokeRefreshToken, rotateRefreshToken } from '../repositories/refresh-token.js';
 import {
   createUser,
   findUserByEmail,
@@ -116,19 +116,48 @@ export const refreshAccessToken = async (
     throw new Error('INVALID_REFRESH_TOKEN');
   }
 
+  /**
+   * Token sudah pernah digunakan.
+   *
+   * Ini dapat mengindikasikan refresh token dicuri
+   * dan digunakan kembali setelah rotation.
+   */
   if (storedToken.revoked_at) {
-    throw new Error('INVALID_REFRESH_TOKEN');
+    throw new Error('REFRESH_TOKEN_REUSED');
   }
 
   if (storedToken.expires_at < new Date()) {
     throw new Error('REFRESH_TOKEN_EXPIRED');
   }
 
-  const payload = verifyRefreshToken(refreshToken);
+  let payload;
+
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch {
+    throw new Error('INVALID_REFRESH_TOKEN');
+  }
 
   if (payload.sub !== storedToken.user_id) {
     throw new Error('INVALID_REFRESH_TOKEN');
   }
+
+  const newRefreshToken =
+    generateRefreshToken(storedToken.user_id);
+
+  const newRefreshTokenHash =
+    hashToken(newRefreshToken);
+
+  const newRefreshTokenRecord =
+    await rotateRefreshToken({
+      oldTokenId: storedToken.id,
+
+      newToken: {
+        userId: storedToken.user_id,
+        tokenHash: newRefreshTokenHash,
+        expiresAt: getRefreshTokenExpiry(),
+      },
+    });
 
   const accessToken = generateAccessToken(
     storedToken.user_id,
@@ -136,6 +165,8 @@ export const refreshAccessToken = async (
 
   return {
     accessToken,
+    refreshToken: newRefreshToken,
+    refreshTokenId: newRefreshTokenRecord.id,
   };
 };
 
@@ -151,6 +182,6 @@ export const logout = async (
   }
 
   if (!storedToken.revoked_at) {
-    await revokeRefreshTokenByHash(tokenHash);
+    await revokeRefreshToken(storedToken.id);
   }
 };

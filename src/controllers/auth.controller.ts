@@ -185,22 +185,74 @@ export const refreshController = async (
       refreshToken,
     );
 
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: env.nodeEnv === 'production',
+      sameSite:
+        env.nodeEnv === 'production'
+          ? 'none'
+          : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: '/api/auth',
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Access token berhasil diperbarui',
-      data: result,
+      data: {
+        accessToken: result.accessToken,
+      },
     });
   } catch (error) {
     if (
       error instanceof Error &&
-      (
-        error.message === 'INVALID_REFRESH_TOKEN' ||
-        error.message === 'REFRESH_TOKEN_EXPIRED'
-      )
+      error.message === 'REFRESH_TOKEN_REUSED'
+    ) {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: env.nodeEnv === 'production',
+        sameSite:
+          env.nodeEnv === 'production'
+            ? 'none'
+            : 'lax',
+        path: '/api/auth',
+      });
+
+      return res.status(401).json({
+        success: false,
+        message:
+          'Refresh token sudah tidak dapat digunakan',
+      });
+    }
+
+    if (
+      error instanceof Error &&
+      error.message === 'REFRESH_TOKEN_EXPIRED'
+    ) {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: env.nodeEnv === 'production',
+        sameSite:
+          env.nodeEnv === 'production'
+            ? 'none'
+            : 'lax',
+        path: '/api/auth',
+      });
+
+      return res.status(401).json({
+        success: false,
+        message: 'Refresh token sudah kedaluwarsa',
+      });
+    }
+
+    if (
+      error instanceof Error &&
+      error.message === 'INVALID_REFRESH_TOKEN'
     ) {
       return res.status(401).json({
         success: false,
-        message: 'Refresh token tidak valid atau sudah kedaluwarsa',
+        message:
+          'Refresh token tidak valid',
       });
     }
 
