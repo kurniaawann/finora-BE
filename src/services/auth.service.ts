@@ -2,6 +2,7 @@ import {
   createUser,
   findUserByEmail,
   findUserByEmailGetProfile,
+  findUserById,
 } from '../repositories/user.repository.js';
 import { generateAccessToken } from '../utils/jwt.js';
 
@@ -64,5 +65,27 @@ export const login = async (input: LoginInput) => {
       profile: user.profiles,
       createdAt: user.created_at,
     },
+  };
+};
+
+export const getCurrentUser = async (userId: string) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new Error('USER_NOT_FOUND');
+  }
+
+  if (!user.is_active) {
+    throw new Error('USER_INACTIVE');
+  }
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    emailVerifiedAt: user.email_verified_at,
+    profile: user.profiles,
+    createdAt: user.created_at,
+    updatedAt: user.updated_at,
   };
 };
