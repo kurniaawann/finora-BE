@@ -14,13 +14,12 @@ export const createUser = async (data: {
   password: string;
 }) => {
   return prisma.user.create({
-    data: {
-        
-      name: data.name,
+    data: {        
+      name:data.name,
       email: data.email,
       password: data.password,
 
-      profile: {
+      profiles: {
         create: {
           currency: 'IDR',
           timezone: 'Asia/Jakarta',
