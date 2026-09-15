@@ -25,7 +25,6 @@ export const createAccountController = async (
     return res.status(201).json({
       success: true,
       message: 'Account berhasil dibuat',
-      data: account,
     });
   } catch (error) {
     console.error(error);
