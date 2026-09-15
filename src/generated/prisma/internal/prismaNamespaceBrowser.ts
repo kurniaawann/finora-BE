@@ -131,6 +131,7 @@ export const RefreshTokenScalarFieldEnum = {
   token_hash: 'token_hash',
   expires_at: 'expires_at',
   revoked_at: 'revoked_at',
+  replaced_by_token_id: 'replaced_by_token_id',
   created_at: 'created_at'
 } as const
 
@@ -560,7 +561,8 @@ export type ProfileOrderByRelevanceFieldEnum = (typeof ProfileOrderByRelevanceFi
 export const RefreshTokenOrderByRelevanceFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  token_hash: 'token_hash'
+  token_hash: 'token_hash',
+  replaced_by_token_id: 'replaced_by_token_id'
 } as const
 
 export type RefreshTokenOrderByRelevanceFieldEnum = (typeof RefreshTokenOrderByRelevanceFieldEnum)[keyof typeof RefreshTokenOrderByRelevanceFieldEnum]

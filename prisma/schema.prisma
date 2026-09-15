@@ -63,16 +63,20 @@ model Profile {
 }
 
 model RefreshToken {
-  id         String    @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
-  user_id    String    @db.VarChar(36)
-  token_hash String    @unique(map: "uk_refresh_tokens_hash") @db.VarChar(255)
-  expires_at DateTime  @db.DateTime(0)
-  revoked_at DateTime? @db.DateTime(0)
-  created_at DateTime  @default(now()) @db.DateTime(0)
-  users      User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_refresh_tokens_user")
+  id                   String         @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  user_id              String         @db.VarChar(36)
+  token_hash           String         @unique(map: "uk_refresh_tokens_hash") @db.VarChar(255)
+  expires_at           DateTime       @db.DateTime(0)
+  revoked_at           DateTime?      @db.DateTime(0)
+  replaced_by_token_id String?        @db.VarChar(36)
+  created_at           DateTime       @default(now()) @db.DateTime(0)
+  refresh_tokens       RefreshToken?  @relation("refresh_tokensTorefresh_tokens", fields: [replaced_by_token_id], references: [id], onUpdate: NoAction, map: "fk_refresh_tokens_replaced_by")
+  other_refresh_tokens RefreshToken[] @relation("refresh_tokensTorefresh_tokens")
+  users                User           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_refresh_tokens_user")
 
   @@index([user_id], map: "idx_refresh_tokens_user_id")
   @@index([expires_at], map: "idx_refresh_tokens_expires_at")
+  @@index([replaced_by_token_id], map: "fk_refresh_tokens_replaced_by")
   @@map("refresh_tokens")
 }
 
