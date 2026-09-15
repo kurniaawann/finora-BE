@@ -21,15 +21,35 @@ export const createAccount = async (data: {
 
 export const findAccountsByUserId = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return prisma.accounts.findMany({
-    where: {
-      user_id: userId,
-    },
-    orderBy: {
-      created_at: 'desc',
-    },
-  });
+  const skip = (page - 1) * perPage;
+
+  const [data, total] = await prisma.$transaction([
+    prisma.accounts.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      skip,
+      take: perPage,
+    }),
+    prisma.accounts.count({
+      where: {
+        user_id: userId,
+      },
+    }),
+  ]);
+
+  return {
+    data,
+    total,
+    page,
+    perPage,
+  };
 };
 
 export const findAccountByIdAndUserId = async (

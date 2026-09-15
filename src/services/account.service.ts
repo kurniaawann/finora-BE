@@ -26,8 +26,10 @@ export const create = async (
 
 export const getAll = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return findAccountsByUserId(userId);
+  return findAccountsByUserId(userId, page, perPage);
 };
 
 export const getById = async (

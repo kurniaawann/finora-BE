@@ -9,6 +9,10 @@ import {
 } from '../services/account.service.js';
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
+import {
+  buildPaginationMeta,
+  parsePagination,
+} from '../utils/pagination.js';
 
 export const createAccountController = async (
   req: Request,
@@ -43,11 +47,19 @@ export const getAccountsController = async (
   try {
     const userId = getAuthenticatedUserId(req);
 
-    const accounts = await getAll(userId);
+    const { page, perPage } = parsePagination(
+      req.query,
+    );
+
+    const result = await getAll(userId, page, perPage);
 
     return res.status(200).json({
       success: true,
-      data: accounts,
+      data: result.data,
+      pagination: buildPaginationMeta(
+        { page, perPage },
+        result.total,
+      ),
     });
   } catch (error) {
     console.error(error);
