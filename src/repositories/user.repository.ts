@@ -8,6 +8,13 @@ export const findUserByEmail = async (email: string) => {
   });
 };
 
+export const findUserByEmailGetProfile = async (email: string) => {
+  return prisma.user.findUnique({
+    where: { email },
+    include: { profiles: true },
+  });
+};
+
 export const createUser = async (data: {
   name: string;
   email: string;

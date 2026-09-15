@@ -21,3 +21,20 @@ export const registerSchema = z.object({
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
+
+
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email('Format email tidak valid')
+    .max(255, 'Email maksimal 255 karakter')
+    .transform((value) => value.toLowerCase()),
+
+  password: z
+    .string()
+    .min(1, 'Password wajib diisi')
+    .max(72, 'Password maksimal 72 karakter'),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;

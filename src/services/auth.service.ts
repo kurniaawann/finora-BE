@@ -1,10 +1,14 @@
 import {
   createUser,
   findUserByEmail,
+  findUserByEmailGetProfile,
 } from '../repositories/user.repository.js';
+import { generateAccessToken } from '../utils/jwt.js';
 
-import { hashPassword } from '../utils/password.js';
-import type { RegisterInput } from '../validators/auth.validator.js';
+import { comparePassword, hashPassword } from '../utils/password.js';
+import type { LoginInput, RegisterInput } from '../validators/auth.validator.js';
+
+
 
 export const register = async (input:RegisterInput) => {
     const existingUser = await findUserByEmail(input.email);
@@ -27,3 +31,38 @@ export const register = async (input:RegisterInput) => {
         createdAt: user.created_at
     }
 }
+
+export const login = async (input: LoginInput) => {
+  const user = await findUserByEmailGetProfile(input.email);
+
+  if (!user) {
+    throw new Error('INVALID_CREDENTIALS');
+  }
+
+  if (!user.is_active) {
+    throw new Error('USER_INACTIVE');
+  }
+
+  const passwordValid = await comparePassword(
+    input.password,
+    user.password,
+  );
+
+  if (!passwordValid) {
+    throw new Error('INVALID_CREDENTIALS');
+  }
+
+  const accessToken = generateAccessToken(user.id);
+
+  return {
+    accessToken,
+
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      profile: user.profiles,
+      createdAt: user.created_at,
+    },
+  };
+};
