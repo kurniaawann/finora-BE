@@ -138,7 +138,7 @@ export const refreshAccessToken = async (
     throw new Error('INVALID_REFRESH_TOKEN');
   }
 
-  if (payload.sub !== storedToken.user_id) {
+  if (payload.id !== storedToken.user_id) {
     throw new Error('INVALID_REFRESH_TOKEN');
   }
 

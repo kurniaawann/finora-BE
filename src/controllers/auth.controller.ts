@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { env } from '../config/env.js';
 import { getCurrentUser, login, logout, refreshAccessToken, register } from '../services/auth.service.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
+import{getAuthenticatedUserId} from '../utils/auth.js'
 
 export const registerController = async (
   req: Request,
@@ -120,15 +121,18 @@ export const meController = async (
   req: Request,
   res: Response,
 ) => {
-  if (!req.user) {
+  const userId = getAuthenticatedUserId(req);
+
+   if (!userId) {
     return res.status(401).json({
       success: false,
       message: 'Autentikasi diperlukan',
     });
   }
 
+
   try {
-    const user = await getCurrentUser(req.user.id);
+    const user = await getCurrentUser(userId);
 
     return res.status(200).json({
       success: true,

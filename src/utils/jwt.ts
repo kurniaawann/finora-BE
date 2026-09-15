@@ -2,18 +2,18 @@ import jwt, { type SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
 export interface AccessTokenPayload {
-  sub: string;
+  id: string;
   type: 'access';
 }
 
 export interface RefreshTokenPayload {
-  sub: string;
+  id: string;
   type: 'refresh';
 }
 
 export const generateAccessToken = (userId: string): string => {
   const payload: AccessTokenPayload = {
-    sub: userId,
+    id: userId,
     type: 'access',
   };
 
@@ -35,14 +35,14 @@ export const verifyAccessToken = (
   if (
     typeof decoded !== 'object' ||
     decoded === null ||
-    typeof decoded.sub !== 'string' ||
+    typeof decoded.id !== 'string' ||
     decoded.type !== 'access'
   ) {
     throw new Error('INVALID_ACCESS_TOKEN');
   }
 
   return {
-    sub: decoded.sub,
+    id: decoded.id,
     type: 'access',
   };
 };
@@ -51,7 +51,7 @@ export const generateRefreshToken = (
   userId: string,
 ): string => {
   const payload: RefreshTokenPayload = {
-    sub: userId,
+    id: userId,
     type: 'refresh',
   };
 
@@ -71,14 +71,14 @@ export const verifyRefreshToken = (
   if (
     typeof decoded !== 'object' ||
     decoded === null ||
-    typeof decoded.sub !== 'string' ||
+    typeof decoded.id !== 'string' ||
     decoded.type !== 'refresh'
   ) {
     throw new Error('INVALID_REFRESH_TOKEN');
   }
 
   return {
-    sub: decoded.sub,
+    id: decoded.id,
     type: 'refresh',
   };
 };
