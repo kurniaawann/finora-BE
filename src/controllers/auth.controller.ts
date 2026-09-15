@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-
-import { getCurrentUser, login, register } from '../services/auth.service.js';
+import { env } from '../config/env.js';
+import { getCurrentUser, login, logout, refreshAccessToken, register } from '../services/auth.service.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
 
 export const registerController = async (
@@ -63,11 +63,29 @@ export const loginController = async (
   try {
     const result = await login(validation.data);
 
+        res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: env.nodeEnv === 'production',
+      sameSite: env.nodeEnv === 'production'
+        ? 'none'
+        : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: '/api/auth',
+    });
+    
     return res.status(200).json({
       success: true,
       message: 'Login berhasil',
-      data: result,
+      data: {
+        accessToken: result.accessToken,
+        user: result.user,
+      },
     });
+    // return res.status(200).json({
+    //   success: true,
+    //   message: 'Login berhasil',
+    //   data: result,
+    // });
   } catch (error) {
     if (
       error instanceof Error &&
@@ -147,4 +165,79 @@ export const meController = async (
       message: 'Terjadi kesalahan pada server',
     });
   }
+};
+
+export const refreshController = async (
+  req: Request,
+  res: Response,
+) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({
+      success: false,
+      message: 'Refresh token tidak ditemukan',
+    });
+  }
+
+  try {
+    const result = await refreshAccessToken(
+      refreshToken,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Access token berhasil diperbarui',
+      data: result,
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (
+        error.message === 'INVALID_REFRESH_TOKEN' ||
+        error.message === 'REFRESH_TOKEN_EXPIRED'
+      )
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: 'Refresh token tidak valid atau sudah kedaluwarsa',
+      });
+    }
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan pada server',
+    });
+  }
+};
+
+export const logoutController = async (
+  req: Request,
+  res: Response,
+) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (refreshToken) {
+    try {
+      await logout(refreshToken);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: env.nodeEnv === 'production',
+    sameSite: env.nodeEnv === 'production'
+      ? 'none'
+      : 'lax',
+    path: '/api/auth',
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logout berhasil',
+  });
 };

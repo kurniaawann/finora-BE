@@ -15,4 +15,6 @@ export const env = {
   frontendUrl: process.env.FRONTEND_URL ?? 'http://localhost:3000',
   jwtAccessSecret: requireEnv('JWT_ACCESS_SECRET'),
   jwtAccessExpiresIn: requireEnv('JWT_ACCESS_EXPIRES_IN') ?? '15m',
+  jwtRefreshSecret:requireEnv('JWT_REFRESH_SECRET'),
+  jwtRefreshExpiresIn:requireEnv('JWT_REFRESH_EXPIRES_IN') ?? '30d',
 };

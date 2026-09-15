@@ -2,7 +2,9 @@ import { Router } from 'express';
 
 import {
   loginController,
+  logoutController,
   meController,
+  refreshController,
   registerController,
 } from '../controllers/auth.controller.js';
 
@@ -18,6 +20,15 @@ router.get(
   '/me',
   authMiddleware,
   meController,
+);
+
+router.post(
+  '/refresh',
+  refreshController,
+);
+router.post(
+  '/logout',
+  logoutController,
 );
 
 export default router;

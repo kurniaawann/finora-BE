@@ -6,6 +6,11 @@ export interface AccessTokenPayload {
   type: 'access';
 }
 
+export interface RefreshTokenPayload {
+  sub: string;
+  type: 'refresh';
+}
+
 export const generateAccessToken = (userId: string): string => {
   const payload: AccessTokenPayload = {
     sub: userId,
@@ -39,5 +44,41 @@ export const verifyAccessToken = (
   return {
     sub: decoded.sub,
     type: 'access',
+  };
+};
+
+export const generateRefreshToken = (
+  userId: string,
+): string => {
+  const payload: RefreshTokenPayload = {
+    sub: userId,
+    type: 'refresh',
+  };
+
+  return jwt.sign(payload, env.jwtRefreshSecret, {
+    expiresIn: env.jwtRefreshExpiresIn as SignOptions['expiresIn'],
+  });
+};
+
+export const verifyRefreshToken = (
+  token: string,
+): RefreshTokenPayload => {
+  const decoded = jwt.verify(
+    token,
+    env.jwtRefreshSecret,
+  );
+
+  if (
+    typeof decoded !== 'object' ||
+    decoded === null ||
+    typeof decoded.sub !== 'string' ||
+    decoded.type !== 'refresh'
+  ) {
+    throw new Error('INVALID_REFRESH_TOKEN');
+  }
+
+  return {
+    sub: decoded.sub,
+    type: 'refresh',
   };
 };
