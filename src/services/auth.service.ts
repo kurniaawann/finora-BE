@@ -21,19 +21,11 @@ export const register = async (input:RegisterInput) => {
     }
 
     const hashedPassword = await hashPassword(input.password);
-    const user = await  createUser({
+    await  createUser({
         name : input.name,
         email : input.email,
         password : hashedPassword,
     });
-
-    return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        profile: user.profiles,
-        createdAt: user.created_at
-    }
 }
 
 export const login = async (input: LoginInput) => {

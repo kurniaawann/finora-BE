@@ -1,5 +1,5 @@
 import { Router } from 'express';
-
+import accountRoutes from './account.routes.js';
 import { prisma } from '../config/database.js';
 import authRoutes from './auth.routes.js';
 
@@ -23,5 +23,6 @@ router.get('/health', async (_req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/accounts', accountRoutes);
 
 export default router;
