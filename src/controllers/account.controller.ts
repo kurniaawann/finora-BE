@@ -13,6 +13,7 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import { fail, success } from '../utils/response.js';
 
 export const createAccountController = async (
   req: Request,
@@ -21,22 +22,24 @@ export const createAccountController = async (
   try {
     const userId = getAuthenticatedUserId(req);
 
-    const account = await create(
+    await create(
       userId,
       req.body,
     );
 
-    return res.status(201).json({
-      success: true,
-      message: 'Account berhasil dibuat',
-    });
+    return success(
+      res,
+      201,
+      'Account berhasil dibuat',
+    );
   } catch (error) {
     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: 'Gagal membuat account',
-    });
+    return fail(
+      res,
+      500,
+      'Gagal membuat account',
+    );
   }
 };
 
@@ -53,21 +56,26 @@ export const getAccountsController = async (
 
     const result = await getAll(userId, page, perPage);
 
-    return res.status(200).json({
-      success: true,
-      data: result.data,
-      pagination: buildPaginationMeta(
-        { page, perPage },
-        result.total,
-      ),
-    });
+    return success(
+      res,
+      200,
+      'Data account berhasil diambil',
+      {
+        data: result.data,
+        pagination: buildPaginationMeta(
+          { page, perPage },
+          result.total,
+        ),
+      },
+    );
   } catch (error) {
     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: 'Gagal mengambil account',
-    });
+    return fail(
+      res,
+      500,
+      'Gagal mengambil account',
+    );
   }
 };
 
@@ -84,27 +92,31 @@ export const getAccountController = async (
       accountId,
     );
 
-    return res.status(200).json({
-      success: true,
-      data: account,
-    });
+    return success(
+      res,
+      200,
+      'Data account berhasil diambil',
+      { data: account },
+    );
   } catch (error) {
     if (
       error instanceof Error &&
       error.message === 'ACCOUNT_NOT_FOUND'
     ) {
-      return res.status(404).json({
-        success: false,
-        message: 'Account tidak ditemukan',
-      });
+      return fail(
+        res,
+        404,
+        'Account tidak ditemukan',
+      );
     }
 
     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: 'Gagal mengambil account',
-    });
+    return fail(
+      res,
+      500,
+      'Gagal mengambil account',
+    );
   }
 };
 
@@ -116,34 +128,36 @@ export const updateAccountController = async (
     const userId = getAuthenticatedUserId(req);
     const accountId = req.params.id as string;
 
-    const account = await update(
+    await update(
       userId,
       accountId,
       req.body,
     );
 
-    return res.status(200).json({
-      success: true,
-      message: 'Account berhasil diperbarui',
-      data: account,
-    });
+    return success(
+      res,
+      200,
+      'Account berhasil diperbarui',
+    );
   } catch (error) {
     if (
       error instanceof Error &&
       error.message === 'ACCOUNT_NOT_FOUND'
     ) {
-      return res.status(404).json({
-        success: false,
-        message: 'Account tidak ditemukan',
-      });
+      return fail(
+        res,
+        404,
+        'Account tidak ditemukan',
+      );
     }
 
     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: 'Gagal memperbarui account',
-    });
+    return fail(
+      res,
+      500,
+      'Gagal memperbarui account',
+    );
   }
 };
 
@@ -160,26 +174,29 @@ export const deleteAccountController = async (
       accountId,
     );
 
-    return res.status(200).json({
-      success: true,
-      message: 'Account berhasil dihapus',
-    });
+    return success(
+      res,
+      200,
+      'Account berhasil dihapus',
+    );
   } catch (error) {
     if (
       error instanceof Error &&
       error.message === 'ACCOUNT_NOT_FOUND'
     ) {
-      return res.status(404).json({
-        success: false,
-        message: 'Account tidak ditemukan',
-      });
+      return fail(
+        res,
+        404,
+        'Account tidak ditemukan',
+      );
     }
 
     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: 'Gagal menghapus account',
-    });
+    return fail(
+      res,
+      500,
+      'Gagal menghapus account',
+    );
   }
 };

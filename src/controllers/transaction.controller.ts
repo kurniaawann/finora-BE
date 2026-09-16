@@ -9,6 +9,7 @@ import {
 } from '../services/transaction.service.js';
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
+import { fail, success } from '../utils/response.js';
 
 export const createTransactionController = async (
   req: Request,
@@ -17,38 +18,39 @@ export const createTransactionController = async (
   try {
     const userId = getAuthenticatedUserId(req);
 
-    const transaction =
-      await createTransactionService(
-        userId,
-        req.body,
-      );
+    await createTransactionService(
+      userId,
+      req.body,
+    );
 
-    return res.status(201).json({
-      success: true,
-      message: 'Transaksi berhasil dibuat',
-      data: transaction,
-    });
+    return success(
+      res,
+      201,
+      'Transaksi berhasil dibuat',
+    );
   } catch (error) {
     if (error instanceof Error) {
       switch (error.message) {
         case 'ACCOUNT_NOT_FOUND':
-          return res.status(404).json({
-            success: false,
-            message: 'Akun tidak ditemukan',
-          });
+          return fail(
+            res,
+            404,
+            'Akun tidak ditemukan',
+          );
 
         case 'CATEGORY_NOT_FOUND':
-          return res.status(404).json({
-            success: false,
-            message: 'Kategori tidak ditemukan',
-          });
+          return fail(
+            res,
+            404,
+            'Kategori tidak ditemukan',
+          );
 
         case 'INVALID_CATEGORY_TYPE':
-          return res.status(422).json({
-            success: false,
-            message:
-              'Tipe kategori tidak sesuai dengan tipe transaksi',
-          });
+          return fail(
+            res,
+            422,
+            'Tipe kategori tidak sesuai dengan tipe transaksi',
+          );
       }
     }
 
@@ -57,10 +59,11 @@ export const createTransactionController = async (
       error,
     );
 
-    return res.status(500).json({
-      success: false,
-      message: 'Terjadi kesalahan pada server',
-    });
+    return fail(
+      res,
+      500,
+      'Terjadi kesalahan pada server',
+    );
   }
 };
 
@@ -74,21 +77,23 @@ export const getTransactionsController = async (
     const transactions =
       await getTransactionsService(userId);
 
-    return res.status(200).json({
-      success: true,
-      message: 'Data transaksi berhasil diambil',
-      data: transactions,
-    });
+    return success(
+      res,
+      200,
+      'Data transaksi berhasil diambil',
+      { data: transactions },
+    );
   } catch (error) {
     console.error(
       'Get transactions error:',
       error,
     );
 
-    return res.status(500).json({
-      success: false,
-      message: 'Terjadi kesalahan pada server',
-    });
+    return fail(
+      res,
+      500,
+      'Terjadi kesalahan pada server',
+    );
   }
 };
 
@@ -104,20 +109,22 @@ export const getTransactionController = async (
     const transaction =
       await getTransactionService(id, userId);
 
-    return res.status(200).json({
-      success: true,
-      message: 'Data transaksi berhasil diambil',
-      data: transaction,
-    });
+    return success(
+      res,
+      200,
+      'Data transaksi berhasil diambil',
+      { data: transaction },
+    );
   } catch (error) {
     if (
       error instanceof Error &&
       error.message === 'TRANSACTION_NOT_FOUND'
     ) {
-      return res.status(404).json({
-        success: false,
-        message: 'Transaksi tidak ditemukan',
-      });
+      return fail(
+        res,
+        404,
+        'Transaksi tidak ditemukan',
+      );
     }
 
     console.error(
@@ -125,10 +132,11 @@ export const getTransactionController = async (
       error,
     );
 
-    return res.status(500).json({
-      success: false,
-      message: 'Terjadi kesalahan pada server',
-    });
+    return fail(
+      res,
+      500,
+      'Terjadi kesalahan pada server',
+    );
   }
 };
 
@@ -141,39 +149,40 @@ export const updateTransactionController = async (
 
     const id = req.params.id as string;
 
-    const transaction =
-      await updateTransactionService(
-        id,
-        userId,
-        req.body,
-      );
+    await updateTransactionService(
+      id,
+      userId,
+      req.body,
+    );
 
-    return res.status(200).json({
-      success: true,
-      message: 'Transaksi berhasil diperbarui',
-      data: transaction,
-    });
+    return success(
+      res,
+      200,
+      'Transaksi berhasil diperbarui',
+    );
   } catch (error) {
     if (error instanceof Error) {
       switch (error.message) {
         case 'TRANSACTION_NOT_FOUND':
-          return res.status(404).json({
-            success: false,
-            message: 'Transaksi tidak ditemukan',
-          });
+          return fail(
+            res,
+            404,
+            'Transaksi tidak ditemukan',
+          );
 
         case 'CATEGORY_NOT_FOUND':
-          return res.status(404).json({
-            success: false,
-            message: 'Kategori tidak ditemukan',
-          });
+          return fail(
+            res,
+            404,
+            'Kategori tidak ditemukan',
+          );
 
         case 'INVALID_CATEGORY_TYPE':
-          return res.status(422).json({
-            success: false,
-            message:
-              'Tipe kategori tidak sesuai dengan tipe transaksi',
-          });
+          return fail(
+            res,
+            422,
+            'Tipe kategori tidak sesuai dengan tipe transaksi',
+          );
       }
     }
 
@@ -182,10 +191,11 @@ export const updateTransactionController = async (
       error,
     );
 
-    return res.status(500).json({
-      success: false,
-      message: 'Terjadi kesalahan pada server',
-    });
+    return fail(
+      res,
+      500,
+      'Terjadi kesalahan pada server',
+    );
   }
 };
 
@@ -203,25 +213,27 @@ export const deleteTransactionController = async (
       userId,
     );
 
-    return res.status(200).json({
-      success: true,
-      message: 'Transaksi berhasil dihapus',
-    });
+    return success(
+      res,
+      200,
+      'Transaksi berhasil dihapus',
+    );
   } catch (error) {
     if (error instanceof Error) {
       switch (error.message) {
         case 'TRANSACTION_NOT_FOUND':
-          return res.status(404).json({
-            success: false,
-            message: 'Transaksi tidak ditemukan',
-          });
+          return fail(
+            res,
+            404,
+            'Transaksi tidak ditemukan',
+          );
 
         case 'TRANSFER_TRANSACTION_NOT_ALLOWED':
-          return res.status(422).json({
-            success: false,
-            message:
-              'Transaksi transfer harus dikelola melalui fitur transfer',
-          });
+          return fail(
+            res,
+            422,
+            'Transaksi transfer harus dikelola melalui fitur transfer',
+          );
       }
     }
 
@@ -230,9 +242,10 @@ export const deleteTransactionController = async (
       error,
     );
 
-    return res.status(500).json({
-      success: false,
-      message: 'Terjadi kesalahan pada server',
-    });
+    return fail(
+      res,
+      500,
+      'Terjadi kesalahan pada server',
+    );
   }
 };
