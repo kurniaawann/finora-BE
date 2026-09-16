@@ -2,7 +2,7 @@ import { Router } from 'express';
 import accountRoutes from './account.routes.js';
 import { prisma } from '../config/database.js';
 import authRoutes from './auth.routes.js';
-
+import transactionRoutes from './transaction.routes.js';
 const router = Router();
 
 router.get('/health', async (_req, res) => {
@@ -24,5 +24,6 @@ router.get('/health', async (_req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/accounts', accountRoutes);
+router.use('/transactions', transactionRoutes);
 
 export default router;
