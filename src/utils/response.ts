@@ -22,10 +22,10 @@ export const success = (
     success: true,
     status_code: statusCode,
     message,
-    ...rest,
     ...(data !== undefined && {
       data,
     }),
+    ...rest,
   });
 };
 
