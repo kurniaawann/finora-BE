@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
 export const accountTypeSchema = z.enum([
-  'bank',
   'cash',
+  'bank',
   'e_wallet',
+  'credit_card',
+  'investment',
   'other',
 ]);
 

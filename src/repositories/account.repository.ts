@@ -132,6 +132,57 @@ export const deleteAccount = async (
   });
 };
 
+export const countAccountReferences = async (
+  accountId: string,
+) => {
+  const [
+    transactions,
+    transfersFrom,
+    transfersTo,
+    expensePayments,
+    paymentMethods,
+    settlements,
+    recurring,
+    savings,
+  ] = await prisma.$transaction([
+    prisma.transactions.count({
+      where: { account_id: accountId },
+    }),
+    prisma.transfers.count({
+      where: { from_account_id: accountId },
+    }),
+    prisma.transfers.count({
+      where: { to_account_id: accountId },
+    }),
+    prisma.expense_payments.count({
+      where: { account_id: accountId },
+    }),
+    prisma.payment_methods.count({
+      where: { account_id: accountId },
+    }),
+    prisma.settlements.count({
+      where: { account_id: accountId },
+    }),
+    prisma.recurring_transactions.count({
+      where: { account_id: accountId },
+    }),
+    prisma.savings_contributions.count({
+      where: { account_id: accountId },
+    }),
+  ]);
+
+  return (
+    transactions +
+    transfersFrom +
+    transfersTo +
+    expensePayments +
+    paymentMethods +
+    settlements +
+    recurring +
+    savings
+  );
+};
+
 export const getAccountBalances = async (
   userId: string,
   accountIds: string[],
@@ -140,27 +191,33 @@ export const getAccountBalances = async (
     return new Map<string, Prisma.Decimal>();
   }
 
-  const transactions = await prisma.transactions.groupBy({
-    by: ['account_id', 'type'],
+  const transactions = await prisma.transactions.findMany({
     where: {
       user_id: userId,
-      account_id: {
-        in: accountIds,
-      },
+      account_id: { in: accountIds },
       status: 'completed',
     },
-    _sum: {
+    select: {
+      account_id: true,
+      type: true,
       amount: true,
+      transfers_transfers_from_transaction_idTotransactions: {
+        select: {
+          id: true,
+        },
+      },
+      transfers_transfers_to_transaction_idTotransactions: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
 
   const balances = new Map<string, Prisma.Decimal>();
 
   for (const accountId of accountIds) {
-    balances.set(
-      accountId,
-      new Prisma.Decimal(0),
-    );
+    balances.set(accountId, new Prisma.Decimal(0));
   }
 
   for (const transaction of transactions) {
@@ -168,27 +225,41 @@ export const getAccountBalances = async (
       balances.get(transaction.account_id) ??
       new Prisma.Decimal(0);
 
-    const amount =
-      transaction._sum.amount ??
-      new Prisma.Decimal(0);
-
     let adjustment = new Prisma.Decimal(0);
 
     switch (transaction.type) {
       case 'income':
       case 'refund':
-        adjustment = amount;
+        adjustment = transaction.amount;
         break;
+
       case 'expense':
-        adjustment = amount.negated();
+        adjustment = transaction.amount.negated();
         break;
 
       case 'adjustment':
-        adjustment = amount;
+        adjustment = transaction.amount;
         break;
 
       case 'transfer':
-        // Transfer akan dikelola oleh module transfer.
+        /*
+         * Transfer memiliki dua transaksi:
+         * - from_transaction = uang keluar
+         * - to_transaction = uang masuk
+         */
+        if (
+          transaction
+            .transfers_transfers_from_transaction_idTotransactions
+            .length > 0
+        ) {
+          adjustment = transaction.amount.negated();
+        } else if (
+          transaction
+            .transfers_transfers_to_transaction_idTotransactions
+            .length > 0
+        ) {
+          adjustment = transaction.amount;
+        }
         break;
     }
 

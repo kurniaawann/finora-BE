@@ -1,4 +1,5 @@
 import {
+  countAccountReferences,
   createAccount,
   deleteAccount,
   findAccountByIdAndUserId,
@@ -15,7 +16,7 @@ export const create = async (
   userId: string,
   input: CreateAccountInput,
 ) => {
-   createAccount({
+  return createAccount({
     userId,
     name: input.name,
     type: input.type,
@@ -87,5 +88,15 @@ export const remove = async (
     throw new Error('ACCOUNT_NOT_FOUND');
   }
 
+  const references = await countAccountReferences(
+    accountId,
+  );
+
+  if (references > 0) {
+    throw new Error('ACCOUNT_HAS_RELATED_DATA');
+  }
+
   await deleteAccount(accountId, userId);
+
+  return true;
 };

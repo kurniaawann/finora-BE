@@ -191,6 +191,17 @@ export const deleteAccountController = async (
       );
     }
 
+    if (
+      error instanceof Error &&
+      error.message === 'ACCOUNT_HAS_RELATED_DATA'
+    ) {
+      return fail(
+        res,
+        422,
+        'Account tidak dapat dihapus karena masih memiliki data terkait. Nonaktifkan saja jika tidak digunakan.',
+      );
+    }
+
     console.error(error);
 
     return fail(
