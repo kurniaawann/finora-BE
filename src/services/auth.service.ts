@@ -1,4 +1,10 @@
-import { createRefreshToken, findRefreshToken, revokeRefreshToken, rotateRefreshToken } from '../repositories/refresh-token.js';
+import {
+  createRefreshToken,
+  findRefreshToken,
+  revokeAllUserRefreshTokens,
+  revokeRefreshToken,
+  rotateRefreshToken,
+} from '../repositories/refresh-token.js';
 import {
   createUser,
   findUserByEmail,
@@ -111,8 +117,15 @@ export const refreshAccessToken = async (
    *
    * Ini dapat mengindikasikan refresh token dicuri
    * dan digunakan kembali setelah rotation.
+   *
+   * Sesuai OWASP best practice, langsung revoke SELURUH
+   * refresh token milik user untuk membatasi dampak pencurian.
    */
   if (storedToken.revoked_at) {
+    await revokeAllUserRefreshTokens(
+      storedToken.user_id,
+    );
+
     throw new Error('REFRESH_TOKEN_REUSED');
   }
 

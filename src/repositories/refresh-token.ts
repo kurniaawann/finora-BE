@@ -37,6 +37,20 @@ export const revokeRefreshToken = async (
   });
 };
 
+export const revokeAllUserRefreshTokens = async (
+  userId: string,
+) => {
+  return prisma.refreshToken.updateMany({
+    where: {
+      user_id: userId,
+      revoked_at: null,
+    },
+    data: {
+      revoked_at: new Date(),
+    },
+  });
+};
+
 export const replaceRefreshToken = async (
   oldTokenId: string,
   newTokenId: string,
