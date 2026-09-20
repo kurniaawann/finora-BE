@@ -2542,8 +2542,11 @@ export const Savings_contributionsScalarFieldEnum = {
   id: 'id',
   goal_id: 'goal_id',
   account_id: 'account_id',
+  contributor_id: 'contributor_id',
   amount: 'amount',
   contribution_date: 'contribution_date',
+  proof_url: 'proof_url',
+  status: 'status',
   note: 'note',
   created_at: 'created_at'
 } as const
@@ -2558,6 +2561,7 @@ export const Savings_goalsScalarFieldEnum = {
   description: 'description',
   target_amount: 'target_amount',
   target_date: 'target_date',
+  share_token: 'share_token',
   icon: 'icon',
   color: 'color',
   is_completed: 'is_completed',
@@ -2904,6 +2908,8 @@ export const savings_contributionsOrderByRelevanceFieldEnum = {
   id: 'id',
   goal_id: 'goal_id',
   account_id: 'account_id',
+  contributor_id: 'contributor_id',
+  proof_url: 'proof_url',
   note: 'note'
 } as const
 
@@ -2915,6 +2921,7 @@ export const savings_goalsOrderByRelevanceFieldEnum = {
   user_id: 'user_id',
   name: 'name',
   description: 'description',
+  share_token: 'share_token',
   icon: 'icon',
   color: 'color'
 } as const
@@ -3100,6 +3107,13 @@ export type Enumrecurring_transactions_typeFieldRefInput<$PrismaModel> = FieldRe
  * Reference to a field of type 'recurring_transactions_frequency'
  */
 export type Enumrecurring_transactions_frequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'recurring_transactions_frequency'>
+    
+
+
+/**
+ * Reference to a field of type 'savings_contributions_status'
+ */
+export type Enumsavings_contributions_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'savings_contributions_status'>
     
 
 

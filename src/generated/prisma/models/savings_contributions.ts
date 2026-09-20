@@ -38,8 +38,11 @@ export type Savings_contributionsMinAggregateOutputType = {
   id: string | null
   goal_id: string | null
   account_id: string | null
+  contributor_id: string | null
   amount: runtime.Decimal | null
   contribution_date: Date | null
+  proof_url: string | null
+  status: $Enums.savings_contributions_status | null
   note: string | null
   created_at: Date | null
 }
@@ -48,8 +51,11 @@ export type Savings_contributionsMaxAggregateOutputType = {
   id: string | null
   goal_id: string | null
   account_id: string | null
+  contributor_id: string | null
   amount: runtime.Decimal | null
   contribution_date: Date | null
+  proof_url: string | null
+  status: $Enums.savings_contributions_status | null
   note: string | null
   created_at: Date | null
 }
@@ -58,8 +64,11 @@ export type Savings_contributionsCountAggregateOutputType = {
   id: number
   goal_id: number
   account_id: number
+  contributor_id: number
   amount: number
   contribution_date: number
+  proof_url: number
+  status: number
   note: number
   created_at: number
   _all: number
@@ -78,8 +87,11 @@ export type Savings_contributionsMinAggregateInputType = {
   id?: true
   goal_id?: true
   account_id?: true
+  contributor_id?: true
   amount?: true
   contribution_date?: true
+  proof_url?: true
+  status?: true
   note?: true
   created_at?: true
 }
@@ -88,8 +100,11 @@ export type Savings_contributionsMaxAggregateInputType = {
   id?: true
   goal_id?: true
   account_id?: true
+  contributor_id?: true
   amount?: true
   contribution_date?: true
+  proof_url?: true
+  status?: true
   note?: true
   created_at?: true
 }
@@ -98,8 +113,11 @@ export type Savings_contributionsCountAggregateInputType = {
   id?: true
   goal_id?: true
   account_id?: true
+  contributor_id?: true
   amount?: true
   contribution_date?: true
+  proof_url?: true
+  status?: true
   note?: true
   created_at?: true
   _all?: true
@@ -195,8 +213,11 @@ export type Savings_contributionsGroupByOutputType = {
   id: string
   goal_id: string
   account_id: string | null
+  contributor_id: string | null
   amount: runtime.Decimal
   contribution_date: Date
+  proof_url: string | null
+  status: $Enums.savings_contributions_status
   note: string | null
   created_at: Date
   _count: Savings_contributionsCountAggregateOutputType | null
@@ -228,24 +249,32 @@ export type savings_contributionsWhereInput = {
   id?: Prisma.StringFilter<"savings_contributions"> | string
   goal_id?: Prisma.StringFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
+  proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  status?: Prisma.Enumsavings_contributions_statusFilter<"savings_contributions"> | $Enums.savings_contributions_status
   note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   savings_goals?: Prisma.XOR<Prisma.Savings_goalsScalarRelationFilter, Prisma.savings_goalsWhereInput>
+  users?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type savings_contributionsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  contributor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
+  proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   accounts?: Prisma.accountsOrderByWithRelationInput
   savings_goals?: Prisma.savings_goalsOrderByWithRelationInput
+  users?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.savings_contributionsOrderByRelevanceInput
 }
 
@@ -256,20 +285,27 @@ export type savings_contributionsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.savings_contributionsWhereInput | Prisma.savings_contributionsWhereInput[]
   goal_id?: Prisma.StringFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
+  proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  status?: Prisma.Enumsavings_contributions_statusFilter<"savings_contributions"> | $Enums.savings_contributions_status
   note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   savings_goals?: Prisma.XOR<Prisma.Savings_goalsScalarRelationFilter, Prisma.savings_goalsWhereInput>
+  users?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type savings_contributionsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  contributor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
+  proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.savings_contributionsCountOrderByAggregateInput
@@ -286,8 +322,11 @@ export type savings_contributionsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"savings_contributions"> | string
   goal_id?: Prisma.StringWithAggregatesFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
+  contributor_id?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalWithAggregatesFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeWithAggregatesFilter<"savings_contributions"> | Date | string
+  proof_url?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
+  status?: Prisma.Enumsavings_contributions_statusWithAggregatesFilter<"savings_contributions"> | $Enums.savings_contributions_status
   note?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"savings_contributions"> | Date | string
 }
@@ -296,18 +335,24 @@ export type savings_contributionsCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
   accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
   savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
 export type savings_contributionsUncheckedCreateInput = {
   id?: string
   goal_id: string
   account_id?: string | null
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -316,18 +361,24 @@ export type savings_contributionsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
   savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,8 +387,11 @@ export type savings_contributionsCreateManyInput = {
   id?: string
   goal_id: string
   account_id?: string | null
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -346,6 +400,8 @@ export type savings_contributionsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,8 +410,11 @@ export type savings_contributionsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -380,8 +439,11 @@ export type savings_contributionsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
+  contributor_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
+  proof_url?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   note?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -394,8 +456,11 @@ export type savings_contributionsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
+  contributor_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
+  proof_url?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   note?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -404,14 +469,59 @@ export type savings_contributionsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
+  contributor_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
+  proof_url?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   note?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
 export type savings_contributionsSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+}
+
+export type savings_contributionsCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput> | Prisma.savings_contributionsCreateWithoutUsersInput[] | Prisma.savings_contributionsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutUsersInput | Prisma.savings_contributionsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.savings_contributionsCreateManyUsersInputEnvelope
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+}
+
+export type savings_contributionsUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput> | Prisma.savings_contributionsCreateWithoutUsersInput[] | Prisma.savings_contributionsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutUsersInput | Prisma.savings_contributionsCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.savings_contributionsCreateManyUsersInputEnvelope
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+}
+
+export type savings_contributionsUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput> | Prisma.savings_contributionsCreateWithoutUsersInput[] | Prisma.savings_contributionsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutUsersInput | Prisma.savings_contributionsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.savings_contributionsUpsertWithWhereUniqueWithoutUsersInput | Prisma.savings_contributionsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.savings_contributionsCreateManyUsersInputEnvelope
+  set?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  disconnect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  delete?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  update?: Prisma.savings_contributionsUpdateWithWhereUniqueWithoutUsersInput | Prisma.savings_contributionsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.savings_contributionsUpdateManyWithWhereWithoutUsersInput | Prisma.savings_contributionsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
+}
+
+export type savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput> | Prisma.savings_contributionsCreateWithoutUsersInput[] | Prisma.savings_contributionsUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutUsersInput | Prisma.savings_contributionsCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.savings_contributionsUpsertWithWhereUniqueWithoutUsersInput | Prisma.savings_contributionsUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.savings_contributionsCreateManyUsersInputEnvelope
+  set?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  disconnect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  delete?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  update?: Prisma.savings_contributionsUpdateWithWhereUniqueWithoutUsersInput | Prisma.savings_contributionsUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.savings_contributionsUpdateManyWithWhereWithoutUsersInput | Prisma.savings_contributionsUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
 }
 
 export type savings_contributionsCreateNestedManyWithoutAccountsInput = {
@@ -456,6 +566,10 @@ export type savings_contributionsUncheckedUpdateManyWithoutAccountsNestedInput =
   deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
 }
 
+export type Enumsavings_contributions_statusFieldUpdateOperationsInput = {
+  set?: $Enums.savings_contributions_status
+}
+
 export type savings_contributionsCreateNestedManyWithoutSavings_goalsInput = {
   create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutSavings_goalsInput, Prisma.savings_contributionsUncheckedCreateWithoutSavings_goalsInput> | Prisma.savings_contributionsCreateWithoutSavings_goalsInput[] | Prisma.savings_contributionsUncheckedCreateWithoutSavings_goalsInput[]
   connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutSavings_goalsInput | Prisma.savings_contributionsCreateOrConnectWithoutSavings_goalsInput[]
@@ -498,20 +612,92 @@ export type savings_contributionsUncheckedUpdateManyWithoutSavings_goalsNestedIn
   deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
 }
 
+export type savings_contributionsCreateWithoutUsersInput = {
+  id?: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+}
+
+export type savings_contributionsUncheckedCreateWithoutUsersInput = {
+  id?: string
+  goal_id: string
+  account_id?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+}
+
+export type savings_contributionsCreateOrConnectWithoutUsersInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput>
+}
+
+export type savings_contributionsCreateManyUsersInputEnvelope = {
+  data: Prisma.savings_contributionsCreateManyUsersInput | Prisma.savings_contributionsCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type savings_contributionsUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  update: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutUsersInput, Prisma.savings_contributionsUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutUsersInput, Prisma.savings_contributionsUncheckedCreateWithoutUsersInput>
+}
+
+export type savings_contributionsUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  data: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutUsersInput, Prisma.savings_contributionsUncheckedUpdateWithoutUsersInput>
+}
+
+export type savings_contributionsUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.savings_contributionsScalarWhereInput
+  data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type savings_contributionsScalarWhereInput = {
+  AND?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
+  OR?: Prisma.savings_contributionsScalarWhereInput[]
+  NOT?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
+  id?: Prisma.StringFilter<"savings_contributions"> | string
+  goal_id?: Prisma.StringFilter<"savings_contributions"> | string
+  account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
+  proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  status?: Prisma.Enumsavings_contributions_statusFilter<"savings_contributions"> | $Enums.savings_contributions_status
+  note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
+}
+
 export type savings_contributionsCreateWithoutAccountsInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
   savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
 export type savings_contributionsUncheckedCreateWithoutAccountsInput = {
   id?: string
   goal_id: string
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -542,33 +728,26 @@ export type savings_contributionsUpdateManyWithWhereWithoutAccountsInput = {
   data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutAccountsInput>
 }
 
-export type savings_contributionsScalarWhereInput = {
-  AND?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
-  OR?: Prisma.savings_contributionsScalarWhereInput[]
-  NOT?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
-  id?: Prisma.StringFilter<"savings_contributions"> | string
-  goal_id?: Prisma.StringFilter<"savings_contributions"> | string
-  account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
-  amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
-  note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
-  created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
-}
-
 export type savings_contributionsCreateWithoutSavings_goalsInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
   accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
 export type savings_contributionsUncheckedCreateWithoutSavings_goalsInput = {
   id?: string
   account_id?: string | null
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -599,11 +778,62 @@ export type savings_contributionsUpdateManyWithWhereWithoutSavings_goalsInput = 
   data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutSavings_goalsInput>
 }
 
+export type savings_contributionsCreateManyUsersInput = {
+  id?: string
+  goal_id: string
+  account_id?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+}
+
+export type savings_contributionsUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+}
+
+export type savings_contributionsUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type savings_contributionsUncheckedUpdateManyWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type savings_contributionsCreateManyAccountsInput = {
   id?: string
   goal_id: string
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -612,16 +842,22 @@ export type savings_contributionsUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -629,8 +865,11 @@ export type savings_contributionsUncheckedUpdateWithoutAccountsInput = {
 export type savings_contributionsUncheckedUpdateManyWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -638,8 +877,11 @@ export type savings_contributionsUncheckedUpdateManyWithoutAccountsInput = {
 export type savings_contributionsCreateManySavings_goalsInput = {
   id?: string
   account_id?: string | null
+  contributor_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
 }
@@ -648,16 +890,22 @@ export type savings_contributionsUpdateWithoutSavings_goalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateWithoutSavings_goalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -665,8 +913,11 @@ export type savings_contributionsUncheckedUpdateWithoutSavings_goalsInput = {
 export type savings_contributionsUncheckedUpdateManyWithoutSavings_goalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -677,12 +928,16 @@ export type savings_contributionsSelect<ExtArgs extends runtime.Types.Extensions
   id?: boolean
   goal_id?: boolean
   account_id?: boolean
+  contributor_id?: boolean
   amount?: boolean
   contribution_date?: boolean
+  proof_url?: boolean
+  status?: boolean
   note?: boolean
   created_at?: boolean
   accounts?: boolean | Prisma.savings_contributions$accountsArgs<ExtArgs>
   savings_goals?: boolean | Prisma.savings_goalsDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.savings_contributions$usersArgs<ExtArgs>
 }, ExtArgs["result"]["savings_contributions"]>
 
 
@@ -691,16 +946,20 @@ export type savings_contributionsSelectScalar = {
   id?: boolean
   goal_id?: boolean
   account_id?: boolean
+  contributor_id?: boolean
   amount?: boolean
   contribution_date?: boolean
+  proof_url?: boolean
+  status?: boolean
   note?: boolean
   created_at?: boolean
 }
 
-export type savings_contributionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "goal_id" | "account_id" | "amount" | "contribution_date" | "note" | "created_at", ExtArgs["result"]["savings_contributions"]>
+export type savings_contributionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "goal_id" | "account_id" | "contributor_id" | "amount" | "contribution_date" | "proof_url" | "status" | "note" | "created_at", ExtArgs["result"]["savings_contributions"]>
 export type savings_contributionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.savings_contributions$accountsArgs<ExtArgs>
   savings_goals?: boolean | Prisma.savings_goalsDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.savings_contributions$usersArgs<ExtArgs>
 }
 
 export type $savings_contributionsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -708,13 +967,17 @@ export type $savings_contributionsPayload<ExtArgs extends runtime.Types.Extensio
   objects: {
     accounts: Prisma.$accountsPayload<ExtArgs> | null
     savings_goals: Prisma.$savings_goalsPayload<ExtArgs>
+    users: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     goal_id: string
     account_id: string | null
+    contributor_id: string | null
     amount: runtime.Decimal
     contribution_date: Date
+    proof_url: string | null
+    status: $Enums.savings_contributions_status
     note: string | null
     created_at: Date
   }, ExtArgs["result"]["savings_contributions"]>
@@ -1059,6 +1322,7 @@ export interface Prisma__savings_contributionsClient<T, Null = never, ExtArgs ex
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accounts<T extends Prisma.savings_contributions$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$accountsArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   savings_goals<T extends Prisma.savings_goalsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_goalsDefaultArgs<ExtArgs>>): Prisma.Prisma__savings_goalsClient<runtime.Types.Result.GetResult<Prisma.$savings_goalsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  users<T extends Prisma.savings_contributions$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$usersArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1091,8 +1355,11 @@ export interface savings_contributionsFieldRefs {
   readonly id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly goal_id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly account_id: Prisma.FieldRef<"savings_contributions", 'String'>
+  readonly contributor_id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly amount: Prisma.FieldRef<"savings_contributions", 'Decimal'>
   readonly contribution_date: Prisma.FieldRef<"savings_contributions", 'DateTime'>
+  readonly proof_url: Prisma.FieldRef<"savings_contributions", 'String'>
+  readonly status: Prisma.FieldRef<"savings_contributions", 'savings_contributions_status'>
   readonly note: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly created_at: Prisma.FieldRef<"savings_contributions", 'DateTime'>
 }
@@ -1459,6 +1726,25 @@ export type savings_contributions$accountsArgs<ExtArgs extends runtime.Types.Ext
    */
   include?: Prisma.accountsInclude<ExtArgs> | null
   where?: Prisma.accountsWhereInput
+}
+
+/**
+ * savings_contributions.users
+ */
+export type savings_contributions$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

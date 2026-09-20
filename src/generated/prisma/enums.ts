@@ -141,6 +141,17 @@ export const expenses_status = {
 export type expenses_status = (typeof expenses_status)[keyof typeof expenses_status]
 
 
+export const savings_contributions_status = {
+  pending: 'pending',
+  submitted: 'submitted',
+  confirmed: 'confirmed',
+  rejected: 'rejected',
+  cancelled: 'cancelled'
+} as const
+
+export type savings_contributions_status = (typeof savings_contributions_status)[keyof typeof savings_contributions_status]
+
+
 export const notifications_type = {
   expense: 'expense',
   payment: 'payment',

@@ -35,6 +35,7 @@ model User {
   profiles                                    Profile?
   recurring_transactions                      recurring_transactions[]
   refresh_tokens                              RefreshToken[]
+  savings_contributions_made                  savings_contributions[]            @relation("savings_contributions_contributor_idTousers")
   savings_goals                               savings_goals[]
   settlements_settlements_from_user_idTousers settlements[]            @relation("settlements_from_user_idTousers")
   settlements_settlements_to_user_idTousers   settlements[]            @relation("settlements_to_user_idTousers")
@@ -471,18 +472,24 @@ model recurring_transactions {
 }
 
 model savings_contributions {
-  id                String        @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
-  goal_id           String        @db.VarChar(36)
-  account_id        String?       @db.VarChar(36)
-  amount            Decimal       @db.Decimal(18, 2)
-  contribution_date DateTime      @default(dbgenerated("(curdate())")) @db.Date
-  note              String?       @db.Text
-  created_at        DateTime      @default(now()) @db.DateTime(0)
-  accounts          accounts?     @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_savings_contributions_acc")
-  savings_goals     savings_goals @relation(fields: [goal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_savings_contributions_goal")
+  id                String                         @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  goal_id           String                         @db.VarChar(36)
+  account_id        String?                        @db.VarChar(36)
+  contributor_id    String?                        @db.VarChar(36)
+  amount            Decimal                        @db.Decimal(18, 2)
+  contribution_date DateTime                       @default(dbgenerated("(curdate())")) @db.Date
+  proof_url         String?                        @db.Text
+  status            savings_contributions_status   @default(pending)
+  note              String?                        @db.Text
+  created_at        DateTime                       @default(now()) @db.DateTime(0)
+  accounts          accounts?                      @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_savings_contributions_acc")
+  savings_goals     savings_goals                  @relation(fields: [goal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_savings_contributions_goal")
+  users             User?                          @relation("savings_contributions_contributor_idTousers", fields: [contributor_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "fk_savings_contributions_contributor")
 
   @@index([account_id], map: "fk_savings_contributions_acc")
+  @@index([contributor_id], map: "idx_savings_contributions_contributor_id")
   @@index([goal_id], map: "idx_savings_contributions_goal_id")
+  @@index([status], map: "idx_savings_contributions_status")
 }
 
 model savings_goals {
@@ -492,6 +499,7 @@ model savings_goals {
   description           String?                 @db.Text
   target_amount         Decimal                 @db.Decimal(18, 2)
   target_date           DateTime?               @db.Date
+  share_token           String?                 @unique(map: "uk_savings_goals_share_token") @db.VarChar(64)
   icon                  String?                 @db.VarChar(100)
   color                 String?                 @db.VarChar(50)
   is_completed          Boolean                 @default(false)
@@ -652,6 +660,14 @@ enum expenses_status {
   draft
   active
   settled
+  cancelled
+}
+
+enum savings_contributions_status {
+  pending
+  submitted
+  confirmed
+  rejected
   cancelled
 }
 

@@ -13,6 +13,12 @@ import { httpLogStream, logger } from './config/logger.js';
 import routes from './routes/index.js';
 import { fail } from './utils/response.js';
 import { generalRateLimiter } from './middlewares/rateLimiter.middleware.js';
+import {
+  ensureUploadDir,
+  uploadDir,
+} from './config/upload.js';
+
+ensureUploadDir();
 
 const app = express();
 
@@ -38,6 +44,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
+
+app.use(
+  '/uploads/images',
+  express.static(uploadDir, {
+    setHeaders: (res) => {
+      res.setHeader(
+        'Cross-Origin-Resource-Policy',
+        'cross-origin',
+      );
+    },
+  }),
+);
 
 app.use('/api', routes);
 

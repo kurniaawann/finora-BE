@@ -6,6 +6,7 @@ import { prisma } from '../config/database.js';
 import authRoutes from './auth.routes.js';
 import transactionRoutes from './transaction.routes.js';
 import transferRoutes from './transfer.routes.js';
+import uploadRoutes from './upload.routes.js';
 const router = Router();
 
 router.get('/health', async (_req, res) => {
@@ -31,5 +32,6 @@ router.use('/transactions', transactionRoutes);
 router.use('/transfers', transferRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/payment-methods', paymentMethodRoutes);
+router.use('/uploads', uploadRoutes);
 
 export default router;

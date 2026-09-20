@@ -225,6 +225,7 @@ export type UserWhereInput = {
   profiles?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
   recurring_transactions?: Prisma.Recurring_transactionsListRelationFilter
   refresh_tokens?: Prisma.RefreshTokenListRelationFilter
+  savings_contributions_made?: Prisma.Savings_contributionsListRelationFilter
   savings_goals?: Prisma.Savings_goalsListRelationFilter
   settlements_settlements_from_user_idTousers?: Prisma.SettlementsListRelationFilter
   settlements_settlements_to_user_idTousers?: Prisma.SettlementsListRelationFilter
@@ -260,6 +261,7 @@ export type UserOrderByWithRelationInput = {
   profiles?: Prisma.ProfileOrderByWithRelationInput
   recurring_transactions?: Prisma.recurring_transactionsOrderByRelationAggregateInput
   refresh_tokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
+  savings_contributions_made?: Prisma.savings_contributionsOrderByRelationAggregateInput
   savings_goals?: Prisma.savings_goalsOrderByRelationAggregateInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsOrderByRelationAggregateInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsOrderByRelationAggregateInput
@@ -299,6 +301,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   profiles?: Prisma.XOR<Prisma.ProfileNullableScalarRelationFilter, Prisma.ProfileWhereInput> | null
   recurring_transactions?: Prisma.Recurring_transactionsListRelationFilter
   refresh_tokens?: Prisma.RefreshTokenListRelationFilter
+  savings_contributions_made?: Prisma.Savings_contributionsListRelationFilter
   savings_goals?: Prisma.Savings_goalsListRelationFilter
   settlements_settlements_from_user_idTousers?: Prisma.SettlementsListRelationFilter
   settlements_settlements_to_user_idTousers?: Prisma.SettlementsListRelationFilter
@@ -362,6 +365,7 @@ export type UserCreateInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -397,6 +401,7 @@ export type UserUncheckedCreateInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -432,6 +437,7 @@ export type UserUpdateInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -467,6 +473,7 @@ export type UserUncheckedUpdateInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -876,6 +883,22 @@ export type UserUpdateOneRequiredWithoutRecurring_transactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecurring_transactionsInput, Prisma.UserUpdateWithoutRecurring_transactionsInput>, Prisma.UserUncheckedUpdateWithoutRecurring_transactionsInput>
 }
 
+export type UserCreateNestedOneWithoutSavings_contributions_madeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedCreateWithoutSavings_contributions_madeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavings_contributions_madeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutSavings_contributions_madeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedCreateWithoutSavings_contributions_madeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavings_contributions_madeInput
+  upsert?: Prisma.UserUpsertWithoutSavings_contributions_madeInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavings_contributions_madeInput, Prisma.UserUpdateWithoutSavings_contributions_madeInput>, Prisma.UserUncheckedUpdateWithoutSavings_contributions_madeInput>
+}
+
 export type UserCreateNestedOneWithoutSavings_goalsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSavings_goalsInput, Prisma.UserUncheckedCreateWithoutSavings_goalsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavings_goalsInput
@@ -945,6 +968,7 @@ export type UserCreateWithoutProfilesInput = {
   payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -979,6 +1003,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1029,6 +1054,7 @@ export type UserUpdateWithoutProfilesInput = {
   payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1063,6 +1089,7 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1097,6 +1124,7 @@ export type UserCreateWithoutRefresh_tokensInput = {
   payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1131,6 +1159,7 @@ export type UserUncheckedCreateWithoutRefresh_tokensInput = {
   payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1181,6 +1210,7 @@ export type UserUpdateWithoutRefresh_tokensInput = {
   payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1215,6 +1245,7 @@ export type UserUncheckedUpdateWithoutRefresh_tokensInput = {
   payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1249,6 +1280,7 @@ export type UserCreateWithoutAccountsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1283,6 +1315,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1333,6 +1366,7 @@ export type UserUpdateWithoutAccountsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1367,6 +1401,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1401,6 +1436,7 @@ export type UserCreateWithoutCategoriesInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1435,6 +1471,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1485,6 +1522,7 @@ export type UserUpdateWithoutCategoriesInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1519,6 +1557,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1553,6 +1592,7 @@ export type UserCreateWithoutGroupsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1587,6 +1627,7 @@ export type UserUncheckedCreateWithoutGroupsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1637,6 +1678,7 @@ export type UserUpdateWithoutGroupsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1671,6 +1713,7 @@ export type UserUncheckedUpdateWithoutGroupsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1705,6 +1748,7 @@ export type UserCreateWithoutEvent_membersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1739,6 +1783,7 @@ export type UserUncheckedCreateWithoutEvent_membersInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1789,6 +1834,7 @@ export type UserUpdateWithoutEvent_membersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1823,6 +1869,7 @@ export type UserUncheckedUpdateWithoutEvent_membersInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1857,6 +1904,7 @@ export type UserCreateWithoutEventsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1891,6 +1939,7 @@ export type UserUncheckedCreateWithoutEventsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -1941,6 +1990,7 @@ export type UserUpdateWithoutEventsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -1975,6 +2025,7 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2009,6 +2060,7 @@ export type UserCreateWithoutExpense_item_membersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2043,6 +2095,7 @@ export type UserUncheckedCreateWithoutExpense_item_membersInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2093,6 +2146,7 @@ export type UserUpdateWithoutExpense_item_membersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2127,6 +2181,7 @@ export type UserUncheckedUpdateWithoutExpense_item_membersInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2161,6 +2216,7 @@ export type UserCreateWithoutExpense_membersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2195,6 +2251,7 @@ export type UserUncheckedCreateWithoutExpense_membersInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2245,6 +2302,7 @@ export type UserUpdateWithoutExpense_membersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2279,6 +2337,7 @@ export type UserUncheckedUpdateWithoutExpense_membersInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2313,6 +2372,7 @@ export type UserCreateWithoutExpense_paymentsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2347,6 +2407,7 @@ export type UserUncheckedCreateWithoutExpense_paymentsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2397,6 +2458,7 @@ export type UserUpdateWithoutExpense_paymentsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2431,6 +2493,7 @@ export type UserUncheckedUpdateWithoutExpense_paymentsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2465,6 +2528,7 @@ export type UserCreateWithoutExpensesInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2499,6 +2563,7 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2549,6 +2614,7 @@ export type UserUpdateWithoutExpensesInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2583,6 +2649,7 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2617,6 +2684,7 @@ export type UserCreateWithoutGroup_membersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2651,6 +2719,7 @@ export type UserUncheckedCreateWithoutGroup_membersInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2701,6 +2770,7 @@ export type UserUpdateWithoutGroup_membersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2735,6 +2805,7 @@ export type UserUncheckedUpdateWithoutGroup_membersInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2769,6 +2840,7 @@ export type UserCreateWithoutInvitations_invitations_invitee_idTousersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2803,6 +2875,7 @@ export type UserUncheckedCreateWithoutInvitations_invitations_invitee_idTousersI
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2842,6 +2915,7 @@ export type UserCreateWithoutInvitations_invitations_inviter_idTousersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2876,6 +2950,7 @@ export type UserUncheckedCreateWithoutInvitations_invitations_inviter_idTousersI
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -2926,6 +3001,7 @@ export type UserUpdateWithoutInvitations_invitations_invitee_idTousersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -2960,6 +3036,7 @@ export type UserUncheckedUpdateWithoutInvitations_invitations_invitee_idTousersI
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3005,6 +3082,7 @@ export type UserUpdateWithoutInvitations_invitations_inviter_idTousersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3039,6 +3117,7 @@ export type UserUncheckedUpdateWithoutInvitations_invitations_inviter_idTousersI
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3073,6 +3152,7 @@ export type UserCreateWithoutPayment_methodsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3107,6 +3187,7 @@ export type UserUncheckedCreateWithoutPayment_methodsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3157,6 +3238,7 @@ export type UserUpdateWithoutPayment_methodsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3191,6 +3273,7 @@ export type UserUncheckedUpdateWithoutPayment_methodsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3226,6 +3309,7 @@ export type UserCreateWithoutSettlements_settlements_from_user_idTousersInput = 
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
@@ -3260,6 +3344,7 @@ export type UserUncheckedCreateWithoutSettlements_settlements_from_user_idTouser
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
@@ -3299,6 +3384,7 @@ export type UserCreateWithoutSettlements_settlements_to_user_idTousersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
@@ -3333,6 +3419,7 @@ export type UserUncheckedCreateWithoutSettlements_settlements_to_user_idTousersI
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
@@ -3383,6 +3470,7 @@ export type UserUpdateWithoutSettlements_settlements_from_user_idTousersInput = 
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
@@ -3417,6 +3505,7 @@ export type UserUncheckedUpdateWithoutSettlements_settlements_from_user_idTouser
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -3462,6 +3551,7 @@ export type UserUpdateWithoutSettlements_settlements_to_user_idTousersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
@@ -3496,6 +3586,7 @@ export type UserUncheckedUpdateWithoutSettlements_settlements_to_user_idTousersI
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -3529,6 +3620,7 @@ export type UserCreateWithoutAudit_logsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3563,6 +3655,7 @@ export type UserUncheckedCreateWithoutAudit_logsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3613,6 +3706,7 @@ export type UserUpdateWithoutAudit_logsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3647,6 +3741,7 @@ export type UserUncheckedUpdateWithoutAudit_logsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3681,6 +3776,7 @@ export type UserCreateWithoutBudgetsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3715,6 +3811,7 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3765,6 +3862,7 @@ export type UserUpdateWithoutBudgetsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3799,6 +3897,7 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3833,6 +3932,7 @@ export type UserCreateWithoutNotificationsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3867,6 +3967,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -3917,6 +4018,7 @@ export type UserUpdateWithoutNotificationsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3951,6 +4053,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -3985,6 +4088,7 @@ export type UserCreateWithoutRecurring_transactionsInput = {
   payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4019,6 +4123,7 @@ export type UserUncheckedCreateWithoutRecurring_transactionsInput = {
   payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4069,6 +4174,7 @@ export type UserUpdateWithoutRecurring_transactionsInput = {
   payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -4102,6 +4208,163 @@ export type UserUncheckedUpdateWithoutRecurring_transactionsInput = {
   notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
   payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type UserCreateWithoutSavings_contributions_madeInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersCreateNestedManyWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutSavings_contributions_madeInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersUncheckedCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsUncheckedCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type UserCreateOrConnectWithoutSavings_contributions_madeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedCreateWithoutSavings_contributions_madeInput>
+}
+
+export type UserUpsertWithoutSavings_contributions_madeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedUpdateWithoutSavings_contributions_madeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedCreateWithoutSavings_contributions_madeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavings_contributions_madeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavings_contributions_madeInput, Prisma.UserUncheckedUpdateWithoutSavings_contributions_madeInput>
+}
+
+export type UserUpdateWithoutSavings_contributions_madeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavings_contributions_madeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUncheckedUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
@@ -4138,6 +4401,7 @@ export type UserCreateWithoutSavings_goalsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
@@ -4172,6 +4436,7 @@ export type UserUncheckedCreateWithoutSavings_goalsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
@@ -4222,6 +4487,7 @@ export type UserUpdateWithoutSavings_goalsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
@@ -4256,6 +4522,7 @@ export type UserUncheckedUpdateWithoutSavings_goalsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -4290,6 +4557,7 @@ export type UserCreateWithoutTransactionsInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4324,6 +4592,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4374,6 +4643,7 @@ export type UserUpdateWithoutTransactionsInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -4408,6 +4678,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -4442,6 +4713,7 @@ export type UserCreateWithoutTransfersInput = {
   profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4476,6 +4748,7 @@ export type UserUncheckedCreateWithoutTransfersInput = {
   profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
   savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
@@ -4526,6 +4799,7 @@ export type UserUpdateWithoutTransfersInput = {
   profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -4560,6 +4834,7 @@ export type UserUncheckedUpdateWithoutTransfersInput = {
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
   recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
   refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
   savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
   settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
   settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
@@ -4590,6 +4865,7 @@ export type UserCountOutputType = {
   payment_methods: number
   recurring_transactions: number
   refresh_tokens: number
+  savings_contributions_made: number
   savings_goals: number
   settlements_settlements_from_user_idTousers: number
   settlements_settlements_to_user_idTousers: number
@@ -4616,6 +4892,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   payment_methods?: boolean | UserCountOutputTypeCountPayment_methodsArgs
   recurring_transactions?: boolean | UserCountOutputTypeCountRecurring_transactionsArgs
   refresh_tokens?: boolean | UserCountOutputTypeCountRefresh_tokensArgs
+  savings_contributions_made?: boolean | UserCountOutputTypeCountSavings_contributions_madeArgs
   savings_goals?: boolean | UserCountOutputTypeCountSavings_goalsArgs
   settlements_settlements_from_user_idTousers?: boolean | UserCountOutputTypeCountSettlements_settlements_from_user_idTousersArgs
   settlements_settlements_to_user_idTousers?: boolean | UserCountOutputTypeCountSettlements_settlements_to_user_idTousersArgs
@@ -4762,6 +5039,13 @@ export type UserCountOutputTypeCountRefresh_tokensArgs<ExtArgs extends runtime.T
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountSavings_contributions_madeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.savings_contributionsWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountSavings_goalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.savings_goalsWhereInput
 }
@@ -4823,6 +5107,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   recurring_transactions?: boolean | Prisma.User$recurring_transactionsArgs<ExtArgs>
   refresh_tokens?: boolean | Prisma.User$refresh_tokensArgs<ExtArgs>
+  savings_contributions_made?: boolean | Prisma.User$savings_contributions_madeArgs<ExtArgs>
   savings_goals?: boolean | Prisma.User$savings_goalsArgs<ExtArgs>
   settlements_settlements_from_user_idTousers?: boolean | Prisma.User$settlements_settlements_from_user_idTousersArgs<ExtArgs>
   settlements_settlements_to_user_idTousers?: boolean | Prisma.User$settlements_settlements_to_user_idTousersArgs<ExtArgs>
@@ -4865,6 +5150,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   recurring_transactions?: boolean | Prisma.User$recurring_transactionsArgs<ExtArgs>
   refresh_tokens?: boolean | Prisma.User$refresh_tokensArgs<ExtArgs>
+  savings_contributions_made?: boolean | Prisma.User$savings_contributions_madeArgs<ExtArgs>
   savings_goals?: boolean | Prisma.User$savings_goalsArgs<ExtArgs>
   settlements_settlements_from_user_idTousers?: boolean | Prisma.User$settlements_settlements_from_user_idTousersArgs<ExtArgs>
   settlements_settlements_to_user_idTousers?: boolean | Prisma.User$settlements_settlements_to_user_idTousersArgs<ExtArgs>
@@ -4895,6 +5181,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     profiles: Prisma.$ProfilePayload<ExtArgs> | null
     recurring_transactions: Prisma.$recurring_transactionsPayload<ExtArgs>[]
     refresh_tokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+    savings_contributions_made: Prisma.$savings_contributionsPayload<ExtArgs>[]
     savings_goals: Prisma.$savings_goalsPayload<ExtArgs>[]
     settlements_settlements_from_user_idTousers: Prisma.$settlementsPayload<ExtArgs>[]
     settlements_settlements_to_user_idTousers: Prisma.$settlementsPayload<ExtArgs>[]
@@ -5269,6 +5556,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   profiles<T extends Prisma.User$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilesArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   recurring_transactions<T extends Prisma.User$recurring_transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recurring_transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$recurring_transactionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refresh_tokens<T extends Prisma.User$refresh_tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refresh_tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savings_contributions_made<T extends Prisma.User$savings_contributions_madeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savings_contributions_madeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$savings_contributionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   savings_goals<T extends Prisma.User$savings_goalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savings_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$savings_goalsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   settlements_settlements_from_user_idTousers<T extends Prisma.User$settlements_settlements_from_user_idTousersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$settlements_settlements_from_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$settlementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   settlements_settlements_to_user_idTousers<T extends Prisma.User$settlements_settlements_to_user_idTousersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$settlements_settlements_to_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$settlementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6107,6 +6395,30 @@ export type User$refresh_tokensArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
+ * User.savings_contributions_made
+ */
+export type User$savings_contributions_madeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the savings_contributions
+   */
+  select?: Prisma.savings_contributionsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the savings_contributions
+   */
+  omit?: Prisma.savings_contributionsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.savings_contributionsInclude<ExtArgs> | null
+  where?: Prisma.savings_contributionsWhereInput
+  orderBy?: Prisma.savings_contributionsOrderByWithRelationInput | Prisma.savings_contributionsOrderByWithRelationInput[]
+  cursor?: Prisma.savings_contributionsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Savings_contributionsScalarFieldEnum | Prisma.Savings_contributionsScalarFieldEnum[]
 }
 
 /**

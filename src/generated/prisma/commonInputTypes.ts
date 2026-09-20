@@ -559,6 +559,23 @@ export type Enumrecurring_transactions_frequencyWithAggregatesFilter<$PrismaMode
   _max?: Prisma.NestedEnumrecurring_transactions_frequencyFilter<$PrismaModel>
 }
 
+export type Enumsavings_contributions_statusFilter<$PrismaModel = never> = {
+  equals?: $Enums.savings_contributions_status | Prisma.Enumsavings_contributions_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.savings_contributions_status[]
+  notIn?: $Enums.savings_contributions_status[]
+  not?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel> | $Enums.savings_contributions_status
+}
+
+export type Enumsavings_contributions_statusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.savings_contributions_status | Prisma.Enumsavings_contributions_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.savings_contributions_status[]
+  notIn?: $Enums.savings_contributions_status[]
+  not?: Prisma.NestedEnumsavings_contributions_statusWithAggregatesFilter<$PrismaModel> | $Enums.savings_contributions_status
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel>
+}
+
 export type Enumtransactions_typeFilter<$PrismaModel = never> = {
   equals?: $Enums.transactions_type | Prisma.Enumtransactions_typeFieldRefInput<$PrismaModel>
   in?: $Enums.transactions_type[]
@@ -1099,6 +1116,23 @@ export type NestedEnumrecurring_transactions_frequencyWithAggregatesFilter<$Pris
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumrecurring_transactions_frequencyFilter<$PrismaModel>
   _max?: Prisma.NestedEnumrecurring_transactions_frequencyFilter<$PrismaModel>
+}
+
+export type NestedEnumsavings_contributions_statusFilter<$PrismaModel = never> = {
+  equals?: $Enums.savings_contributions_status | Prisma.Enumsavings_contributions_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.savings_contributions_status[]
+  notIn?: $Enums.savings_contributions_status[]
+  not?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel> | $Enums.savings_contributions_status
+}
+
+export type NestedEnumsavings_contributions_statusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.savings_contributions_status | Prisma.Enumsavings_contributions_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.savings_contributions_status[]
+  notIn?: $Enums.savings_contributions_status[]
+  not?: Prisma.NestedEnumsavings_contributions_statusWithAggregatesFilter<$PrismaModel> | $Enums.savings_contributions_status
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumsavings_contributions_statusFilter<$PrismaModel>
 }
 
 export type NestedEnumtransactions_typeFilter<$PrismaModel = never> = {
