@@ -42,7 +42,6 @@ model User {
   transactions                                transactions[]
   transfers                                   transfers[]
 
-  @@index([is_active], map: "idx_users_active")
   @@map("users")
 }
 
@@ -59,7 +58,6 @@ model Profile {
   updated_at DateTime @updatedAt @db.DateTime(0)
   users      User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_profiles_user")
 
-  @@index([user_id], map: "idx_profiles_user_id")
   @@map("profiles")
 }
 
@@ -76,7 +74,6 @@ model RefreshToken {
   users                User           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_refresh_tokens_user")
 
   @@index([user_id], map: "idx_refresh_tokens_user_id")
-  @@index([expires_at], map: "idx_refresh_tokens_expires_at")
   @@index([replaced_by_token_id], map: "fk_refresh_tokens_replaced_by")
   @@map("refresh_tokens")
 }
@@ -104,7 +101,6 @@ model accounts {
   transfers_transfers_from_account_idToaccounts transfers[]              @relation("transfers_from_account_idToaccounts")
   transfers_transfers_to_account_idToaccounts   transfers[]              @relation("transfers_to_account_idToaccounts")
 
-  @@index([user_id, is_active], map: "idx_accounts_active")
   @@index([user_id], map: "idx_accounts_user_id")
 }
 
@@ -162,7 +158,6 @@ model event_members {
   users     User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event_members_user")
 
   @@unique([event_id, user_id], map: "uk_event_user")
-  @@index([event_id], map: "idx_event_members_event_id")
   @@index([user_id], map: "idx_event_members_user_id")
 }
 
@@ -203,7 +198,6 @@ model expense_item_members {
   users           User?         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_expense_item_members_user")
 
   @@unique([expense_item_id, user_id], map: "idx_expense_item_members_user_unique")
-  @@index([expense_item_id], map: "idx_expense_item_members_item_id")
   @@index([user_id], map: "idx_expense_item_members_user_id")
 }
 
@@ -237,7 +231,6 @@ model expense_members {
   users      User?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_expense_members_user")
 
   @@unique([expense_id, user_id], map: "idx_expense_members_user_unique")
-  @@index([expense_id], map: "idx_expense_members_expense_id")
   @@index([user_id], map: "idx_expense_members_user_id")
 }
 
@@ -292,7 +285,6 @@ model expenses {
 
   @@index([event_id], map: "fk_expenses_event")
   @@index([created_by], map: "idx_expenses_created_by")
-  @@index([expense_date, status], map: "idx_expenses_date_status")
   @@index([group_id], map: "idx_expenses_group_id")
 }
 
@@ -307,7 +299,6 @@ model group_members {
   users     User               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_group_members_user")
 
   @@unique([group_id, user_id], map: "uk_group_user")
-  @@index([group_id], map: "idx_group_members_group_id")
   @@index([user_id], map: "idx_group_members_user_id")
 }
 
@@ -344,6 +335,7 @@ model payment_methods {
   created_at       DateTime             @default(now()) @db.DateTime(0)
   updated_at       DateTime             @updatedAt @db.DateTime(0)
   expense_payments expense_payments[]
+  savings_contributions savings_contributions[]
   accounts         accounts?            @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_payment_methods_account")
   users            User                 @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_payment_methods_user")
   settlements      settlements[]
@@ -378,7 +370,6 @@ model settlements {
   @@index([payment_method_id], map: "fk_settlements_pm")
   @@index([to_user_id], map: "fk_settlements_to_user")
   @@index([group_id], map: "idx_settlements_group_id")
-  @@index([status], map: "idx_settlements_status")
   @@index([from_user_id, to_user_id], map: "idx_settlements_users")
 }
 
@@ -410,7 +401,6 @@ model budget_categories {
   categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_budget_categories_category")
 
   @@unique([budget_id, category_id], map: "uk_budget_category")
-  @@index([budget_id], map: "idx_budget_categories_budget_id")
   @@index([category_id], map: "idx_budget_categories_category_id")
 }
 
@@ -428,7 +418,6 @@ model budgets {
   users             User                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_budgets_user")
 
   @@index([user_id, start_date, end_date], map: "idx_budgets_dates")
-  @@index([user_id], map: "idx_budgets_user_id")
 }
 
 model notifications {
@@ -467,7 +456,6 @@ model recurring_transactions {
 
   @@index([account_id], map: "fk_recurring_account")
   @@index([category_id], map: "fk_recurring_category")
-  @@index([next_run_date, is_active], map: "idx_recurring_next_run")
   @@index([user_id], map: "idx_recurring_user_id")
 }
 
@@ -476,6 +464,7 @@ model savings_contributions {
   goal_id           String                         @db.VarChar(36)
   account_id        String?                        @db.VarChar(36)
   contributor_id    String?                        @db.VarChar(36)
+  payment_method_id String?                        @db.VarChar(36)
   amount            Decimal                        @db.Decimal(18, 2)
   contribution_date DateTime                       @default(dbgenerated("(curdate())")) @db.Date
   proof_url         String?                        @db.Text
@@ -483,13 +472,15 @@ model savings_contributions {
   note              String?                        @db.Text
   created_at        DateTime                       @default(now()) @db.DateTime(0)
   accounts          accounts?                      @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_savings_contributions_acc")
+  payment_methods   payment_methods?               @relation(fields: [payment_method_id], references: [id], onUpdate: NoAction, map: "fk_savings_contributions_pm")
   savings_goals     savings_goals                  @relation(fields: [goal_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_savings_contributions_goal")
+  transactions      transactions?
   users             User?                          @relation("savings_contributions_contributor_idTousers", fields: [contributor_id], references: [id], onDelete: SetNull, onUpdate: NoAction, map: "fk_savings_contributions_contributor")
 
   @@index([account_id], map: "fk_savings_contributions_acc")
   @@index([contributor_id], map: "idx_savings_contributions_contributor_id")
   @@index([goal_id], map: "idx_savings_contributions_goal_id")
-  @@index([status], map: "idx_savings_contributions_status")
+  @@index([payment_method_id], map: "fk_savings_contributions_pm")
 }
 
 model savings_goals {
@@ -525,21 +516,21 @@ model transactions {
   reference_number                                      String?             @db.VarChar(255)
   expense_payment_id                                    String?             @unique(map: "expense_payment_id") @db.VarChar(36)
   settlement_id                                         String?             @unique(map: "settlement_id") @db.VarChar(36)
+  savings_contribution_id                               String?             @unique(map: "savings_contribution_id") @db.VarChar(36)
   created_at                                            DateTime            @default(now()) @db.DateTime(0)
   updated_at                                            DateTime            @updatedAt @db.DateTime(0)
   accounts                                              accounts            @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_transactions_account")
   categories                                            categories?         @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "fk_transactions_category")
   expense_payments                                      expense_payments?   @relation(fields: [expense_payment_id], references: [id], onUpdate: NoAction, map: "fk_transactions_exp_payment")
   settlements                                           settlements?        @relation(fields: [settlement_id], references: [id], onUpdate: NoAction, map: "fk_transactions_settlement")
+  savings_contributions                                 savings_contributions? @relation(fields: [savings_contribution_id], references: [id], onUpdate: NoAction, map: "fk_transactions_sav_contribution")
   users                                                 User                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_transactions_user")
   transfers_transfers_from_transaction_idTotransactions transfers[]         @relation("transfers_from_transaction_idTotransactions")
   transfers_transfers_to_transaction_idTotransactions   transfers[]         @relation("transfers_to_transaction_idTotransactions")
 
   @@index([account_id], map: "fk_transactions_account")
   @@index([category_id], map: "fk_transactions_category")
-  @@index([user_id, account_id], map: "idx_transactions_user_account")
   @@index([user_id, transaction_date], map: "idx_transactions_user_date")
-  @@index([user_id, type], map: "idx_transactions_user_type")
 }
 
 model transfers {
@@ -564,7 +555,6 @@ model transfers {
   @@index([to_account_id], map: "fk_transfers_to_acc")
   @@index([to_transaction_id], map: "fk_transfers_to_tx")
   @@index([user_id, transfer_date], map: "idx_transfers_date")
-  @@index([user_id], map: "idx_transfers_user_id")
 }
 
 enum accounts_type {

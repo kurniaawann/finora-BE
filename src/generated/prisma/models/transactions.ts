@@ -48,6 +48,7 @@ export type TransactionsMinAggregateOutputType = {
   reference_number: string | null
   expense_payment_id: string | null
   settlement_id: string | null
+  savings_contribution_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -66,6 +67,7 @@ export type TransactionsMaxAggregateOutputType = {
   reference_number: string | null
   expense_payment_id: string | null
   settlement_id: string | null
+  savings_contribution_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -84,6 +86,7 @@ export type TransactionsCountAggregateOutputType = {
   reference_number: number
   expense_payment_id: number
   settlement_id: number
+  savings_contribution_id: number
   created_at: number
   updated_at: number
   _all: number
@@ -112,6 +115,7 @@ export type TransactionsMinAggregateInputType = {
   reference_number?: true
   expense_payment_id?: true
   settlement_id?: true
+  savings_contribution_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -130,6 +134,7 @@ export type TransactionsMaxAggregateInputType = {
   reference_number?: true
   expense_payment_id?: true
   settlement_id?: true
+  savings_contribution_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -148,6 +153,7 @@ export type TransactionsCountAggregateInputType = {
   reference_number?: true
   expense_payment_id?: true
   settlement_id?: true
+  savings_contribution_id?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -253,6 +259,7 @@ export type TransactionsGroupByOutputType = {
   reference_number: string | null
   expense_payment_id: string | null
   settlement_id: string | null
+  savings_contribution_id: string | null
   created_at: Date
   updated_at: Date
   _count: TransactionsCountAggregateOutputType | null
@@ -294,12 +301,14 @@ export type transactionsWhereInput = {
   reference_number?: Prisma.StringNullableFilter<"transactions"> | string | null
   expense_payment_id?: Prisma.StringNullableFilter<"transactions"> | string | null
   settlement_id?: Prisma.StringNullableFilter<"transactions"> | string | null
+  savings_contribution_id?: Prisma.StringNullableFilter<"transactions"> | string | null
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsScalarRelationFilter, Prisma.accountsWhereInput>
   categories?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.categoriesWhereInput> | null
   expense_payments?: Prisma.XOR<Prisma.Expense_paymentsNullableScalarRelationFilter, Prisma.expense_paymentsWhereInput> | null
   settlements?: Prisma.XOR<Prisma.SettlementsNullableScalarRelationFilter, Prisma.settlementsWhereInput> | null
+  savings_contributions?: Prisma.XOR<Prisma.Savings_contributionsNullableScalarRelationFilter, Prisma.savings_contributionsWhereInput> | null
   users?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   transfers_transfers_from_transaction_idTotransactions?: Prisma.TransfersListRelationFilter
   transfers_transfers_to_transaction_idTotransactions?: Prisma.TransfersListRelationFilter
@@ -319,12 +328,14 @@ export type transactionsOrderByWithRelationInput = {
   reference_number?: Prisma.SortOrderInput | Prisma.SortOrder
   expense_payment_id?: Prisma.SortOrderInput | Prisma.SortOrder
   settlement_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  savings_contribution_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   accounts?: Prisma.accountsOrderByWithRelationInput
   categories?: Prisma.categoriesOrderByWithRelationInput
   expense_payments?: Prisma.expense_paymentsOrderByWithRelationInput
   settlements?: Prisma.settlementsOrderByWithRelationInput
+  savings_contributions?: Prisma.savings_contributionsOrderByWithRelationInput
   users?: Prisma.UserOrderByWithRelationInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersOrderByRelationAggregateInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersOrderByRelationAggregateInput
@@ -335,6 +346,7 @@ export type transactionsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   expense_payment_id?: string
   settlement_id?: string
+  savings_contribution_id?: string
   AND?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
   OR?: Prisma.transactionsWhereInput[]
   NOT?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
@@ -354,10 +366,11 @@ export type transactionsWhereUniqueInput = Prisma.AtLeast<{
   categories?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.categoriesWhereInput> | null
   expense_payments?: Prisma.XOR<Prisma.Expense_paymentsNullableScalarRelationFilter, Prisma.expense_paymentsWhereInput> | null
   settlements?: Prisma.XOR<Prisma.SettlementsNullableScalarRelationFilter, Prisma.settlementsWhereInput> | null
+  savings_contributions?: Prisma.XOR<Prisma.Savings_contributionsNullableScalarRelationFilter, Prisma.savings_contributionsWhereInput> | null
   users?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   transfers_transfers_from_transaction_idTotransactions?: Prisma.TransfersListRelationFilter
   transfers_transfers_to_transaction_idTotransactions?: Prisma.TransfersListRelationFilter
-}, "id" | "expense_payment_id" | "settlement_id">
+}, "id" | "expense_payment_id" | "settlement_id" | "savings_contribution_id">
 
 export type transactionsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -373,6 +386,7 @@ export type transactionsOrderByWithAggregationInput = {
   reference_number?: Prisma.SortOrderInput | Prisma.SortOrder
   expense_payment_id?: Prisma.SortOrderInput | Prisma.SortOrder
   settlement_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  savings_contribution_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.transactionsCountOrderByAggregateInput
@@ -399,6 +413,7 @@ export type transactionsScalarWhereWithAggregatesInput = {
   reference_number?: Prisma.StringNullableWithAggregatesFilter<"transactions"> | string | null
   expense_payment_id?: Prisma.StringNullableWithAggregatesFilter<"transactions"> | string | null
   settlement_id?: Prisma.StringNullableWithAggregatesFilter<"transactions"> | string | null
+  savings_contribution_id?: Prisma.StringNullableWithAggregatesFilter<"transactions"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
 }
@@ -418,6 +433,7 @@ export type transactionsCreateInput = {
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -437,6 +453,7 @@ export type transactionsUncheckedCreateInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -458,6 +475,7 @@ export type transactionsUpdateInput = {
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -477,6 +495,7 @@ export type transactionsUncheckedUpdateInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -497,6 +516,7 @@ export type transactionsCreateManyInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -528,6 +548,7 @@ export type transactionsUncheckedUpdateManyInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -567,6 +588,7 @@ export type transactionsCountOrderByAggregateInput = {
   reference_number?: Prisma.SortOrder
   expense_payment_id?: Prisma.SortOrder
   settlement_id?: Prisma.SortOrder
+  savings_contribution_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -589,6 +611,7 @@ export type transactionsMaxOrderByAggregateInput = {
   reference_number?: Prisma.SortOrder
   expense_payment_id?: Prisma.SortOrder
   settlement_id?: Prisma.SortOrder
+  savings_contribution_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -607,6 +630,7 @@ export type transactionsMinOrderByAggregateInput = {
   reference_number?: Prisma.SortOrder
   expense_payment_id?: Prisma.SortOrder
   settlement_id?: Prisma.SortOrder
+  savings_contribution_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -805,6 +829,38 @@ export type transactionsUncheckedUpdateOneWithoutSettlementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.transactionsUpdateToOneWithWhereWithoutSettlementsInput, Prisma.transactionsUpdateWithoutSettlementsInput>, Prisma.transactionsUncheckedUpdateWithoutSettlementsInput>
 }
 
+export type transactionsCreateNestedOneWithoutSavings_contributionsInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutSavings_contributionsInput
+  connect?: Prisma.transactionsWhereUniqueInput
+}
+
+export type transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutSavings_contributionsInput
+  connect?: Prisma.transactionsWhereUniqueInput
+}
+
+export type transactionsUpdateOneWithoutSavings_contributionsNestedInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutSavings_contributionsInput
+  upsert?: Prisma.transactionsUpsertWithoutSavings_contributionsInput
+  disconnect?: Prisma.transactionsWhereInput | boolean
+  delete?: Prisma.transactionsWhereInput | boolean
+  connect?: Prisma.transactionsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.transactionsUpdateToOneWithWhereWithoutSavings_contributionsInput, Prisma.transactionsUpdateWithoutSavings_contributionsInput>, Prisma.transactionsUncheckedUpdateWithoutSavings_contributionsInput>
+}
+
+export type transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutSavings_contributionsInput
+  upsert?: Prisma.transactionsUpsertWithoutSavings_contributionsInput
+  disconnect?: Prisma.transactionsWhereInput | boolean
+  delete?: Prisma.transactionsWhereInput | boolean
+  connect?: Prisma.transactionsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.transactionsUpdateToOneWithWhereWithoutSavings_contributionsInput, Prisma.transactionsUpdateWithoutSavings_contributionsInput>, Prisma.transactionsUncheckedUpdateWithoutSavings_contributionsInput>
+}
+
 export type Enumtransactions_typeFieldUpdateOperationsInput = {
   set?: $Enums.transactions_type
 }
@@ -860,6 +916,7 @@ export type transactionsCreateWithoutUsersInput = {
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
 }
@@ -877,6 +934,7 @@ export type transactionsUncheckedCreateWithoutUsersInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -926,6 +984,7 @@ export type transactionsScalarWhereInput = {
   reference_number?: Prisma.StringNullableFilter<"transactions"> | string | null
   expense_payment_id?: Prisma.StringNullableFilter<"transactions"> | string | null
   settlement_id?: Prisma.StringNullableFilter<"transactions"> | string | null
+  savings_contribution_id?: Prisma.StringNullableFilter<"transactions"> | string | null
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
 }
@@ -944,6 +1003,7 @@ export type transactionsCreateWithoutAccountsInput = {
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -962,6 +1022,7 @@ export type transactionsUncheckedCreateWithoutAccountsInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -1008,6 +1069,7 @@ export type transactionsCreateWithoutCategoriesInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -1026,6 +1088,7 @@ export type transactionsUncheckedCreateWithoutCategoriesInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -1072,6 +1135,7 @@ export type transactionsCreateWithoutExpense_paymentsInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -1090,6 +1154,7 @@ export type transactionsUncheckedCreateWithoutExpense_paymentsInput = {
   merchant?: string | null
   reference_number?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -1126,6 +1191,7 @@ export type transactionsUpdateWithoutExpense_paymentsInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -1144,6 +1210,7 @@ export type transactionsUncheckedUpdateWithoutExpense_paymentsInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1164,6 +1231,7 @@ export type transactionsCreateWithoutSettlementsInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -1182,6 +1250,7 @@ export type transactionsUncheckedCreateWithoutSettlementsInput = {
   merchant?: string | null
   reference_number?: string | null
   expense_payment_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -1218,6 +1287,7 @@ export type transactionsUpdateWithoutSettlementsInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -1236,6 +1306,103 @@ export type transactionsUncheckedUpdateWithoutSettlementsInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
+  transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
+}
+
+export type transactionsCreateWithoutSavings_contributionsInput = {
+  id?: string
+  type: $Enums.transactions_type
+  status?: $Enums.transactions_status
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transaction_date?: Date | string
+  description?: string | null
+  merchant?: string | null
+  reference_number?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
+  categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
+  settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  users: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
+  transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
+}
+
+export type transactionsUncheckedCreateWithoutSavings_contributionsInput = {
+  id?: string
+  user_id: string
+  account_id: string
+  category_id?: string | null
+  type: $Enums.transactions_type
+  status?: $Enums.transactions_status
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transaction_date?: Date | string
+  description?: string | null
+  merchant?: string | null
+  reference_number?: string | null
+  expense_payment_id?: string | null
+  settlement_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
+  transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
+}
+
+export type transactionsCreateOrConnectWithoutSavings_contributionsInput = {
+  where: Prisma.transactionsWhereUniqueInput
+  create: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+}
+
+export type transactionsUpsertWithoutSavings_contributionsInput = {
+  update: Prisma.XOR<Prisma.transactionsUpdateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedUpdateWithoutSavings_contributionsInput>
+  create: Prisma.XOR<Prisma.transactionsCreateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedCreateWithoutSavings_contributionsInput>
+  where?: Prisma.transactionsWhereInput
+}
+
+export type transactionsUpdateToOneWithWhereWithoutSavings_contributionsInput = {
+  where?: Prisma.transactionsWhereInput
+  data: Prisma.XOR<Prisma.transactionsUpdateWithoutSavings_contributionsInput, Prisma.transactionsUncheckedUpdateWithoutSavings_contributionsInput>
+}
+
+export type transactionsUpdateWithoutSavings_contributionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.Enumtransactions_typeFieldUpdateOperationsInput | $Enums.transactions_type
+  status?: Prisma.Enumtransactions_statusFieldUpdateOperationsInput | $Enums.transactions_status
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
+  categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
+  settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
+  transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
+}
+
+export type transactionsUncheckedUpdateWithoutSavings_contributionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.StringFieldUpdateOperationsInput | string
+  category_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.Enumtransactions_typeFieldUpdateOperationsInput | $Enums.transactions_type
+  status?: Prisma.Enumtransactions_statusFieldUpdateOperationsInput | $Enums.transactions_status
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transaction_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1257,6 +1424,7 @@ export type transactionsCreateWithoutTransfers_transfers_from_transaction_idTotr
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
 }
@@ -1275,6 +1443,7 @@ export type transactionsUncheckedCreateWithoutTransfers_transfers_from_transacti
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_to_transaction_idTotransactionsInput
@@ -1300,6 +1469,7 @@ export type transactionsCreateWithoutTransfers_transfers_to_transaction_idTotran
   categories?: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   expense_payments?: Prisma.expense_paymentsCreateNestedOneWithoutTransactionsInput
   settlements?: Prisma.settlementsCreateNestedOneWithoutTransactionsInput
+  savings_contributions?: Prisma.savings_contributionsCreateNestedOneWithoutTransactionsInput
   users: Prisma.UserCreateNestedOneWithoutTransactionsInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
 }
@@ -1318,6 +1488,7 @@ export type transactionsUncheckedCreateWithoutTransfers_transfers_to_transaction
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedCreateNestedManyWithoutTransactions_transfers_from_transaction_idTotransactionsInput
@@ -1354,6 +1525,7 @@ export type transactionsUpdateWithoutTransfers_transfers_from_transaction_idTotr
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
 }
@@ -1372,6 +1544,7 @@ export type transactionsUncheckedUpdateWithoutTransfers_transfers_from_transacti
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -1403,6 +1576,7 @@ export type transactionsUpdateWithoutTransfers_transfers_to_transaction_idTotran
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
 }
@@ -1421,6 +1595,7 @@ export type transactionsUncheckedUpdateWithoutTransfers_transfers_to_transaction
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1439,6 +1614,7 @@ export type transactionsCreateManyUsersInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -1458,6 +1634,7 @@ export type transactionsUpdateWithoutUsersInput = {
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
 }
@@ -1475,6 +1652,7 @@ export type transactionsUncheckedUpdateWithoutUsersInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1494,6 +1672,7 @@ export type transactionsUncheckedUpdateManyWithoutUsersInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1511,6 +1690,7 @@ export type transactionsCreateManyAccountsInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -1529,6 +1709,7 @@ export type transactionsUpdateWithoutAccountsInput = {
   categories?: Prisma.categoriesUpdateOneWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -1547,6 +1728,7 @@ export type transactionsUncheckedUpdateWithoutAccountsInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1566,6 +1748,7 @@ export type transactionsUncheckedUpdateManyWithoutAccountsInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1583,6 +1766,7 @@ export type transactionsCreateManyCategoriesInput = {
   reference_number?: string | null
   expense_payment_id?: string | null
   settlement_id?: string | null
+  savings_contribution_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -1601,6 +1785,7 @@ export type transactionsUpdateWithoutCategoriesInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateOneWithoutTransactionsNestedInput
   settlements?: Prisma.settlementsUpdateOneWithoutTransactionsNestedInput
+  savings_contributions?: Prisma.savings_contributionsUpdateOneWithoutTransactionsNestedInput
   users?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
   transfers_transfers_to_transaction_idTotransactions?: Prisma.transfersUpdateManyWithoutTransactions_transfers_to_transaction_idTotransactionsNestedInput
@@ -1619,6 +1804,7 @@ export type transactionsUncheckedUpdateWithoutCategoriesInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transfers_transfers_from_transaction_idTotransactions?: Prisma.transfersUncheckedUpdateManyWithoutTransactions_transfers_from_transaction_idTotransactionsNestedInput
@@ -1638,6 +1824,7 @@ export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
   reference_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expense_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settlement_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savings_contribution_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1696,12 +1883,14 @@ export type transactionsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   reference_number?: boolean
   expense_payment_id?: boolean
   settlement_id?: boolean
+  savings_contribution_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   categories?: boolean | Prisma.transactions$categoriesArgs<ExtArgs>
   expense_payments?: boolean | Prisma.transactions$expense_paymentsArgs<ExtArgs>
   settlements?: boolean | Prisma.transactions$settlementsArgs<ExtArgs>
+  savings_contributions?: boolean | Prisma.transactions$savings_contributionsArgs<ExtArgs>
   users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transfers_transfers_from_transaction_idTotransactions?: boolean | Prisma.transactions$transfers_transfers_from_transaction_idTotransactionsArgs<ExtArgs>
   transfers_transfers_to_transaction_idTotransactions?: boolean | Prisma.transactions$transfers_transfers_to_transaction_idTotransactionsArgs<ExtArgs>
@@ -1724,16 +1913,18 @@ export type transactionsSelectScalar = {
   reference_number?: boolean
   expense_payment_id?: boolean
   settlement_id?: boolean
+  savings_contribution_id?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type transactionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "account_id" | "category_id" | "type" | "status" | "amount" | "transaction_date" | "description" | "merchant" | "reference_number" | "expense_payment_id" | "settlement_id" | "created_at" | "updated_at", ExtArgs["result"]["transactions"]>
+export type transactionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "account_id" | "category_id" | "type" | "status" | "amount" | "transaction_date" | "description" | "merchant" | "reference_number" | "expense_payment_id" | "settlement_id" | "savings_contribution_id" | "created_at" | "updated_at", ExtArgs["result"]["transactions"]>
 export type transactionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   categories?: boolean | Prisma.transactions$categoriesArgs<ExtArgs>
   expense_payments?: boolean | Prisma.transactions$expense_paymentsArgs<ExtArgs>
   settlements?: boolean | Prisma.transactions$settlementsArgs<ExtArgs>
+  savings_contributions?: boolean | Prisma.transactions$savings_contributionsArgs<ExtArgs>
   users?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transfers_transfers_from_transaction_idTotransactions?: boolean | Prisma.transactions$transfers_transfers_from_transaction_idTotransactionsArgs<ExtArgs>
   transfers_transfers_to_transaction_idTotransactions?: boolean | Prisma.transactions$transfers_transfers_to_transaction_idTotransactionsArgs<ExtArgs>
@@ -1747,6 +1938,7 @@ export type $transactionsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     categories: Prisma.$categoriesPayload<ExtArgs> | null
     expense_payments: Prisma.$expense_paymentsPayload<ExtArgs> | null
     settlements: Prisma.$settlementsPayload<ExtArgs> | null
+    savings_contributions: Prisma.$savings_contributionsPayload<ExtArgs> | null
     users: Prisma.$UserPayload<ExtArgs>
     transfers_transfers_from_transaction_idTotransactions: Prisma.$transfersPayload<ExtArgs>[]
     transfers_transfers_to_transaction_idTotransactions: Prisma.$transfersPayload<ExtArgs>[]
@@ -1765,6 +1957,7 @@ export type $transactionsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     reference_number: string | null
     expense_payment_id: string | null
     settlement_id: string | null
+    savings_contribution_id: string | null
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["transactions"]>
@@ -2111,6 +2304,7 @@ export interface Prisma__transactionsClient<T, Null = never, ExtArgs extends run
   categories<T extends Prisma.transactions$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$categoriesArgs<ExtArgs>>): Prisma.Prisma__categoriesClient<runtime.Types.Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   expense_payments<T extends Prisma.transactions$expense_paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$expense_paymentsArgs<ExtArgs>>): Prisma.Prisma__expense_paymentsClient<runtime.Types.Result.GetResult<Prisma.$expense_paymentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   settlements<T extends Prisma.transactions$settlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$settlementsArgs<ExtArgs>>): Prisma.Prisma__settlementsClient<runtime.Types.Result.GetResult<Prisma.$settlementsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  savings_contributions<T extends Prisma.transactions$savings_contributionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$savings_contributionsArgs<ExtArgs>>): Prisma.Prisma__savings_contributionsClient<runtime.Types.Result.GetResult<Prisma.$savings_contributionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   transfers_transfers_from_transaction_idTotransactions<T extends Prisma.transactions$transfers_transfers_from_transaction_idTotransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$transfers_transfers_from_transaction_idTotransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transfersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transfers_transfers_to_transaction_idTotransactions<T extends Prisma.transactions$transfers_transfers_to_transaction_idTotransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$transfers_transfers_to_transaction_idTotransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transfersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2156,6 +2350,7 @@ export interface transactionsFieldRefs {
   readonly reference_number: Prisma.FieldRef<"transactions", 'String'>
   readonly expense_payment_id: Prisma.FieldRef<"transactions", 'String'>
   readonly settlement_id: Prisma.FieldRef<"transactions", 'String'>
+  readonly savings_contribution_id: Prisma.FieldRef<"transactions", 'String'>
   readonly created_at: Prisma.FieldRef<"transactions", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"transactions", 'DateTime'>
 }
@@ -2560,6 +2755,25 @@ export type transactions$settlementsArgs<ExtArgs extends runtime.Types.Extension
    */
   include?: Prisma.settlementsInclude<ExtArgs> | null
   where?: Prisma.settlementsWhereInput
+}
+
+/**
+ * transactions.savings_contributions
+ */
+export type transactions$savings_contributionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the savings_contributions
+   */
+  select?: Prisma.savings_contributionsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the savings_contributions
+   */
+  omit?: Prisma.savings_contributionsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.savings_contributionsInclude<ExtArgs> | null
+  where?: Prisma.savings_contributionsWhereInput
 }
 
 /**

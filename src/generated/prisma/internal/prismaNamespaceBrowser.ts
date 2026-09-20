@@ -441,6 +441,7 @@ export const Savings_contributionsScalarFieldEnum = {
   goal_id: 'goal_id',
   account_id: 'account_id',
   contributor_id: 'contributor_id',
+  payment_method_id: 'payment_method_id',
   amount: 'amount',
   contribution_date: 'contribution_date',
   proof_url: 'proof_url',
@@ -484,6 +485,7 @@ export const TransactionsScalarFieldEnum = {
   reference_number: 'reference_number',
   expense_payment_id: 'expense_payment_id',
   settlement_id: 'settlement_id',
+  savings_contribution_id: 'savings_contribution_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -807,6 +809,7 @@ export const savings_contributionsOrderByRelevanceFieldEnum = {
   goal_id: 'goal_id',
   account_id: 'account_id',
   contributor_id: 'contributor_id',
+  payment_method_id: 'payment_method_id',
   proof_url: 'proof_url',
   note: 'note'
 } as const
@@ -836,7 +839,8 @@ export const transactionsOrderByRelevanceFieldEnum = {
   merchant: 'merchant',
   reference_number: 'reference_number',
   expense_payment_id: 'expense_payment_id',
-  settlement_id: 'settlement_id'
+  settlement_id: 'settlement_id',
+  savings_contribution_id: 'savings_contribution_id'
 } as const
 
 export type transactionsOrderByRelevanceFieldEnum = (typeof transactionsOrderByRelevanceFieldEnum)[keyof typeof transactionsOrderByRelevanceFieldEnum]

@@ -39,6 +39,7 @@ export type Savings_contributionsMinAggregateOutputType = {
   goal_id: string | null
   account_id: string | null
   contributor_id: string | null
+  payment_method_id: string | null
   amount: runtime.Decimal | null
   contribution_date: Date | null
   proof_url: string | null
@@ -52,6 +53,7 @@ export type Savings_contributionsMaxAggregateOutputType = {
   goal_id: string | null
   account_id: string | null
   contributor_id: string | null
+  payment_method_id: string | null
   amount: runtime.Decimal | null
   contribution_date: Date | null
   proof_url: string | null
@@ -65,6 +67,7 @@ export type Savings_contributionsCountAggregateOutputType = {
   goal_id: number
   account_id: number
   contributor_id: number
+  payment_method_id: number
   amount: number
   contribution_date: number
   proof_url: number
@@ -88,6 +91,7 @@ export type Savings_contributionsMinAggregateInputType = {
   goal_id?: true
   account_id?: true
   contributor_id?: true
+  payment_method_id?: true
   amount?: true
   contribution_date?: true
   proof_url?: true
@@ -101,6 +105,7 @@ export type Savings_contributionsMaxAggregateInputType = {
   goal_id?: true
   account_id?: true
   contributor_id?: true
+  payment_method_id?: true
   amount?: true
   contribution_date?: true
   proof_url?: true
@@ -114,6 +119,7 @@ export type Savings_contributionsCountAggregateInputType = {
   goal_id?: true
   account_id?: true
   contributor_id?: true
+  payment_method_id?: true
   amount?: true
   contribution_date?: true
   proof_url?: true
@@ -214,6 +220,7 @@ export type Savings_contributionsGroupByOutputType = {
   goal_id: string
   account_id: string | null
   contributor_id: string | null
+  payment_method_id: string | null
   amount: runtime.Decimal
   contribution_date: Date
   proof_url: string | null
@@ -250,6 +257,7 @@ export type savings_contributionsWhereInput = {
   goal_id?: Prisma.StringFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  payment_method_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
@@ -257,7 +265,9 @@ export type savings_contributionsWhereInput = {
   note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
+  payment_methods?: Prisma.XOR<Prisma.Payment_methodsNullableScalarRelationFilter, Prisma.payment_methodsWhereInput> | null
   savings_goals?: Prisma.XOR<Prisma.Savings_goalsScalarRelationFilter, Prisma.savings_goalsWhereInput>
+  transactions?: Prisma.XOR<Prisma.TransactionsNullableScalarRelationFilter, Prisma.transactionsWhereInput> | null
   users?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
@@ -266,6 +276,7 @@ export type savings_contributionsOrderByWithRelationInput = {
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrderInput | Prisma.SortOrder
   contributor_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  payment_method_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
   proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -273,7 +284,9 @@ export type savings_contributionsOrderByWithRelationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   accounts?: Prisma.accountsOrderByWithRelationInput
+  payment_methods?: Prisma.payment_methodsOrderByWithRelationInput
   savings_goals?: Prisma.savings_goalsOrderByWithRelationInput
+  transactions?: Prisma.transactionsOrderByWithRelationInput
   users?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.savings_contributionsOrderByRelevanceInput
 }
@@ -286,6 +299,7 @@ export type savings_contributionsWhereUniqueInput = Prisma.AtLeast<{
   goal_id?: Prisma.StringFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  payment_method_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
@@ -293,7 +307,9 @@ export type savings_contributionsWhereUniqueInput = Prisma.AtLeast<{
   note?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   created_at?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
+  payment_methods?: Prisma.XOR<Prisma.Payment_methodsNullableScalarRelationFilter, Prisma.payment_methodsWhereInput> | null
   savings_goals?: Prisma.XOR<Prisma.Savings_goalsScalarRelationFilter, Prisma.savings_goalsWhereInput>
+  transactions?: Prisma.XOR<Prisma.TransactionsNullableScalarRelationFilter, Prisma.transactionsWhereInput> | null
   users?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
@@ -302,6 +318,7 @@ export type savings_contributionsOrderByWithAggregationInput = {
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrderInput | Prisma.SortOrder
   contributor_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  payment_method_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
   proof_url?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -323,6 +340,7 @@ export type savings_contributionsScalarWhereWithAggregatesInput = {
   goal_id?: Prisma.StringWithAggregatesFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
   contributor_id?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
+  payment_method_id?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalWithAggregatesFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeWithAggregatesFilter<"savings_contributions"> | Date | string
   proof_url?: Prisma.StringNullableWithAggregatesFilter<"savings_contributions"> | string | null
@@ -340,7 +358,9 @@ export type savings_contributionsCreateInput = {
   note?: string | null
   created_at?: Date | string
   accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  payment_methods?: Prisma.payment_methodsCreateNestedOneWithoutSavings_contributionsInput
   savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  transactions?: Prisma.transactionsCreateNestedOneWithoutSavings_contributionsInput
   users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
@@ -349,12 +369,14 @@ export type savings_contributionsUncheckedCreateInput = {
   goal_id: string
   account_id?: string | null
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
   status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
+  transactions?: Prisma.transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput
 }
 
 export type savings_contributionsUpdateInput = {
@@ -366,7 +388,9 @@ export type savings_contributionsUpdateInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateOneWithoutSavings_contributionsNestedInput
   savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  transactions?: Prisma.transactionsUpdateOneWithoutSavings_contributionsNestedInput
   users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
@@ -375,12 +399,14 @@ export type savings_contributionsUncheckedUpdateInput = {
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput
 }
 
 export type savings_contributionsCreateManyInput = {
@@ -388,6 +414,7 @@ export type savings_contributionsCreateManyInput = {
   goal_id: string
   account_id?: string | null
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
@@ -411,6 +438,7 @@ export type savings_contributionsUncheckedUpdateManyInput = {
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -440,6 +468,7 @@ export type savings_contributionsCountOrderByAggregateInput = {
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
   contributor_id?: Prisma.SortOrder
+  payment_method_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
   proof_url?: Prisma.SortOrder
@@ -457,6 +486,7 @@ export type savings_contributionsMaxOrderByAggregateInput = {
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
   contributor_id?: Prisma.SortOrder
+  payment_method_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
   proof_url?: Prisma.SortOrder
@@ -470,6 +500,7 @@ export type savings_contributionsMinOrderByAggregateInput = {
   goal_id?: Prisma.SortOrder
   account_id?: Prisma.SortOrder
   contributor_id?: Prisma.SortOrder
+  payment_method_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   contribution_date?: Prisma.SortOrder
   proof_url?: Prisma.SortOrder
@@ -480,6 +511,11 @@ export type savings_contributionsMinOrderByAggregateInput = {
 
 export type savings_contributionsSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+}
+
+export type Savings_contributionsNullableScalarRelationFilter = {
+  is?: Prisma.savings_contributionsWhereInput | null
+  isNot?: Prisma.savings_contributionsWhereInput | null
 }
 
 export type savings_contributionsCreateNestedManyWithoutUsersInput = {
@@ -566,6 +602,48 @@ export type savings_contributionsUncheckedUpdateManyWithoutAccountsNestedInput =
   deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
 }
 
+export type savings_contributionsCreateNestedManyWithoutPayment_methodsInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput> | Prisma.savings_contributionsCreateWithoutPayment_methodsInput[] | Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput | Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput[]
+  createMany?: Prisma.savings_contributionsCreateManyPayment_methodsInputEnvelope
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+}
+
+export type savings_contributionsUncheckedCreateNestedManyWithoutPayment_methodsInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput> | Prisma.savings_contributionsCreateWithoutPayment_methodsInput[] | Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput | Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput[]
+  createMany?: Prisma.savings_contributionsCreateManyPayment_methodsInputEnvelope
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+}
+
+export type savings_contributionsUpdateManyWithoutPayment_methodsNestedInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput> | Prisma.savings_contributionsCreateWithoutPayment_methodsInput[] | Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput | Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput[]
+  upsert?: Prisma.savings_contributionsUpsertWithWhereUniqueWithoutPayment_methodsInput | Prisma.savings_contributionsUpsertWithWhereUniqueWithoutPayment_methodsInput[]
+  createMany?: Prisma.savings_contributionsCreateManyPayment_methodsInputEnvelope
+  set?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  disconnect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  delete?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  update?: Prisma.savings_contributionsUpdateWithWhereUniqueWithoutPayment_methodsInput | Prisma.savings_contributionsUpdateWithWhereUniqueWithoutPayment_methodsInput[]
+  updateMany?: Prisma.savings_contributionsUpdateManyWithWhereWithoutPayment_methodsInput | Prisma.savings_contributionsUpdateManyWithWhereWithoutPayment_methodsInput[]
+  deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
+}
+
+export type savings_contributionsUncheckedUpdateManyWithoutPayment_methodsNestedInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput> | Prisma.savings_contributionsCreateWithoutPayment_methodsInput[] | Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput[]
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput | Prisma.savings_contributionsCreateOrConnectWithoutPayment_methodsInput[]
+  upsert?: Prisma.savings_contributionsUpsertWithWhereUniqueWithoutPayment_methodsInput | Prisma.savings_contributionsUpsertWithWhereUniqueWithoutPayment_methodsInput[]
+  createMany?: Prisma.savings_contributionsCreateManyPayment_methodsInputEnvelope
+  set?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  disconnect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  delete?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  connect?: Prisma.savings_contributionsWhereUniqueInput | Prisma.savings_contributionsWhereUniqueInput[]
+  update?: Prisma.savings_contributionsUpdateWithWhereUniqueWithoutPayment_methodsInput | Prisma.savings_contributionsUpdateWithWhereUniqueWithoutPayment_methodsInput[]
+  updateMany?: Prisma.savings_contributionsUpdateManyWithWhereWithoutPayment_methodsInput | Prisma.savings_contributionsUpdateManyWithWhereWithoutPayment_methodsInput[]
+  deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
+}
+
 export type Enumsavings_contributions_statusFieldUpdateOperationsInput = {
   set?: $Enums.savings_contributions_status
 }
@@ -612,6 +690,22 @@ export type savings_contributionsUncheckedUpdateManyWithoutSavings_goalsNestedIn
   deleteMany?: Prisma.savings_contributionsScalarWhereInput | Prisma.savings_contributionsScalarWhereInput[]
 }
 
+export type savings_contributionsCreateNestedOneWithoutTransactionsInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutTransactionsInput
+  connect?: Prisma.savings_contributionsWhereUniqueInput
+}
+
+export type savings_contributionsUpdateOneWithoutTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.savings_contributionsCreateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.savings_contributionsCreateOrConnectWithoutTransactionsInput
+  upsert?: Prisma.savings_contributionsUpsertWithoutTransactionsInput
+  disconnect?: Prisma.savings_contributionsWhereInput | boolean
+  delete?: Prisma.savings_contributionsWhereInput | boolean
+  connect?: Prisma.savings_contributionsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.savings_contributionsUpdateToOneWithWhereWithoutTransactionsInput, Prisma.savings_contributionsUpdateWithoutTransactionsInput>, Prisma.savings_contributionsUncheckedUpdateWithoutTransactionsInput>
+}
+
 export type savings_contributionsCreateWithoutUsersInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -621,19 +715,23 @@ export type savings_contributionsCreateWithoutUsersInput = {
   note?: string | null
   created_at?: Date | string
   accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  payment_methods?: Prisma.payment_methodsCreateNestedOneWithoutSavings_contributionsInput
   savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  transactions?: Prisma.transactionsCreateNestedOneWithoutSavings_contributionsInput
 }
 
 export type savings_contributionsUncheckedCreateWithoutUsersInput = {
   id?: string
   goal_id: string
   account_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
   status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
+  transactions?: Prisma.transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput
 }
 
 export type savings_contributionsCreateOrConnectWithoutUsersInput = {
@@ -670,6 +768,7 @@ export type savings_contributionsScalarWhereInput = {
   goal_id?: Prisma.StringFilter<"savings_contributions"> | string
   account_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   contributor_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
+  payment_method_id?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
   amount?: Prisma.DecimalFilter<"savings_contributions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFilter<"savings_contributions"> | Date | string
   proof_url?: Prisma.StringNullableFilter<"savings_contributions"> | string | null
@@ -686,7 +785,9 @@ export type savings_contributionsCreateWithoutAccountsInput = {
   status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
+  payment_methods?: Prisma.payment_methodsCreateNestedOneWithoutSavings_contributionsInput
   savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  transactions?: Prisma.transactionsCreateNestedOneWithoutSavings_contributionsInput
   users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
@@ -694,12 +795,14 @@ export type savings_contributionsUncheckedCreateWithoutAccountsInput = {
   id?: string
   goal_id: string
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
   status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
+  transactions?: Prisma.transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput
 }
 
 export type savings_contributionsCreateOrConnectWithoutAccountsInput = {
@@ -728,6 +831,60 @@ export type savings_contributionsUpdateManyWithWhereWithoutAccountsInput = {
   data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutAccountsInput>
 }
 
+export type savings_contributionsCreateWithoutPayment_methodsInput = {
+  id?: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  transactions?: Prisma.transactionsCreateNestedOneWithoutSavings_contributionsInput
+  users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
+}
+
+export type savings_contributionsUncheckedCreateWithoutPayment_methodsInput = {
+  id?: string
+  goal_id: string
+  account_id?: string | null
+  contributor_id?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+  transactions?: Prisma.transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput
+}
+
+export type savings_contributionsCreateOrConnectWithoutPayment_methodsInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput>
+}
+
+export type savings_contributionsCreateManyPayment_methodsInputEnvelope = {
+  data: Prisma.savings_contributionsCreateManyPayment_methodsInput | Prisma.savings_contributionsCreateManyPayment_methodsInput[]
+  skipDuplicates?: boolean
+}
+
+export type savings_contributionsUpsertWithWhereUniqueWithoutPayment_methodsInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  update: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedUpdateWithoutPayment_methodsInput>
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedCreateWithoutPayment_methodsInput>
+}
+
+export type savings_contributionsUpdateWithWhereUniqueWithoutPayment_methodsInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  data: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutPayment_methodsInput, Prisma.savings_contributionsUncheckedUpdateWithoutPayment_methodsInput>
+}
+
+export type savings_contributionsUpdateManyWithWhereWithoutPayment_methodsInput = {
+  where: Prisma.savings_contributionsScalarWhereInput
+  data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutPayment_methodsInput>
+}
+
 export type savings_contributionsCreateWithoutSavings_goalsInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -737,6 +894,8 @@ export type savings_contributionsCreateWithoutSavings_goalsInput = {
   note?: string | null
   created_at?: Date | string
   accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  payment_methods?: Prisma.payment_methodsCreateNestedOneWithoutSavings_contributionsInput
+  transactions?: Prisma.transactionsCreateNestedOneWithoutSavings_contributionsInput
   users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
 }
 
@@ -744,12 +903,14 @@ export type savings_contributionsUncheckedCreateWithoutSavings_goalsInput = {
   id?: string
   account_id?: string | null
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
   status?: $Enums.savings_contributions_status
   note?: string | null
   created_at?: Date | string
+  transactions?: Prisma.transactionsUncheckedCreateNestedOneWithoutSavings_contributionsInput
 }
 
 export type savings_contributionsCreateOrConnectWithoutSavings_goalsInput = {
@@ -778,10 +939,83 @@ export type savings_contributionsUpdateManyWithWhereWithoutSavings_goalsInput = 
   data: Prisma.XOR<Prisma.savings_contributionsUpdateManyMutationInput, Prisma.savings_contributionsUncheckedUpdateManyWithoutSavings_goalsInput>
 }
 
+export type savings_contributionsCreateWithoutTransactionsInput = {
+  id?: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedOneWithoutSavings_contributionsInput
+  payment_methods?: Prisma.payment_methodsCreateNestedOneWithoutSavings_contributionsInput
+  savings_goals: Prisma.savings_goalsCreateNestedOneWithoutSavings_contributionsInput
+  users?: Prisma.UserCreateNestedOneWithoutSavings_contributions_madeInput
+}
+
+export type savings_contributionsUncheckedCreateWithoutTransactionsInput = {
+  id?: string
+  goal_id: string
+  account_id?: string | null
+  contributor_id?: string | null
+  payment_method_id?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+}
+
+export type savings_contributionsCreateOrConnectWithoutTransactionsInput = {
+  where: Prisma.savings_contributionsWhereUniqueInput
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedCreateWithoutTransactionsInput>
+}
+
+export type savings_contributionsUpsertWithoutTransactionsInput = {
+  update: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedUpdateWithoutTransactionsInput>
+  create: Prisma.XOR<Prisma.savings_contributionsCreateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedCreateWithoutTransactionsInput>
+  where?: Prisma.savings_contributionsWhereInput
+}
+
+export type savings_contributionsUpdateToOneWithWhereWithoutTransactionsInput = {
+  where?: Prisma.savings_contributionsWhereInput
+  data: Prisma.XOR<Prisma.savings_contributionsUpdateWithoutTransactionsInput, Prisma.savings_contributionsUncheckedUpdateWithoutTransactionsInput>
+}
+
+export type savings_contributionsUpdateWithoutTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateOneWithoutSavings_contributionsNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
+}
+
+export type savings_contributionsUncheckedUpdateWithoutTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type savings_contributionsCreateManyUsersInput = {
   id?: string
   goal_id: string
   account_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
@@ -799,25 +1033,30 @@ export type savings_contributionsUpdateWithoutUsersInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateOneWithoutSavings_contributionsNestedInput
   savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  transactions?: Prisma.transactionsUpdateOneWithoutSavings_contributionsNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateManyWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -830,6 +1069,7 @@ export type savings_contributionsCreateManyAccountsInput = {
   id?: string
   goal_id: string
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
@@ -846,7 +1086,9 @@ export type savings_contributionsUpdateWithoutAccountsInput = {
   status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payment_methods?: Prisma.payment_methodsUpdateOneWithoutSavings_contributionsNestedInput
   savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  transactions?: Prisma.transactionsUpdateOneWithoutSavings_contributionsNestedInput
   users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
@@ -854,6 +1096,21 @@ export type savings_contributionsUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput
+}
+
+export type savings_contributionsUncheckedUpdateManyWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -862,9 +1119,51 @@ export type savings_contributionsUncheckedUpdateWithoutAccountsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type savings_contributionsUncheckedUpdateManyWithoutAccountsInput = {
+export type savings_contributionsCreateManyPayment_methodsInput = {
+  id?: string
+  goal_id: string
+  account_id?: string | null
+  contributor_id?: string | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Date | string
+  proof_url?: string | null
+  status?: $Enums.savings_contributions_status
+  note?: string | null
+  created_at?: Date | string
+}
+
+export type savings_contributionsUpdateWithoutPayment_methodsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateOneRequiredWithoutSavings_contributionsNestedInput
+  transactions?: Prisma.transactionsUpdateOneWithoutSavings_contributionsNestedInput
+  users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
+}
+
+export type savings_contributionsUncheckedUpdateWithoutPayment_methodsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput
+}
+
+export type savings_contributionsUncheckedUpdateManyWithoutPayment_methodsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  goal_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -878,6 +1177,7 @@ export type savings_contributionsCreateManySavings_goalsInput = {
   id?: string
   account_id?: string | null
   contributor_id?: string | null
+  payment_method_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Date | string
   proof_url?: string | null
@@ -895,6 +1195,8 @@ export type savings_contributionsUpdateWithoutSavings_goalsInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateOneWithoutSavings_contributionsNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateOneWithoutSavings_contributionsNestedInput
+  transactions?: Prisma.transactionsUpdateOneWithoutSavings_contributionsNestedInput
   users?: Prisma.UserUpdateOneWithoutSavings_contributions_madeNestedInput
 }
 
@@ -902,18 +1204,21 @@ export type savings_contributionsUncheckedUpdateWithoutSavings_goalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.Enumsavings_contributions_statusFieldUpdateOperationsInput | $Enums.savings_contributions_status
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.transactionsUncheckedUpdateOneWithoutSavings_contributionsNestedInput
 }
 
 export type savings_contributionsUncheckedUpdateManyWithoutSavings_goalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contributor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  payment_method_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   contribution_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   proof_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -929,6 +1234,7 @@ export type savings_contributionsSelect<ExtArgs extends runtime.Types.Extensions
   goal_id?: boolean
   account_id?: boolean
   contributor_id?: boolean
+  payment_method_id?: boolean
   amount?: boolean
   contribution_date?: boolean
   proof_url?: boolean
@@ -936,7 +1242,9 @@ export type savings_contributionsSelect<ExtArgs extends runtime.Types.Extensions
   note?: boolean
   created_at?: boolean
   accounts?: boolean | Prisma.savings_contributions$accountsArgs<ExtArgs>
+  payment_methods?: boolean | Prisma.savings_contributions$payment_methodsArgs<ExtArgs>
   savings_goals?: boolean | Prisma.savings_goalsDefaultArgs<ExtArgs>
+  transactions?: boolean | Prisma.savings_contributions$transactionsArgs<ExtArgs>
   users?: boolean | Prisma.savings_contributions$usersArgs<ExtArgs>
 }, ExtArgs["result"]["savings_contributions"]>
 
@@ -947,6 +1255,7 @@ export type savings_contributionsSelectScalar = {
   goal_id?: boolean
   account_id?: boolean
   contributor_id?: boolean
+  payment_method_id?: boolean
   amount?: boolean
   contribution_date?: boolean
   proof_url?: boolean
@@ -955,10 +1264,12 @@ export type savings_contributionsSelectScalar = {
   created_at?: boolean
 }
 
-export type savings_contributionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "goal_id" | "account_id" | "contributor_id" | "amount" | "contribution_date" | "proof_url" | "status" | "note" | "created_at", ExtArgs["result"]["savings_contributions"]>
+export type savings_contributionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "goal_id" | "account_id" | "contributor_id" | "payment_method_id" | "amount" | "contribution_date" | "proof_url" | "status" | "note" | "created_at", ExtArgs["result"]["savings_contributions"]>
 export type savings_contributionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.savings_contributions$accountsArgs<ExtArgs>
+  payment_methods?: boolean | Prisma.savings_contributions$payment_methodsArgs<ExtArgs>
   savings_goals?: boolean | Prisma.savings_goalsDefaultArgs<ExtArgs>
+  transactions?: boolean | Prisma.savings_contributions$transactionsArgs<ExtArgs>
   users?: boolean | Prisma.savings_contributions$usersArgs<ExtArgs>
 }
 
@@ -966,7 +1277,9 @@ export type $savings_contributionsPayload<ExtArgs extends runtime.Types.Extensio
   name: "savings_contributions"
   objects: {
     accounts: Prisma.$accountsPayload<ExtArgs> | null
+    payment_methods: Prisma.$payment_methodsPayload<ExtArgs> | null
     savings_goals: Prisma.$savings_goalsPayload<ExtArgs>
+    transactions: Prisma.$transactionsPayload<ExtArgs> | null
     users: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -974,6 +1287,7 @@ export type $savings_contributionsPayload<ExtArgs extends runtime.Types.Extensio
     goal_id: string
     account_id: string | null
     contributor_id: string | null
+    payment_method_id: string | null
     amount: runtime.Decimal
     contribution_date: Date
     proof_url: string | null
@@ -1321,7 +1635,9 @@ readonly fields: savings_contributionsFieldRefs;
 export interface Prisma__savings_contributionsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accounts<T extends Prisma.savings_contributions$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$accountsArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  payment_methods<T extends Prisma.savings_contributions$payment_methodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$payment_methodsArgs<ExtArgs>>): Prisma.Prisma__payment_methodsClient<runtime.Types.Result.GetResult<Prisma.$payment_methodsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   savings_goals<T extends Prisma.savings_goalsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_goalsDefaultArgs<ExtArgs>>): Prisma.Prisma__savings_goalsClient<runtime.Types.Result.GetResult<Prisma.$savings_goalsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  transactions<T extends Prisma.savings_contributions$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$transactionsArgs<ExtArgs>>): Prisma.Prisma__transactionsClient<runtime.Types.Result.GetResult<Prisma.$transactionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.savings_contributions$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.savings_contributions$usersArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1356,6 +1672,7 @@ export interface savings_contributionsFieldRefs {
   readonly goal_id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly account_id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly contributor_id: Prisma.FieldRef<"savings_contributions", 'String'>
+  readonly payment_method_id: Prisma.FieldRef<"savings_contributions", 'String'>
   readonly amount: Prisma.FieldRef<"savings_contributions", 'Decimal'>
   readonly contribution_date: Prisma.FieldRef<"savings_contributions", 'DateTime'>
   readonly proof_url: Prisma.FieldRef<"savings_contributions", 'String'>
@@ -1726,6 +2043,44 @@ export type savings_contributions$accountsArgs<ExtArgs extends runtime.Types.Ext
    */
   include?: Prisma.accountsInclude<ExtArgs> | null
   where?: Prisma.accountsWhereInput
+}
+
+/**
+ * savings_contributions.payment_methods
+ */
+export type savings_contributions$payment_methodsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the payment_methods
+   */
+  select?: Prisma.payment_methodsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the payment_methods
+   */
+  omit?: Prisma.payment_methodsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.payment_methodsInclude<ExtArgs> | null
+  where?: Prisma.payment_methodsWhereInput
+}
+
+/**
+ * savings_contributions.transactions
+ */
+export type savings_contributions$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the transactions
+   */
+  select?: Prisma.transactionsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the transactions
+   */
+  omit?: Prisma.transactionsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.transactionsInclude<ExtArgs> | null
+  where?: Prisma.transactionsWhereInput
 }
 
 /**
