@@ -14,6 +14,7 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import { toTransactionDTO } from '../dtos/transaction.dto.js';
 import { logger } from '../config/logger.js';
 
 export const createTransactionController = async (
@@ -95,7 +96,7 @@ export const getTransactionsController = async (
       200,
       'Data transaksi berhasil diambil',
       {
-        data: result.data,
+        data: result.data.map(toTransactionDTO),
         pagination: buildPaginationMeta(
           { page, perPage },
           result.total,
@@ -132,7 +133,7 @@ export const getTransactionController = async (
       res,
       200,
       'Data transaksi berhasil diambil',
-      { data: transaction },
+      { data: toTransactionDTO(transaction) },
     );
   } catch (error) {
     if (

@@ -14,6 +14,7 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import { toTransferDTO } from '../dtos/transfer.dto.js';
 import { logger } from '../config/logger.js';
 
 const TRANSFER_ERRORS: Record<
@@ -90,7 +91,7 @@ export const createTransferController = async (
       res,
       201,
       'Transfer berhasil dibuat',
-      { data: result.transfer },
+      { data: toTransferDTO(result.transfer) },
     );
   } catch (error) {
     return handleTransferError(
@@ -123,7 +124,7 @@ export const getTransfersController = async (
       200,
       'Data transfer berhasil diambil',
       {
-        data: result.data,
+        data: result.data.map(toTransferDTO),
         pagination: buildPaginationMeta(
           { page, perPage },
           result.total,
@@ -157,7 +158,7 @@ export const getTransferController = async (
       res,
       200,
       'Data transfer berhasil diambil',
-      { data: transfer },
+      { data: toTransferDTO(transfer) },
     );
   } catch (error) {
     return handleTransferError(

@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { env } from '../config/env.js';
 import { logger } from '../config/logger.js';
 import { getCurrentUser, login, logout, refreshAccessToken, register } from '../services/auth.service.js';
+import { toProfileDTO, toUserDTO } from '../dtos/user.dto.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
 import { getAuthenticatedUserId } from '../utils/auth.js'
 import { fail, success } from '../utils/response.js'
@@ -63,7 +64,7 @@ export const loginController = async (
     return success(res, 200, 'Login berhasil', {
       data: {
         accessToken: result.accessToken,
-        user: result.user,
+        user: toUserDTO(result.user),
       },
     });
   } catch (error) {
@@ -102,7 +103,12 @@ export const meController = async (
 
     return success(res, 200, 'Data user berhasil diambil', {
       data: {
-        user,
+        user: {
+          ...toUserDTO(user),
+          profile: user.profile
+            ? toProfileDTO(user.profile)
+            : null,
+        },
       },
     });
   } catch (error) {

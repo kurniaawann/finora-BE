@@ -13,6 +13,7 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import { toAccountDTO } from '../dtos/account.dto.js';
 import { fail, success } from '../utils/response.js';
 import { logger } from '../config/logger.js';
 
@@ -62,7 +63,7 @@ export const getAccountsController = async (
       200,
       'Data account berhasil diambil',
       {
-        data: result.data,
+        data: result.data.map(toAccountDTO),
         pagination: buildPaginationMeta(
           { page, perPage },
           result.total,
@@ -97,7 +98,7 @@ export const getAccountController = async (
       res,
       200,
       'Data account berhasil diambil',
-      { data: account },
+      { data: toAccountDTO(account) },
     );
   } catch (error) {
     if (
