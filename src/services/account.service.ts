@@ -1,7 +1,5 @@
 import {
-  countAccountReferences,
   createAccount,
-  deleteAccount,
   findAccountByIdAndUserId,
   findAccountsByUserId,
   updateAccount,
@@ -88,15 +86,16 @@ export const remove = async (
     throw new Error('ACCOUNT_NOT_FOUND');
   }
 
-  const references = await countAccountReferences(
+  // Soft delete: akun dinonaktifkan dan tidak dihitung lagi
+  // dalam total saldo, agar history transaksi tetap terjaga.
+  await updateAccount(
     accountId,
+    userId,
+    {
+      is_active: false,
+      include_in_total_balance: false,
+    },
   );
-
-  if (references > 0) {
-    throw new Error('ACCOUNT_HAS_RELATED_DATA');
-  }
-
-  await deleteAccount(accountId, userId);
 
   return true;
 };

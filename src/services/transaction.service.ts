@@ -98,8 +98,10 @@ export const createTransactionService = async (
 
 export const getTransactionsService = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return findTransactionsByUser(userId);
+  return findTransactionsByUser(userId, page, perPage);
 };
 
 export const getTransactionService = async (
@@ -130,6 +132,34 @@ export const updateTransactionService = async (
 
   if (!transaction) {
     throw new Error('TRANSACTION_NOT_FOUND');
+  }
+
+  // Transaksi transfer tidak boleh diubah amount/akun lewat transaksi biasa.
+  if (
+    transaction.type === 'transfer' &&
+    (data.account_id !== undefined || data.amount !== undefined)
+  ) {
+    throw new Error('TRANSFER_TRANSACTION_NOT_ALLOWED');
+  }
+
+  if (data.account_id !== undefined) {
+    const account = await findAccountByIdAndUser(
+      data.account_id,
+      userId,
+    );
+
+    if (!account) {
+      throw new Error('ACCOUNT_NOT_FOUND');
+    }
+  }
+
+  if (data.amount !== undefined) {
+    if (
+      transaction.type !== 'adjustment' &&
+      data.amount <= 0
+    ) {
+      throw new Error('INVALID_AMOUNT');
+    }
   }
 
   if (data.category_id) {
@@ -168,6 +198,22 @@ export const updateTransactionService = async (
     transactionId,
     userId,
     {
+      ...(data.account_id !== undefined
+        ? {
+            accounts: {
+              connect: {
+                id: data.account_id,
+              },
+            },
+          }
+        : {}),
+
+      ...(data.amount !== undefined
+        ? {
+            amount: data.amount,
+          }
+        : {}),
+
       ...(data.category_id !== undefined
         ? {
             categories: data.category_id

@@ -2,6 +2,18 @@ import { prisma } from '../config/database.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { getAccountBalances } from './account.repository.js';
 
+const lockAccounts = async (
+  tx: Prisma.TransactionClient,
+  userId: string,
+  accountIds: string[],
+) => {
+  const sortedIds = [...accountIds].sort();
+
+  for (const id of sortedIds) {
+    await tx.$queryRaw`SELECT id FROM accounts WHERE id = ${id} AND user_id = ${userId} FOR UPDATE`;
+  }
+};
+
 export interface CreateTransferData {
   userId: string;
   fromAccountId: string;
@@ -55,6 +67,44 @@ export const createTransfer = async (
   data: CreateTransferData,
 ) => {
   return prisma.$transaction(async (tx) => {
+    // Kunci baris akun agar pengecekan saldo atomic terhadap
+    // transfer/transaksi lain yang berjalan bersamaan.
+    await lockAccounts(
+      tx,
+      data.userId,
+      [data.fromAccountId, data.toAccountId],
+    );
+
+    const fromAccountRow = await tx.accounts.findUnique({
+      where: {
+        id: data.fromAccountId,
+      },
+      select: {
+        initial_balance: true,
+      },
+    });
+
+    const transactionsSum =
+      (await getAccountBalances(
+        data.userId,
+        [data.fromAccountId],
+        tx,
+      )).get(data.fromAccountId) ?? new Prisma.Decimal(0);
+
+    const fromBalance = transactionsSum.add(
+      new Prisma.Decimal(
+        fromAccountRow?.initial_balance ?? 0,
+      ),
+    );
+
+    if (
+      fromBalance.lessThan(
+        new Prisma.Decimal(data.amount),
+      )
+    ) {
+      throw new Error('INSUFFICIENT_FUNDS');
+    }
+
     const fromTransaction = await tx.transactions.create({
       data: {
         users: {
@@ -155,38 +205,59 @@ export const createTransfer = async (
 };
 export const findTransfersByUser = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return prisma.transfers.findMany({
-    where: {
-      user_id: userId,
-    },
-    orderBy: [
-      {
-        transfer_date: 'desc',
-      },
-      {
-        created_at: 'desc',
-      },
-    ],
-    include: {
-      accounts_transfers_from_account_idToaccounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      accounts_transfers_to_account_idToaccounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
+  const skip = (page - 1) * perPage;
+
+  const include = {
+    accounts_transfers_from_account_idToaccounts: {
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        currency: true,
       },
     },
-  });
+    accounts_transfers_to_account_idToaccounts: {
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        currency: true,
+      },
+    },
+  };
+
+  const [data, total] = await prisma.$transaction([
+    prisma.transfers.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: [
+        {
+          transfer_date: 'desc',
+        },
+        {
+          created_at: 'desc',
+        },
+      ],
+      skip,
+      take: perPage,
+      include,
+    }),
+
+    prisma.transfers.count({
+      where: {
+        user_id: userId,
+      },
+    }),
+  ]);
+
+  return {
+    data,
+    total,
+  };
 };
 
 export const findTransferById = async (
@@ -246,8 +317,62 @@ export const updateTransfer = async (
   data: UpdateTransferData,
   fromTransactionId: string,
   toTransactionId: string,
+  userId: string,
 ) => {
   return prisma.$transaction(async (tx) => {
+    const existing = await tx.transfers.findUnique({
+      where: {
+        id: transferId,
+      },
+      select: {
+        from_account_id: true,
+        amount: true,
+      },
+    });
+
+    if (!existing) {
+      throw new Error('TRANSFER_NOT_FOUND');
+    }
+
+    // Kunci baris akun agar pengecekan saldo atomic.
+    await lockAccounts(
+      tx,
+      userId,
+      [data.fromAccountId, data.toAccountId],
+    );
+
+    const fromAccountRow = await tx.accounts.findUnique({
+      where: {
+        id: data.fromAccountId,
+      },
+      select: {
+        initial_balance: true,
+      },
+    });
+
+    const transactionsSum =
+      (await getAccountBalances(
+        userId,
+        [data.fromAccountId],
+        tx,
+      )).get(data.fromAccountId) ?? new Prisma.Decimal(0);
+
+    const fromBalance = transactionsSum.add(
+      new Prisma.Decimal(
+        fromAccountRow?.initial_balance ?? 0,
+      ),
+    );
+
+    // Jika akun asal tidak berubah, saldo saat ini sudah termasuk
+    // pengurangan transfer lama, jadi kembalikan dulu untuk dicek.
+    const available = existing.from_account_id === data.fromAccountId
+      ? fromBalance.add(new Prisma.Decimal(existing.amount))
+      : fromBalance;
+
+    if (available.lessThan(new Prisma.Decimal(data.amount))) {
+      throw new Error('INSUFFICIENT_FUNDS');
+    }
+
     const transactionUpdate: Prisma.transactionsUncheckedUpdateInput = {
       amount: data.amount,
       transaction_date: data.transferDate,

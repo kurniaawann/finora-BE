@@ -80,8 +80,10 @@ export const createTransferService = async (
 
 export const getTransfersService = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return findTransfersByUser(userId);
+  return findTransfersByUser(userId, page, perPage);
 };
 
 export const getTransferService = async (
@@ -195,6 +197,7 @@ export const updateTransferService = async (
     },
     fromTransaction.id,
     toTransaction.id,
+    userId,
   );
 
   return findTransferById(transferId, userId);

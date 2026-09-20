@@ -32,6 +32,7 @@ export const findAccountsByUserId = async (
     prisma.accounts.findMany({
       where: {
         user_id: userId,
+        is_active: true,
       },
       orderBy: {
         created_at: 'desc',
@@ -43,6 +44,7 @@ export const findAccountsByUserId = async (
     prisma.accounts.count({
       where: {
         user_id: userId,
+        is_active: true,
       },
     }),
   ]);
@@ -109,6 +111,7 @@ export const updateAccount = async (
     type?: accounts_type;
     currency?: string;
     is_active?: boolean;
+    include_in_total_balance?: boolean;
   },
 ) => {
   return prisma.accounts.updateMany({
@@ -186,12 +189,13 @@ export const countAccountReferences = async (
 export const getAccountBalances = async (
   userId: string,
   accountIds: string[],
+  db: Prisma.TransactionClient = prisma,
 ) => {
   if (accountIds.length === 0) {
     return new Map<string, Prisma.Decimal>();
   }
 
-  const transactions = await prisma.transactions.findMany({
+  const transactions = await db.transactions.findMany({
     where: {
       user_id: userId,
       account_id: { in: accountIds },
@@ -204,11 +208,15 @@ export const getAccountBalances = async (
       transfers_transfers_from_transaction_idTotransactions: {
         select: {
           id: true,
+          from_account_id: true,
+          to_account_id: true,
         },
       },
       transfers_transfers_to_transaction_idTotransactions: {
         select: {
           id: true,
+          from_account_id: true,
+          to_account_id: true,
         },
       },
     },
@@ -246,17 +254,29 @@ export const getAccountBalances = async (
          * Transfer memiliki dua transaksi:
          * - from_transaction = uang keluar
          * - to_transaction = uang masuk
+         *
+         * Arah ditentukan dengan mencocokkan akun transaksi terhadap
+         * akun asal/tujuan pada record transfer, bukan hanya dari
+         * kolom FK mana yang mereferensikannya.
          */
         if (
           transaction
             .transfers_transfers_from_transaction_idTotransactions
-            .length > 0
+            .some(
+              (transfer) =>
+                transfer.from_account_id ===
+                transaction.account_id,
+            )
         ) {
           adjustment = transaction.amount.negated();
         } else if (
           transaction
             .transfers_transfers_to_transaction_idTotransactions
-            .length > 0
+            .some(
+              (transfer) =>
+                transfer.to_account_id ===
+                transaction.account_id,
+            )
         ) {
           adjustment = transaction.amount;
         }

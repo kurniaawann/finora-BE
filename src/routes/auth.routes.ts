@@ -10,6 +10,7 @@ import {
 
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { authRateLimiter } from '../middlewares/rateLimiter.middleware.js';
+import { originCheck } from '../middlewares/origin.middleware.js';
 
 const router = Router();
 
@@ -26,10 +27,12 @@ router.get(
 router.post(
   '/refresh',
   authRateLimiter,
+  originCheck,
   refreshController,
 );
 router.post(
   '/logout',
+  originCheck,
   logoutController,
 );
 

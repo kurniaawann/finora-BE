@@ -10,6 +10,10 @@ import {
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
 import { fail, success } from '../utils/response.js';
+import {
+  buildPaginationMeta,
+  parsePagination,
+} from '../utils/pagination.js';
 import { logger } from '../config/logger.js';
 
 const TRANSFER_ERRORS: Record<
@@ -104,13 +108,27 @@ export const getTransfersController = async (
   try {
     const userId = getAuthenticatedUserId(req);
 
-    const transfers = await getTransfersService(userId);
+    const { page, perPage } = parsePagination(
+      req.query,
+    );
+
+    const result = await getTransfersService(
+      userId,
+      page,
+      perPage,
+    );
 
     return success(
       res,
       200,
       'Data transfer berhasil diambil',
-      { data: transfers },
+      {
+        data: result.data,
+        pagination: buildPaginationMeta(
+          { page, perPage },
+          result.total,
+        ),
+      },
     );
   } catch (error) {
     return handleTransferError(

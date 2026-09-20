@@ -178,7 +178,7 @@ export const deleteAccountController = async (
     return success(
       res,
       200,
-      'Account berhasil dihapus',
+      'Account berhasil dinonaktifkan',
     );
   } catch (error) {
     if (
@@ -189,17 +189,6 @@ export const deleteAccountController = async (
         res,
         404,
         'Account tidak ditemukan',
-      );
-    }
-
-    if (
-      error instanceof Error &&
-      error.message === 'ACCOUNT_HAS_RELATED_DATA'
-    ) {
-      return fail(
-        res,
-        422,
-        'Account tidak dapat dihapus karena masih memiliki data terkait. Nonaktifkan saja jika tidak digunakan.',
       );
     }
 

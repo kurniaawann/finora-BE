@@ -15,7 +15,7 @@ model User {
   email_verified_at                           DateTime?                @db.DateTime(0)
   is_active                                   Boolean                  @default(true)
   created_at                                  DateTime                 @default(now()) @db.DateTime(0)
-  updated_at                                  DateTime                 @default(now()) @db.DateTime(0)
+  updated_at                                  DateTime                 @updatedAt @db.DateTime(0)
   accounts                                    accounts[]
   audit_logs                                  audit_logs[]
   budgets                                     budgets[]
@@ -55,7 +55,7 @@ model Profile {
   currency   String   @default("IDR") @db.Char(3)
   timezone   String   @default("Asia/Jakarta") @db.VarChar(50)
   created_at DateTime @default(now()) @db.DateTime(0)
-  updated_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @updatedAt @db.DateTime(0)
   users      User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_profiles_user")
 
   @@index([user_id], map: "idx_profiles_user_id")
@@ -92,7 +92,7 @@ model accounts {
   is_active                                     Boolean                  @default(true)
   include_in_total_balance                      Boolean                  @default(true)
   created_at                                    DateTime                 @default(now()) @db.DateTime(0)
-  updated_at                                    DateTime                 @default(now()) @db.DateTime(0)
+  updated_at                                    DateTime                 @updatedAt @db.DateTime(0)
   users                                         User                     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_accounts_user")
   expense_payments                              expense_payments[]
   payment_methods                               payment_methods[]
@@ -117,7 +117,7 @@ model categories {
   color                  String?                  @db.VarChar(50)
   is_system              Boolean                  @default(false)
   created_at             DateTime                 @default(now()) @db.DateTime(0)
-  updated_at             DateTime                 @default(now()) @db.DateTime(0)
+  updated_at             DateTime                 @updatedAt @db.DateTime(0)
   budget_categories      budget_categories[]
   categories             categories?              @relation("categoriesTocategories", fields: [parent_id], references: [id], onUpdate: NoAction, map: "fk_categories_parent")
   other_categories       categories[]             @relation("categoriesTocategories")
@@ -141,7 +141,7 @@ model groups {
   invite_code   String          @unique(map: "invite_code") @db.VarChar(50)
   is_archived   Boolean         @default(false)
   created_at    DateTime        @default(now()) @db.DateTime(0)
-  updated_at    DateTime        @default(now()) @db.DateTime(0)
+  updated_at    DateTime        @updatedAt @db.DateTime(0)
   events        events[]
   expenses      expenses[]
   group_members group_members[]
@@ -178,7 +178,7 @@ model events {
   status        events_status   @default(planning)
   budget        Decimal?        @db.Decimal(18, 2)
   created_at    DateTime        @default(now()) @db.DateTime(0)
-  updated_at    DateTime        @default(now()) @db.DateTime(0)
+  updated_at    DateTime        @updatedAt @db.DateTime(0)
   event_members event_members[]
   users         User            @relation(fields: [created_by], references: [id], onUpdate: NoAction, map: "fk_events_created_by")
   groups        groups          @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_events_group")
@@ -253,7 +253,7 @@ model expense_payments {
   note              String?                 @db.Text
   proof_url         String?                 @db.Text
   created_at        DateTime                @default(now()) @db.DateTime(0)
-  updated_at        DateTime                @default(now()) @db.DateTime(0)
+  updated_at        DateTime                @updatedAt @db.DateTime(0)
   accounts          accounts?               @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_expense_payments_account")
   expenses          expenses                @relation(fields: [expense_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_expense_payments_expense")
   users             User                    @relation(fields: [payer_id], references: [id], onUpdate: NoAction, map: "fk_expense_payments_payer")
@@ -281,7 +281,7 @@ model expenses {
   expense_date     DateTime              @default(dbgenerated("(curdate())")) @db.Date
   receipt_url      String?               @db.Text
   created_at       DateTime              @default(now()) @db.DateTime(0)
-  updated_at       DateTime              @default(now()) @db.DateTime(0)
+  updated_at       DateTime              @updatedAt @db.DateTime(0)
   expense_items    expense_items[]
   expense_members  expense_members[]
   expense_payments expense_payments[]
@@ -341,7 +341,7 @@ model payment_methods {
   is_default       Boolean              @default(false)
   is_active        Boolean              @default(true)
   created_at       DateTime             @default(now()) @db.DateTime(0)
-  updated_at       DateTime             @default(now()) @db.DateTime(0)
+  updated_at       DateTime             @updatedAt @db.DateTime(0)
   expense_payments expense_payments[]
   accounts         accounts?            @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_payment_methods_account")
   users            User                 @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_payment_methods_user")
@@ -365,7 +365,7 @@ model settlements {
   note                                  String?            @db.Text
   proof_url                             String?            @db.Text
   created_at                            DateTime           @default(now()) @db.DateTime(0)
-  updated_at                            DateTime           @default(now()) @db.DateTime(0)
+  updated_at                            DateTime           @updatedAt @db.DateTime(0)
   accounts                              accounts?          @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_settlements_account")
   users_settlements_from_user_idTousers User               @relation("settlements_from_user_idTousers", fields: [from_user_id], references: [id], onUpdate: NoAction, map: "fk_settlements_from_user")
   groups                                groups             @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_settlements_group")
@@ -422,7 +422,7 @@ model budgets {
   end_date          DateTime            @db.Date
   is_active         Boolean             @default(true)
   created_at        DateTime            @default(now()) @db.DateTime(0)
-  updated_at        DateTime            @default(now()) @db.DateTime(0)
+  updated_at        DateTime            @updatedAt @db.DateTime(0)
   budget_categories budget_categories[]
   users             User                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_budgets_user")
 
@@ -459,7 +459,7 @@ model recurring_transactions {
   is_active     Boolean                          @default(true)
   description   String?                          @db.Text
   created_at    DateTime                         @default(now()) @db.DateTime(0)
-  updated_at    DateTime                         @default(now()) @db.DateTime(0)
+  updated_at    DateTime                         @updatedAt @db.DateTime(0)
   accounts      accounts?                        @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_recurring_account")
   categories    categories?                      @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "fk_recurring_category")
   users         User                             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_recurring_user")
@@ -496,7 +496,7 @@ model savings_goals {
   color                 String?                 @db.VarChar(50)
   is_completed          Boolean                 @default(false)
   created_at            DateTime                @default(now()) @db.DateTime(0)
-  updated_at            DateTime                @default(now()) @db.DateTime(0)
+  updated_at            DateTime                @updatedAt @db.DateTime(0)
   savings_contributions savings_contributions[]
   users                 User                    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_savings_goals_user")
 
@@ -518,7 +518,7 @@ model transactions {
   expense_payment_id                                    String?             @unique(map: "expense_payment_id") @db.VarChar(36)
   settlement_id                                         String?             @unique(map: "settlement_id") @db.VarChar(36)
   created_at                                            DateTime            @default(now()) @db.DateTime(0)
-  updated_at                                            DateTime            @default(now()) @db.DateTime(0)
+  updated_at                                            DateTime            @updatedAt @db.DateTime(0)
   accounts                                              accounts            @relation(fields: [account_id], references: [id], onUpdate: NoAction, map: "fk_transactions_account")
   categories                                            categories?         @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "fk_transactions_category")
   expense_payments                                      expense_payments?   @relation(fields: [expense_payment_id], references: [id], onUpdate: NoAction, map: "fk_transactions_exp_payment")

@@ -30,39 +30,60 @@ export const createTransaction = async (
 
 export const findTransactionsByUser = async (
   userId: string,
+  page: number,
+  perPage: number,
 ) => {
-  return prisma.transactions.findMany({
-    where: {
-      user_id: userId,
-    },
-    orderBy: [
-      {
-        transaction_date: 'desc',
-      },
-      {
-        created_at: 'desc',
-      },
-    ],
-    include: {
-      accounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          icon: true,
-          color: true,
-        },
+  const skip = (page - 1) * perPage;
+
+  const include = {
+    accounts: {
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        currency: true,
       },
     },
-  });
+    categories: {
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        icon: true,
+        color: true,
+      },
+    },
+  };
+
+  const [data, total] = await prisma.$transaction([
+    prisma.transactions.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: [
+        {
+          transaction_date: 'desc',
+        },
+        {
+          created_at: 'desc',
+        },
+      ],
+      skip,
+      take: perPage,
+      include,
+    }),
+
+    prisma.transactions.count({
+      where: {
+        user_id: userId,
+      },
+    }),
+  ]);
+
+  return {
+    data,
+    total,
+  };
 };
 
 export const findTransactionById = async (

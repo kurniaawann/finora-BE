@@ -48,6 +48,8 @@ export const updateAccountSchema = z.object({
     .optional(),
 
   is_active: z.boolean().optional(),
+
+  include_in_total_balance: z.boolean().optional(),
 });
 
 export type CreateAccountInput = z.infer<

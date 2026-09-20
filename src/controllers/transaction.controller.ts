@@ -10,6 +10,10 @@ import {
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
 import { fail, success } from '../utils/response.js';
+import {
+  buildPaginationMeta,
+  parsePagination,
+} from '../utils/pagination.js';
 import { logger } from '../config/logger.js';
 
 export const createTransactionController = async (
@@ -75,14 +79,28 @@ export const getTransactionsController = async (
   try {
     const userId = getAuthenticatedUserId(req);
 
-    const transactions =
-      await getTransactionsService(userId);
+    const { page, perPage } = parsePagination(
+      req.query,
+    );
+
+    const result =
+      await getTransactionsService(
+        userId,
+        page,
+        perPage,
+      );
 
     return success(
       res,
       200,
       'Data transaksi berhasil diambil',
-      { data: transactions },
+      {
+        data: result.data,
+        pagination: buildPaginationMeta(
+          { page, perPage },
+          result.total,
+        ),
+      },
     );
   } catch (error) {
     logger.error(
@@ -171,6 +189,13 @@ export const updateTransactionController = async (
             'Transaksi tidak ditemukan',
           );
 
+        case 'ACCOUNT_NOT_FOUND':
+          return fail(
+            res,
+            404,
+            'Akun tidak ditemukan',
+          );
+
         case 'CATEGORY_NOT_FOUND':
           return fail(
             res,
@@ -183,6 +208,20 @@ export const updateTransactionController = async (
             res,
             422,
             'Tipe kategori tidak sesuai dengan tipe transaksi',
+          );
+
+        case 'INVALID_AMOUNT':
+          return fail(
+            res,
+            422,
+            'Nominal transaksi tidak valid',
+          );
+
+        case 'TRANSFER_TRANSACTION_NOT_ALLOWED':
+          return fail(
+            res,
+            422,
+            'Transaksi transfer harus dikelola melalui fitur transfer',
           );
       }
     }

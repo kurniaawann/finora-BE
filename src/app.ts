@@ -16,6 +16,11 @@ import { generalRateLimiter } from './middlewares/rateLimiter.middleware.js';
 
 const app = express();
 
+app.set(
+  'trust proxy',
+  env.nodeEnv === 'production' ? 1 : false,
+);
+
 app.use(helmet());
 
 app.use(morgan(env.nodeEnv === 'development' ? 'dev' : 'combined', { stream: httpLogStream }));
@@ -35,6 +40,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api', routes);
+
+app.use((_req: Request, res: Response) => {
+  return fail(res, 404, 'Endpoint tidak ditemukan');
+});
 
 app.use(
   (

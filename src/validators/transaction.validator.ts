@@ -77,10 +77,23 @@ export const createTransactionSchema = z
   });
 
 export const updateTransactionSchema = z.object({
+  account_id: z
+    .string()
+    .uuid('Account ID tidak valid')
+    .optional(),
+
   category_id: z
     .string()
     .uuid('Category ID tidak valid')
     .nullable()
+    .optional(),
+
+  amount: z
+    .number()
+    .refine(
+      (value) => value !== 0,
+      'Nominal tidak boleh 0',
+    )
     .optional(),
 
   transaction_date: z
