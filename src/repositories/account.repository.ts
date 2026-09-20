@@ -21,36 +21,54 @@ export const createAccount = async (data: {
   });
 };
 
-export const findAccountsByUserId = async (
-  userId: string,
-  page: number,
-  perPage: number,
-) => {
-  const skip = (page - 1) * perPage;
+export const findAccountsByUserId = async (params: {
+  userId: string;
+  page: number;
+  perPage: number;
+  search?: string;
+  type?: accounts_type;
+  isActive?: boolean;
+}) => {
+  const skip = (params.page - 1) * params.perPage;
+
+  const where: Prisma.accountsWhereInput = {
+    user_id: params.userId,
+    is_active: params.isActive ?? true,
+  };
+
+  if (params.search) {
+    const contains = {
+      contains: params.search,
+    };
+
+    where.OR = [
+      { name: contains },
+      { institution_name: contains },
+      { account_number_masked: contains },
+    ];
+  }
+
+  if (params.type) {
+    where.type = params.type;
+  }
 
   const [data, total] = await prisma.$transaction([
     prisma.accounts.findMany({
-      where: {
-        user_id: userId,
-        is_active: true,
-      },
+      where,
       orderBy: {
         created_at: 'desc',
       },
       skip,
-      take: perPage,
+      take: params.perPage,
     }),
 
     prisma.accounts.count({
-      where: {
-        user_id: userId,
-        is_active: true,
-      },
+      where,
     }),
   ]);
 
   const balances = await getAccountBalances(
-    userId,
+    params.userId,
     data.map((account) => account.id),
   );
 
@@ -67,8 +85,8 @@ export const findAccountsByUserId = async (
   return {
     data: accounts,
     total,
-    page,
-    perPage,
+    page: params.page,
+    perPage: params.perPage,
   };
 };
 

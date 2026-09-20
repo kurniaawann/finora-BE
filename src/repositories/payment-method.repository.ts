@@ -55,16 +55,34 @@ export const findPaymentMethodsByUser = async (params: {
   page: number;
   perPage: number;
   type?: payment_methods_type;
+  search?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
 }) => {
   const skip = (params.page - 1) * params.perPage;
 
   const where: Prisma.payment_methodsWhereInput = {
     user_id: params.userId,
-    is_active: true,
+    is_active: params.isActive ?? true,
   };
 
   if (params.type) {
     where.type = params.type;
+  }
+
+  if (params.search) {
+    const contains = {
+      contains: params.search,
+    };
+
+    where.OR = [
+      { name: contains },
+      { provider: contains },
+    ];
+  }
+
+  if (params.isDefault !== undefined) {
+    where.is_default = params.isDefault;
   }
 
   const [data, total] = await prisma.$transaction([

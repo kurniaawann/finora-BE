@@ -37,23 +37,38 @@ export const findCategoriesByUser = async (params: {
   perPage: number;
   type?: categories_type;
   parentId?: string | null;
+  search?: string;
 }) => {
   const skip = (params.page - 1) * params.perPage;
 
-  const where: Prisma.categoriesWhereInput = {
-    OR: [
-      { user_id: params.userId },
-      { is_system: true },
-    ],
-  };
+  const conditions: Prisma.categoriesWhereInput[] = [
+    {
+      OR: [
+        { user_id: params.userId },
+        { is_system: true },
+      ],
+    },
+  ];
 
   if (params.type) {
-    where.type = params.type;
+    conditions.push({ type: params.type });
   }
 
   if (params.parentId !== undefined) {
-    where.parent_id = params.parentId;
+    conditions.push({ parent_id: params.parentId });
   }
+
+  if (params.search) {
+    conditions.push({
+      name: {
+        contains: params.search,
+      },
+    });
+  }
+
+  const where: Prisma.categoriesWhereInput = {
+    AND: conditions,
+  };
 
   const include = {
     categories: {

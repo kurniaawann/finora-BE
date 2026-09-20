@@ -76,6 +76,7 @@ export const getAll = async (
   perPage: number,
   type?: categories_type,
   parentId?: string | null,
+  search?: string,
 ) => {
   return findCategoriesByUser({
     userId,
@@ -83,6 +84,7 @@ export const getAll = async (
     perPage,
     type,
     parentId,
+    search,
   });
 };
 

@@ -1,5 +1,18 @@
 import { prisma } from '../config/database.js';
 import type { Prisma } from '../generated/prisma/client.js';
+import type { transactions_type, transactions_status } from '../generated/prisma/enums.js';
+
+export interface TransactionFilters {
+  search?: string;
+  type?: transactions_type;
+  status?: transactions_status;
+  accountId?: string;
+  categoryId?: string;
+  from?: Date;
+  to?: Date;
+  minAmount?: number;
+  maxAmount?: number;
+}
 
 export const createTransaction = async (
   data: Prisma.transactionsCreateInput,
@@ -28,12 +41,14 @@ export const createTransaction = async (
   });
 };
 
-export const findTransactionsByUser = async (
-  userId: string,
-  page: number,
-  perPage: number,
-) => {
-  const skip = (page - 1) * perPage;
+export const findTransactionsByUser = async (params: {
+  userId: string;
+  page: number;
+  perPage: number;
+  filters?: TransactionFilters;
+}) => {
+  const skip = (params.page - 1) * params.perPage;
+  const filters = params.filters ?? {};
 
   const include = {
     accounts: {
@@ -55,11 +70,71 @@ export const findTransactionsByUser = async (
     },
   };
 
+  const conditions: Prisma.transactionsWhereInput[] = [
+    {
+      user_id: params.userId,
+    },
+  ];
+
+  if (filters.search) {
+    const contains = {
+      contains: filters.search,
+    };
+
+    conditions.push({
+      OR: [
+        { description: contains },
+        { merchant: contains },
+        { reference_number: contains },
+      ],
+    });
+  }
+
+  if (filters.type) {
+    conditions.push({ type: filters.type });
+  }
+
+  if (filters.status) {
+    conditions.push({ status: filters.status });
+  }
+
+  if (filters.accountId) {
+    conditions.push({ account_id: filters.accountId });
+  }
+
+  if (filters.categoryId) {
+    conditions.push({ category_id: filters.categoryId });
+  }
+
+  if (filters.from || filters.to) {
+    conditions.push({
+      transaction_date: {
+        ...(filters.from ? { gte: filters.from } : {}),
+        ...(filters.to ? { lte: filters.to } : {}),
+      },
+    });
+  }
+
+  if (filters.minAmount !== undefined || filters.maxAmount !== undefined) {
+    conditions.push({
+      amount: {
+        ...(filters.minAmount !== undefined
+          ? { gte: filters.minAmount }
+          : {}),
+        ...(filters.maxAmount !== undefined
+          ? { lte: filters.maxAmount }
+          : {}),
+      },
+    });
+  }
+
+  const where: Prisma.transactionsWhereInput = {
+    AND: conditions,
+  };
+
   const [data, total] = await prisma.$transaction([
     prisma.transactions.findMany({
-      where: {
-        user_id: userId,
-      },
+      where,
       orderBy: [
         {
           transaction_date: 'desc',
@@ -69,14 +144,12 @@ export const findTransactionsByUser = async (
         },
       ],
       skip,
-      take: perPage,
+      take: params.perPage,
       include,
     }),
 
     prisma.transactions.count({
-      where: {
-        user_id: userId,
-      },
+      where,
     }),
   ]);
 

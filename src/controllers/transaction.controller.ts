@@ -14,8 +14,29 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import {
+  parseAmountFilter,
+  parseDateRangeFilter,
+  parseEnumFilter,
+  parseIdFilter,
+  parseSearchQuery,
+} from '../utils/filters.js';
 import { toTransactionDTO } from '../dtos/transaction.dto.js';
 import { logger } from '../config/logger.js';
+
+const TRANSACTIONS_TYPES = [
+  'income',
+  'expense',
+  'transfer',
+  'refund',
+  'adjustment',
+] as const;
+
+const TRANSACTIONS_STATUS = [
+  'pending',
+  'completed',
+  'cancelled',
+] as const;
 
 export const createTransactionController = async (
   req: Request,
@@ -84,12 +105,38 @@ export const getTransactionsController = async (
       req.query,
     );
 
-    const result =
-      await getTransactionsService(
-        userId,
-        page,
-        perPage,
-      );
+    const dateRange = parseDateRangeFilter(req.query);
+
+    const result = await getTransactionsService(
+      userId,
+      page,
+      perPage,
+      {
+        search: parseSearchQuery(req.query),
+        type: parseEnumFilter(
+          req.query,
+          'type',
+          TRANSACTIONS_TYPES,
+        ),
+        status: parseEnumFilter(
+          req.query,
+          'status',
+          TRANSACTIONS_STATUS,
+        ),
+        accountId: parseIdFilter(req.query, 'account_id'),
+        categoryId: parseIdFilter(req.query, 'category_id'),
+        from: dateRange.from,
+        to: dateRange.to,
+        minAmount: parseAmountFilter(
+          req.query,
+          'min_amount',
+        ),
+        maxAmount: parseAmountFilter(
+          req.query,
+          'max_amount',
+        ),
+      },
+    );
 
     return success(
       res,
@@ -104,6 +151,14 @@ export const getTransactionsController = async (
       },
     );
   } catch (error) {
+    if (error instanceof TypeError) {
+      return fail(
+        res,
+        422,
+        'Parameter filter tidak valid',
+      );
+    }
+
     logger.error(
       'Get transactions error:',
       error,

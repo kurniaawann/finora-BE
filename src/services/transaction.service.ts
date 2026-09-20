@@ -8,6 +8,8 @@ import {
   findCategoryByIdAndUser,
 } from '../repositories/transaction.repository.js';
 
+import type { TransactionFilters } from '../repositories/transaction.repository.js';
+
 import type {
   CreateTransactionInput,
   UpdateTransactionInput,
@@ -100,8 +102,14 @@ export const getTransactionsService = async (
   userId: string,
   page: number,
   perPage: number,
+  filters: TransactionFilters = {},
 ) => {
-  return findTransactionsByUser(userId, page, perPage);
+  return findTransactionsByUser({
+    userId,
+    page,
+    perPage,
+    filters,
+  });
 };
 
 export const getTransactionService = async (

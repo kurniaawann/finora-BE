@@ -10,6 +10,14 @@ import type {
   UpdateAccountInput,
 } from '../validators/account.validator.js';
 
+import type { accounts_type } from '../generated/prisma/enums.js';
+
+export interface AccountFilters {
+  search?: string;
+  type?: accounts_type;
+  isActive?: boolean;
+}
+
 export const create = async (
   userId: string,
   input: CreateAccountInput,
@@ -27,8 +35,14 @@ export const getAll = async (
   userId: string,
   page: number,
   perPage: number,
+  filters: AccountFilters = {},
 ) => {
-  return findAccountsByUserId(userId, page, perPage);
+  return findAccountsByUserId({
+    userId,
+    page,
+    perPage,
+    ...filters,
+  });
 };
 
 export const getById = async (

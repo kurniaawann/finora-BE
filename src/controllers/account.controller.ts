@@ -13,9 +13,23 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import {
+  parseBooleanFilter,
+  parseEnumFilter,
+  parseSearchQuery,
+} from '../utils/filters.js';
 import { toAccountDTO } from '../dtos/account.dto.js';
 import { fail, success } from '../utils/response.js';
 import { logger } from '../config/logger.js';
+
+const ACCOUNTS_TYPES = [
+  'cash',
+  'bank',
+  'e_wallet',
+  'credit_card',
+  'investment',
+  'other',
+] as const;
 
 export const createAccountController = async (
   req: Request,
@@ -56,7 +70,18 @@ export const getAccountsController = async (
       req.query,
     );
 
-    const result = await getAll(userId, page, perPage);
+    const result = await getAll(userId, page, perPage, {
+      search: parseSearchQuery(req.query),
+      type: parseEnumFilter(
+        req.query,
+        'type',
+        ACCOUNTS_TYPES,
+      ),
+      isActive: parseBooleanFilter(
+        req.query,
+        'is_active',
+      ),
+    });
 
     return success(
       res,
@@ -71,6 +96,14 @@ export const getAccountsController = async (
       },
     );
   } catch (error) {
+    if (error instanceof TypeError) {
+      return fail(
+        res,
+        422,
+        'Parameter filter tidak valid',
+      );
+    }
+
     logger.error(error);
 
     return fail(

@@ -14,6 +14,12 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import {
+  parseAmountFilter,
+  parseDateRangeFilter,
+  parseIdFilter,
+  parseSearchQuery,
+} from '../utils/filters.js';
 import { toTransferDTO } from '../dtos/transfer.dto.js';
 import { logger } from '../config/logger.js';
 
@@ -113,10 +119,33 @@ export const getTransfersController = async (
       req.query,
     );
 
+    const dateRange = parseDateRangeFilter(req.query);
+
     const result = await getTransfersService(
       userId,
       page,
       perPage,
+      {
+        search: parseSearchQuery(req.query),
+        fromAccountId: parseIdFilter(
+          req.query,
+          'from_account_id',
+        ),
+        toAccountId: parseIdFilter(
+          req.query,
+          'to_account_id',
+        ),
+        from: dateRange.from,
+        to: dateRange.to,
+        minAmount: parseAmountFilter(
+          req.query,
+          'min_amount',
+        ),
+        maxAmount: parseAmountFilter(
+          req.query,
+          'max_amount',
+        ),
+      },
     );
 
     return success(
@@ -132,6 +161,14 @@ export const getTransfersController = async (
       },
     );
   } catch (error) {
+    if (error instanceof TypeError) {
+      return fail(
+        res,
+        422,
+        'Parameter filter tidak valid',
+      );
+    }
+
     return handleTransferError(
       res,
       error,

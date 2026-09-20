@@ -10,6 +10,10 @@ import {
 import { Prisma } from '../generated/prisma/client.js';
 
 import type {
+  TransferFilters,
+} from '../repositories/transfer.repository.js';
+
+import type {
   CreateTransferInput,
   UpdateTransferInput,
 } from '../validators/transfer.validator.js';
@@ -82,8 +86,14 @@ export const getTransfersService = async (
   userId: string,
   page: number,
   perPage: number,
+  filters: TransferFilters = {},
 ) => {
-  return findTransfersByUser(userId, page, perPage);
+  return findTransfersByUser({
+    userId,
+    page,
+    perPage,
+    filters,
+  });
 };
 
 export const getTransferService = async (

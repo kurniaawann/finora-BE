@@ -62,18 +62,16 @@ export const create = async (
   });
 };
 
-export const getAll = async (
-  userId: string,
-  page: number,
-  perPage: number,
-  type?: payment_methods_type,
-) => {
-  return findPaymentMethodsByUser({
-    userId,
-    page,
-    perPage,
-    type,
-  });
+export const getAll = async (params: {
+  userId: string;
+  page: number;
+  perPage: number;
+  type?: payment_methods_type;
+  search?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+}) => {
+  return findPaymentMethodsByUser(params);
 };
 
 export const getById = async (

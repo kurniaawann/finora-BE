@@ -13,26 +13,15 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import {
+  parseEnumFilter,
+  parseSearchQuery,
+} from '../utils/filters.js';
 import { toCategoryDTO } from '../dtos/category.dto.js';
 import { fail, success } from '../utils/response.js';
 import { logger } from '../config/logger.js';
-import type { categories_type } from '../generated/prisma/enums.js';
 
-const parseTypeFilter = (
-  req: Request,
-): categories_type | undefined => {
-  const raw = req.query.type;
-
-  if (typeof raw !== 'string' || raw.length === 0) {
-    return undefined;
-  }
-
-  if (raw === 'income' || raw === 'expense') {
-    return raw;
-  }
-
-  throw new TypeError('INVALID_TYPE_FILTER');
-};
+const CATEGORIES_TYPES = ['income', 'expense'] as const;
 
 const parseParentFilter = (
   req: Request,
@@ -119,8 +108,13 @@ export const getCategoriesController = async (
       req.query,
     );
 
-    const type = parseTypeFilter(req);
+    const type = parseEnumFilter(
+      req.query,
+      'type',
+      CATEGORIES_TYPES,
+    );
     const parentId = parseParentFilter(req);
+    const search = parseSearchQuery(req.query);
 
     const result = await getAll(
       userId,
@@ -128,6 +122,7 @@ export const getCategoriesController = async (
       perPage,
       type,
       parentId,
+      search,
     );
 
     return success(
@@ -145,7 +140,7 @@ export const getCategoriesController = async (
   } catch (error) {
     if (
       error instanceof TypeError &&
-      (error.message === 'INVALID_TYPE_FILTER' ||
+      (error.message === 'INVALID_ENUM_FILTER' ||
         error.message === 'INVALID_PARENT_FILTER')
     ) {
       return fail(

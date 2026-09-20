@@ -13,32 +13,22 @@ import {
   buildPaginationMeta,
   parsePagination,
 } from '../utils/pagination.js';
+import {
+  parseBooleanFilter,
+  parseEnumFilter,
+  parseSearchQuery,
+} from '../utils/filters.js';
 import { toPaymentMethodDTO } from '../dtos/payment-method.dto.js';
 import { fail, success } from '../utils/response.js';
 import { logger } from '../config/logger.js';
-import type { payment_methods_type } from '../generated/prisma/enums.js';
 
-const parseTypeFilter = (
-  req: Request,
-): payment_methods_type | undefined => {
-  const raw = req.query.type;
-
-  if (typeof raw !== 'string' || raw.length === 0) {
-    return undefined;
-  }
-
-  if (
-    raw === 'cash' ||
-    raw === 'bank_transfer' ||
-    raw === 'e_wallet' ||
-    raw === 'card' ||
-    raw === 'other'
-  ) {
-    return raw;
-  }
-
-  throw new TypeError('INVALID_TYPE_FILTER');
-};
+const PAYMENT_METHOD_TYPES = [
+  'cash',
+  'bank_transfer',
+  'e_wallet',
+  'card',
+  'other',
+] as const;
 
 export const createPaymentMethodController = async (
   req: Request,
@@ -88,14 +78,25 @@ export const getPaymentMethodsController = async (
       req.query,
     );
 
-    const type = parseTypeFilter(req);
-
-    const result = await getAll(
+    const result = await getAll({
       userId,
       page,
       perPage,
-      type,
-    );
+      type: parseEnumFilter(
+        req.query,
+        'type',
+        PAYMENT_METHOD_TYPES,
+      ),
+      search: parseSearchQuery(req.query),
+      isActive: parseBooleanFilter(
+        req.query,
+        'is_active',
+      ),
+      isDefault: parseBooleanFilter(
+        req.query,
+        'is_default',
+      ),
+    });
 
     return success(
       res,
@@ -110,10 +111,7 @@ export const getPaymentMethodsController = async (
       },
     );
   } catch (error) {
-    if (
-      error instanceof TypeError &&
-      error.message === 'INVALID_TYPE_FILTER'
-    ) {
+    if (error instanceof TypeError) {
       return fail(
         res,
         422,

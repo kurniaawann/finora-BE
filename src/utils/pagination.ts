@@ -24,7 +24,9 @@ export const parsePagination = (
   query: PaginationQuery,
 ): PaginationParams => {
   const rawPage = Number(query.page);
-  const rawPerPage = Number(query.perPage);
+  const rawPerPage = Number(
+    query.per_page ?? query.perPage,
+  );
 
   const page =
     Number.isInteger(rawPage) && rawPage > 0

@@ -2,6 +2,16 @@ import { prisma } from '../config/database.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { getAccountBalances } from './account.repository.js';
 
+export interface TransferFilters {
+  search?: string;
+  fromAccountId?: string;
+  toAccountId?: string;
+  from?: Date;
+  to?: Date;
+  minAmount?: number;
+  maxAmount?: number;
+}
+
 const lockAccounts = async (
   tx: Prisma.TransactionClient,
   userId: string,
@@ -203,12 +213,14 @@ export const createTransfer = async (
     };
   });
 };
-export const findTransfersByUser = async (
-  userId: string,
-  page: number,
-  perPage: number,
-) => {
-  const skip = (page - 1) * perPage;
+export const findTransfersByUser = async (params: {
+  userId: string;
+  page: number;
+  perPage: number;
+  filters?: TransferFilters;
+}) => {
+  const skip = (params.page - 1) * params.perPage;
+  const filters = params.filters ?? {};
 
   const include = {
     accounts_transfers_from_account_idToaccounts: {
@@ -229,11 +241,64 @@ export const findTransfersByUser = async (
     },
   };
 
+  const conditions: Prisma.transfersWhereInput[] = [
+    {
+      user_id: params.userId,
+    },
+  ];
+
+  if (filters.search) {
+    conditions.push({
+      note: {
+        contains: filters.search,
+      },
+    });
+  }
+
+  if (filters.fromAccountId) {
+    conditions.push({
+      from_account_id: filters.fromAccountId,
+    });
+  }
+
+  if (filters.toAccountId) {
+    conditions.push({
+      to_account_id: filters.toAccountId,
+    });
+  }
+
+  if (filters.from || filters.to) {
+    conditions.push({
+      transfer_date: {
+        ...(filters.from ? { gte: filters.from } : {}),
+        ...(filters.to ? { lte: filters.to } : {}),
+      },
+    });
+  }
+
+  if (
+    filters.minAmount !== undefined ||
+    filters.maxAmount !== undefined
+  ) {
+    conditions.push({
+      amount: {
+        ...(filters.minAmount !== undefined
+          ? { gte: filters.minAmount }
+          : {}),
+        ...(filters.maxAmount !== undefined
+          ? { lte: filters.maxAmount }
+          : {}),
+      },
+    });
+  }
+
+  const where: Prisma.transfersWhereInput = {
+    AND: conditions,
+  };
+
   const [data, total] = await prisma.$transaction([
     prisma.transfers.findMany({
-      where: {
-        user_id: userId,
-      },
+      where,
       orderBy: [
         {
           transfer_date: 'desc',
@@ -243,14 +308,12 @@ export const findTransfersByUser = async (
         },
       ],
       skip,
-      take: perPage,
+      take: params.perPage,
       include,
     }),
 
     prisma.transfers.count({
-      where: {
-        user_id: userId,
-      },
+      where,
     }),
   ]);
 
