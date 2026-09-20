@@ -12,10 +12,10 @@ export interface TransferAccountDTO {
 export interface TransferDTO {
   id: string;
   amount: string;
-  transferDate: string;
+  transfer_date: string;
   note: string | null;
-  fromAccount: TransferAccountDTO;
-  toAccount: TransferAccountDTO;
+  from_account: TransferAccountDTO;
+  to_account: TransferAccountDTO;
 }
 
 const toIsoDate = (value: Date | string): string =>
@@ -31,10 +31,10 @@ export const toTransferDTO = (transfer: {
 }): TransferDTO => ({
   id: transfer.id,
   amount: toMoneyString(transfer.amount),
-  transferDate: toIsoDate(transfer.transfer_date),
+  transfer_date: toIsoDate(transfer.transfer_date),
   note: transfer.note ?? null,
-  fromAccount:
+  from_account:
     transfer.accounts_transfers_from_account_idToaccounts,
-  toAccount:
+  to_account:
     transfer.accounts_transfers_to_account_idToaccounts,
 });

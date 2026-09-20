@@ -4,7 +4,7 @@ export interface UserDTO {
   id: string;
   name: string;
   email: string;
-  emailVerifiedAt: Date | string | null;
+  email_verified_at: Date | string | null;
 }
 
 export const toUserDTO = (user: {
@@ -16,13 +16,13 @@ export const toUserDTO = (user: {
   id: user.id,
   name: user.name,
   email: user.email,
-  emailVerifiedAt: user.email_verified_at ?? null,
+  email_verified_at: user.email_verified_at ?? null,
 });
 
 export interface ProfileDTO {
   username: string | null;
-  fullName: string | null;
-  avatarUrl: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
   phone: string | null;
   bio: string | null;
   currency: string;
@@ -39,8 +39,8 @@ export const toProfileDTO = (profile: {
   timezone: string;
 }): ProfileDTO => ({
   username: profile.username ?? null,
-  fullName: profile.full_name ?? null,
-  avatarUrl: profile.avatar_url ?? null,
+  full_name: profile.full_name ?? null,
+  avatar_url: profile.avatar_url ?? null,
   phone: profile.phone ?? null,
   bio: profile.bio ?? null,
   currency: profile.currency,

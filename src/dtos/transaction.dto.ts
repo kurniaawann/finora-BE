@@ -22,10 +22,10 @@ export interface TransactionDTO {
   type: string;
   status: string;
   amount: string;
-  transactionDate: string;
+  transaction_date: string;
   description: string | null;
   merchant: string | null;
-  referenceNumber: string | null;
+  reference_number: string | null;
   account: TransactionAccountDTO;
   category: CategoryDTO | null;
 }
@@ -49,10 +49,10 @@ export const toTransactionDTO = (transaction: {
   type: transaction.type,
   status: transaction.status,
   amount: toMoneyString(transaction.amount),
-  transactionDate: toIsoDate(transaction.transaction_date),
+  transaction_date: toIsoDate(transaction.transaction_date),
   description: transaction.description ?? null,
   merchant: transaction.merchant ?? null,
-  referenceNumber: transaction.reference_number ?? null,
+  reference_number: transaction.reference_number ?? null,
   account: transaction.accounts,
   category: transaction.categories ?? null,
 });

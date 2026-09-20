@@ -8,10 +8,10 @@ export interface PaymentMethodDTO {
   name: string;
   type: string;
   provider: string | null;
-  accountId: string | null;
+  account_id: string | null;
   account: PaymentMethodAccountDTO | null;
-  isDefault: boolean;
-  isActive: boolean;
+  is_default: boolean;
+  is_active: boolean;
 }
 
 export const toPaymentMethodDTO = (
@@ -33,8 +33,8 @@ export const toPaymentMethodDTO = (
   name: method.name,
   type: method.type,
   provider: method.provider ?? null,
-  accountId: method.account_id ?? null,
+  account_id: method.account_id ?? null,
   account: method.accounts ?? null,
-  isDefault: method.is_default ?? false,
-  isActive: method.is_active ?? true,
+  is_default: method.is_default ?? false,
+  is_active: method.is_active ?? true,
 });

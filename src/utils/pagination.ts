@@ -5,11 +5,11 @@ export interface PaginationParams {
 
 export interface PaginationMeta {
   page: number;
-  perPage: number;
+  per_page: number;
   total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
+  total_pages: number;
+  has_next_page: boolean;
+  has_prev_page: boolean;
 }
 
 export const DEFAULT_PER_PAGE = 10;
@@ -54,10 +54,10 @@ export const buildPaginationMeta = (
 
   return {
     page: pagination.page,
-    perPage: pagination.perPage,
+    per_page: pagination.perPage,
     total,
-    totalPages,
-    hasNextPage: pagination.page < totalPages,
-    hasPrevPage: pagination.page > 1,
+    total_pages: totalPages,
+    has_next_page: pagination.page < totalPages,
+    has_prev_page: pagination.page > 1,
   };
 };

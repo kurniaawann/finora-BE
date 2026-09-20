@@ -10,9 +10,9 @@ export interface CategoryDTO {
   type: string;
   icon: string | null;
   color: string | null;
-  parentId: string | null;
+  parent_id: string | null;
   parent: CategoryParentDTO | null;
-  isSystem: boolean;
+  is_system: boolean;
 }
 
 export const toCategoryDTO = (category: {
@@ -34,7 +34,7 @@ export const toCategoryDTO = (category: {
   type: category.type,
   icon: category.icon ?? null,
   color: category.color ?? null,
-  parentId: category.parent_id ?? null,
+  parent_id: category.parent_id ?? null,
   parent: category.categories ?? null,
-  isSystem: category.is_system ?? false,
+  is_system: category.is_system ?? false,
 });

@@ -63,7 +63,7 @@ export const loginController = async (
 
     return success(res, 200, 'Login berhasil', {
       data: {
-        accessToken: result.accessToken,
+        access_token: result.accessToken,
         user: toUserDTO(result.user),
       },
     });
@@ -160,7 +160,7 @@ export const refreshController = async (
 
     return success(res, 200, 'Access token berhasil diperbarui', {
       data: {
-        accessToken: result.accessToken,
+        access_token: result.accessToken,
       },
     });
   } catch (error) {
