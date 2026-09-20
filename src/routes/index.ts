@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import accountRoutes from './account.routes.js';
 import categoryRoutes from './category.routes.js';
+import paymentMethodRoutes from './payment-method.routes.js';
 import { prisma } from '../config/database.js';
 import authRoutes from './auth.routes.js';
 import transactionRoutes from './transaction.routes.js';
@@ -29,5 +30,6 @@ router.use('/accounts', accountRoutes);
 router.use('/transactions', transactionRoutes);
 router.use('/transfers', transferRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/payment-methods', paymentMethodRoutes);
 
 export default router;
