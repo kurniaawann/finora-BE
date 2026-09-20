@@ -22,7 +22,7 @@ const readQuery = (
 export const parseSearchQuery = (
   query: PaginationQuery,
 ): string | undefined => {
-  const q = readQuery(query, 'q');
+  const q = readQuery(query, 'search');
 
   return q ? q.slice(0, MAX_SEARCH_LENGTH) : undefined;
 };
