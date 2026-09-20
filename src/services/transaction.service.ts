@@ -52,6 +52,13 @@ export const createTransactionService = async (
     ) {
       throw new Error('INVALID_CATEGORY_TYPE');
     }
+
+    if (
+      data.type === 'refund' &&
+      category.type !== 'income'
+    ) {
+      throw new Error('INVALID_CATEGORY_TYPE');
+    }
   }
 
   return createTransaction({
@@ -145,6 +152,13 @@ export const updateTransactionService = async (
     if (
       transaction.type === 'expense' &&
       category.type !== 'expense'
+    ) {
+      throw new Error('INVALID_CATEGORY_TYPE');
+    }
+
+    if (
+      transaction.type === 'refund' &&
+      category.type !== 'income'
     ) {
       throw new Error('INVALID_CATEGORY_TYPE');
     }

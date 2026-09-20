@@ -68,7 +68,7 @@ export const login = async (input: LoginInput) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      emailVerifiedAt: user.email_verified_at,
+      email_verified_at: user.email_verified_at,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
     },
@@ -90,10 +90,8 @@ export const getCurrentUser = async (userId: string) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    emailVerifiedAt: user.email_verified_at,
+    email_verified_at: user.email_verified_at,
     profile: user.profiles,
-    createdAt: user.created_at,
-    updatedAt: user.updated_at,
   };
 };
 

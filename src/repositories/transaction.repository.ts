@@ -101,10 +101,9 @@ export const updateTransaction = async (
   userId: string,
   data: Prisma.transactionsUpdateInput,
 ) => {
-  return prisma.transactions.updateMany({
+  return prisma.transactions.update({
     where: {
       id: transactionId,
-      user_id: userId,
     },
     data,
   });
