@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { env } from '../config/env.js';
+import { logger } from '../config/logger.js';
 import { getCurrentUser, login, logout, refreshAccessToken, register } from '../services/auth.service.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
 import { getAuthenticatedUserId } from '../utils/auth.js'
@@ -29,7 +30,7 @@ export const registerController = async (
       return fail(res, 409, 'Email sudah terdaftar');
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(res, 500, 'Terjadi kesalahan pada server');
   }
@@ -80,7 +81,7 @@ export const loginController = async (
       return fail(res, 403, 'Akun Anda tidak aktif');
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(res, 500, 'Terjadi kesalahan pada server');
   }
@@ -119,7 +120,7 @@ export const meController = async (
       return fail(res, 403, 'Akun Anda tidak aktif');
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(res, 500, 'Terjadi kesalahan pada server');
   }
@@ -210,7 +211,7 @@ export const refreshController = async (
       );
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(res, 500, 'Terjadi kesalahan pada server');
   }
@@ -226,7 +227,7 @@ export const logoutController = async (
     try {
       await logout(refreshToken);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

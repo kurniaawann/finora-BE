@@ -10,6 +10,7 @@ import {
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
 import { fail, success } from '../utils/response.js';
+import { logger } from '../config/logger.js';
 
 const TRANSFER_ERRORS: Record<
   string,
@@ -60,7 +61,7 @@ const handleTransferError = (
     return fail(res, status, message);
   }
 
-  console.error(`${context}:`, error);
+  logger.error(`${context}:`, error);
 
   return fail(
     res,

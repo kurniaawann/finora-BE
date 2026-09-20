@@ -10,6 +10,7 @@ import {
 
 import { getAuthenticatedUserId } from '../utils/auth.js';
 import { fail, success } from '../utils/response.js';
+import { logger } from '../config/logger.js';
 
 export const createTransactionController = async (
   req: Request,
@@ -54,7 +55,7 @@ export const createTransactionController = async (
       }
     }
 
-    console.error(
+    logger.error(
       'Create transaction error:',
       error,
     );
@@ -84,7 +85,7 @@ export const getTransactionsController = async (
       { data: transactions },
     );
   } catch (error) {
-    console.error(
+    logger.error(
       'Get transactions error:',
       error,
     );
@@ -127,7 +128,7 @@ export const getTransactionController = async (
       );
     }
 
-    console.error(
+    logger.error(
       'Get transaction error:',
       error,
     );
@@ -186,7 +187,7 @@ export const updateTransactionController = async (
       }
     }
 
-    console.error(
+    logger.error(
       'Update transaction error:',
       error,
     );
@@ -237,7 +238,7 @@ export const deleteTransactionController = async (
       }
     }
 
-    console.error(
+    logger.error(
       'Delete transaction error:',
       error,
     );

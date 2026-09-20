@@ -17,4 +17,5 @@ export const env = {
   jwtAccessExpiresIn: requireEnv('JWT_ACCESS_EXPIRES_IN') ?? '15m',
   jwtRefreshSecret:requireEnv('JWT_REFRESH_SECRET'),
   jwtRefreshExpiresIn:requireEnv('JWT_REFRESH_EXPIRES_IN') ?? '30d',
+  logLevel: process.env.LOG_LEVEL ?? 'info',
 };

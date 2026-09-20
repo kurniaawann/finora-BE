@@ -14,6 +14,7 @@ import {
   parsePagination,
 } from '../utils/pagination.js';
 import { fail, success } from '../utils/response.js';
+import { logger } from '../config/logger.js';
 
 export const createAccountController = async (
   req: Request,
@@ -33,7 +34,7 @@ export const createAccountController = async (
       'Account berhasil dibuat',
     );
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     return fail(
       res,
@@ -69,7 +70,7 @@ export const getAccountsController = async (
       },
     );
   } catch (error) {
-    console.error(error);
+    logger.error(error);
 
     return fail(
       res,
@@ -110,7 +111,7 @@ export const getAccountController = async (
       );
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(
       res,
@@ -151,7 +152,7 @@ export const updateAccountController = async (
       );
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(
       res,
@@ -202,7 +203,7 @@ export const deleteAccountController = async (
       );
     }
 
-    console.error(error);
+    logger.error(error);
 
     return fail(
       res,

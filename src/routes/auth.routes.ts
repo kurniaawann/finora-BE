@@ -9,12 +9,13 @@ import {
 } from '../controllers/auth.controller.js';
 
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { authRateLimiter } from '../middlewares/rateLimiter.middleware.js';
 
 const router = Router();
 
-router.post('/register', registerController);
+router.post('/register', authRateLimiter, registerController);
 
-router.post('/login', loginController);
+router.post('/login', authRateLimiter, loginController);
 
 router.get(
   '/me',
@@ -24,6 +25,7 @@ router.get(
 
 router.post(
   '/refresh',
+  authRateLimiter,
   refreshController,
 );
 router.post(
