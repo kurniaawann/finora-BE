@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import jwt, { type SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
@@ -9,6 +10,8 @@ export interface AccessTokenPayload {
 export interface RefreshTokenPayload {
   id: string;
   type: 'refresh';
+  // Opsional agar token lama (tanpa jti) tetap valid saat diverifikasi.
+  jti?: string;
 }
 
 export const generateAccessToken = (userId: string): string => {
@@ -53,6 +56,10 @@ export const generateRefreshToken = (
   const payload: RefreshTokenPayload = {
     id: userId,
     type: 'refresh',
+    // Identitas unik per token agar dua token yang dibuat pada
+    // detik yang sama (mis. login lalu refresh cepat) tidak identik
+    // dan tidak bentrok pada constraint token_hash.
+    jti: crypto.randomUUID(),
   };
 
   return jwt.sign(payload, env.jwtRefreshSecret, {

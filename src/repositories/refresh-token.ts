@@ -83,9 +83,13 @@ export const rotateRefreshToken = async (data: {
       },
     });
 
-    await tx.refreshToken.update({
+    // Conditional update: hanya rotasi jika token lama masih aktif.
+    // Kalau count 0, token sudah dipakai thread/request lain (race),
+    // transaksi dibatalkan sehingga token baru tidak jadi disimpan.
+    const result = await tx.refreshToken.updateMany({
       where: {
         id: data.oldTokenId,
+        revoked_at: null,
       },
       data: {
         revoked_at: new Date(),
@@ -93,6 +97,41 @@ export const rotateRefreshToken = async (data: {
       },
     });
 
+    if (result.count === 0) {
+      throw new Error('REFRESH_TOKEN_REUSED');
+    }
+
     return newToken;
+  });
+};
+
+/**
+ * Membersihkan baris refresh token yang sudah tidak berguna.
+ *
+ * Baris revoked/expired dipertahankan beberapa hari agar deteksi
+ * pemakaian ulang (reuse detection) tetap berfungsi, lalu dihapus.
+ */
+export const pruneExpiredRefreshTokens = async () => {
+  const cutoff = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000,
+  );
+
+  return prisma.refreshToken.deleteMany({
+    where: {
+      OR: [
+        {
+          revoked_at: {
+            not: null,
+            lt: cutoff,
+          },
+        },
+        {
+          revoked_at: null,
+          expires_at: {
+            lt: cutoff,
+          },
+        },
+      ],
+    },
   });
 };

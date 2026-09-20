@@ -1,6 +1,7 @@
 import {
   createRefreshToken,
   findRefreshToken,
+  pruneExpiredRefreshTokens,
   revokeAllUserRefreshTokens,
   revokeRefreshToken,
   rotateRefreshToken,
@@ -13,10 +14,31 @@ import {
 } from '../repositories/user.repository.js';
 import { getRefreshTokenExpiry } from '../utils/date.js';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
+import { logger } from '../config/logger.js';
 
 import { comparePassword, hashPassword } from '../utils/password.js';
 import { hashToken } from '../utils/token.js';
 import type { LoginInput, RegisterInput } from '../validators/auth.validator.js';
+
+const PRUNE_INTERVAL_MS = 60 * 60 * 1000;
+
+let lastPruneAt = 0;
+
+const pruneRefreshTokensIfNeeded = async () => {
+  const now = Date.now();
+
+  if (now - lastPruneAt < PRUNE_INTERVAL_MS) {
+    return;
+  }
+
+  lastPruneAt = now;
+
+  try {
+    await pruneExpiredRefreshTokens();
+  } catch (error) {
+    logger.error('Prune refresh tokens error:', error);
+  }
+};
 
 
 
@@ -65,6 +87,8 @@ export const login = async (input: LoginInput) => {
     tokenHash,
     expiresAt: getRefreshTokenExpiry(),
   });
+
+  await pruneRefreshTokensIfNeeded();
 
   return {
     accessToken,
@@ -151,16 +175,40 @@ export const refreshAccessToken = async (
   const newRefreshTokenHash =
     hashToken(newRefreshToken);
 
-  const newRefreshTokenRecord =
-    await rotateRefreshToken({
-      oldTokenId: storedToken.id,
+  let newRefreshTokenRecord;
 
-      newToken: {
-        userId: storedToken.user_id,
-        tokenHash: newRefreshTokenHash,
-        expiresAt: getRefreshTokenExpiry(),
-      },
-    });
+  try {
+    newRefreshTokenRecord =
+      await rotateRefreshToken({
+        oldTokenId: storedToken.id,
+
+        newToken: {
+          userId: storedToken.user_id,
+          tokenHash: newRefreshTokenHash,
+          expiresAt: getRefreshTokenExpiry(),
+        },
+      });
+  } catch (error) {
+    /**
+     * Token lama ternyata sudah dirotasi proses lain yang berjalan
+     * bersamaan (race). Perlakukan seperti pemakaian ulang sesuai
+     * OWASP: revoke seluruh refresh token user.
+     */
+    if (
+      error instanceof Error &&
+      error.message === 'REFRESH_TOKEN_REUSED'
+    ) {
+      await revokeAllUserRefreshTokens(
+        storedToken.user_id,
+      );
+
+      throw new Error('REFRESH_TOKEN_REUSED');
+    }
+
+    throw error;
+  }
+
+  await pruneRefreshTokensIfNeeded();
 
   const accessToken = generateAccessToken(
     storedToken.user_id,
