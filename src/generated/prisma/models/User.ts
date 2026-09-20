@@ -216,6 +216,10 @@ export type UserWhereInput = {
   expense_members?: Prisma.Expense_membersListRelationFilter
   expense_payments?: Prisma.Expense_paymentsListRelationFilter
   expenses?: Prisma.ExpensesListRelationFilter
+  friend_requests_sent?: Prisma.Friend_requestsListRelationFilter
+  friend_requests_received?: Prisma.Friend_requestsListRelationFilter
+  friendships_a?: Prisma.FriendshipsListRelationFilter
+  friendships_b?: Prisma.FriendshipsListRelationFilter
   group_members?: Prisma.Group_membersListRelationFilter
   groups?: Prisma.GroupsListRelationFilter
   invitations_invitations_invitee_idTousers?: Prisma.InvitationsListRelationFilter
@@ -252,6 +256,10 @@ export type UserOrderByWithRelationInput = {
   expense_members?: Prisma.expense_membersOrderByRelationAggregateInput
   expense_payments?: Prisma.expense_paymentsOrderByRelationAggregateInput
   expenses?: Prisma.expensesOrderByRelationAggregateInput
+  friend_requests_sent?: Prisma.friend_requestsOrderByRelationAggregateInput
+  friend_requests_received?: Prisma.friend_requestsOrderByRelationAggregateInput
+  friendships_a?: Prisma.friendshipsOrderByRelationAggregateInput
+  friendships_b?: Prisma.friendshipsOrderByRelationAggregateInput
   group_members?: Prisma.group_membersOrderByRelationAggregateInput
   groups?: Prisma.groupsOrderByRelationAggregateInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsOrderByRelationAggregateInput
@@ -292,6 +300,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   expense_members?: Prisma.Expense_membersListRelationFilter
   expense_payments?: Prisma.Expense_paymentsListRelationFilter
   expenses?: Prisma.ExpensesListRelationFilter
+  friend_requests_sent?: Prisma.Friend_requestsListRelationFilter
+  friend_requests_received?: Prisma.Friend_requestsListRelationFilter
+  friendships_a?: Prisma.FriendshipsListRelationFilter
+  friendships_b?: Prisma.FriendshipsListRelationFilter
   group_members?: Prisma.Group_membersListRelationFilter
   groups?: Prisma.GroupsListRelationFilter
   invitations_invitations_invitee_idTousers?: Prisma.InvitationsListRelationFilter
@@ -356,6 +368,10 @@ export type UserCreateInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -392,6 +408,10 @@ export type UserUncheckedCreateInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -428,6 +448,10 @@ export type UserUpdateInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -464,6 +488,10 @@ export type UserUncheckedUpdateInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -783,6 +811,62 @@ export type UserUpdateOneRequiredWithoutInvitations_invitations_inviter_idTouser
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvitations_invitations_inviter_idTousersInput, Prisma.UserUpdateWithoutInvitations_invitations_inviter_idTousersInput>, Prisma.UserUncheckedUpdateWithoutInvitations_invitations_inviter_idTousersInput>
 }
 
+export type UserCreateNestedOneWithoutFriend_requests_sentInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_sentInput, Prisma.UserUncheckedCreateWithoutFriend_requests_sentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriend_requests_sentInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFriend_requests_receivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedCreateWithoutFriend_requests_receivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriend_requests_receivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFriend_requests_sentNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_sentInput, Prisma.UserUncheckedCreateWithoutFriend_requests_sentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriend_requests_sentInput
+  upsert?: Prisma.UserUpsertWithoutFriend_requests_sentInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriend_requests_sentInput, Prisma.UserUpdateWithoutFriend_requests_sentInput>, Prisma.UserUncheckedUpdateWithoutFriend_requests_sentInput>
+}
+
+export type UserUpdateOneRequiredWithoutFriend_requests_receivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedCreateWithoutFriend_requests_receivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriend_requests_receivedInput
+  upsert?: Prisma.UserUpsertWithoutFriend_requests_receivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriend_requests_receivedInput, Prisma.UserUpdateWithoutFriend_requests_receivedInput>, Prisma.UserUncheckedUpdateWithoutFriend_requests_receivedInput>
+}
+
+export type UserCreateNestedOneWithoutFriendships_aInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendships_aInput, Prisma.UserUncheckedCreateWithoutFriendships_aInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendships_aInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFriendships_bInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendships_bInput, Prisma.UserUncheckedCreateWithoutFriendships_bInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendships_bInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFriendships_aNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendships_aInput, Prisma.UserUncheckedCreateWithoutFriendships_aInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendships_aInput
+  upsert?: Prisma.UserUpsertWithoutFriendships_aInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendships_aInput, Prisma.UserUpdateWithoutFriendships_aInput>, Prisma.UserUncheckedUpdateWithoutFriendships_aInput>
+}
+
+export type UserUpdateOneRequiredWithoutFriendships_bNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendships_bInput, Prisma.UserUncheckedCreateWithoutFriendships_bInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendships_bInput
+  upsert?: Prisma.UserUpsertWithoutFriendships_bInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendships_bInput, Prisma.UserUpdateWithoutFriendships_bInput>, Prisma.UserUncheckedUpdateWithoutFriendships_bInput>
+}
+
 export type UserCreateNestedOneWithoutPayment_methodsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPayment_methodsInput, Prisma.UserUncheckedCreateWithoutPayment_methodsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPayment_methodsInput
@@ -960,6 +1044,10 @@ export type UserCreateWithoutProfilesInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -995,6 +1083,10 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1046,6 +1138,10 @@ export type UserUpdateWithoutProfilesInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1081,6 +1177,10 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1116,6 +1216,10 @@ export type UserCreateWithoutRefresh_tokensInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1151,6 +1255,10 @@ export type UserUncheckedCreateWithoutRefresh_tokensInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1202,6 +1310,10 @@ export type UserUpdateWithoutRefresh_tokensInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1237,6 +1349,10 @@ export type UserUncheckedUpdateWithoutRefresh_tokensInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1271,6 +1387,10 @@ export type UserCreateWithoutAccountsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1306,6 +1426,10 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1357,6 +1481,10 @@ export type UserUpdateWithoutAccountsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1392,6 +1520,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1427,6 +1559,10 @@ export type UserCreateWithoutCategoriesInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1462,6 +1598,10 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1513,6 +1653,10 @@ export type UserUpdateWithoutCategoriesInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1548,6 +1692,10 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1584,6 +1732,10 @@ export type UserCreateWithoutGroupsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -1619,6 +1771,10 @@ export type UserUncheckedCreateWithoutGroupsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -1670,6 +1826,10 @@ export type UserUpdateWithoutGroupsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -1705,6 +1865,10 @@ export type UserUncheckedUpdateWithoutGroupsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -1739,6 +1903,10 @@ export type UserCreateWithoutEvent_membersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1774,6 +1942,10 @@ export type UserUncheckedCreateWithoutEvent_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1825,6 +1997,10 @@ export type UserUpdateWithoutEvent_membersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1860,6 +2036,10 @@ export type UserUncheckedUpdateWithoutEvent_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -1895,6 +2075,10 @@ export type UserCreateWithoutEventsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1930,6 +2114,10 @@ export type UserUncheckedCreateWithoutEventsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -1981,6 +2169,10 @@ export type UserUpdateWithoutEventsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2016,6 +2208,10 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2051,6 +2247,10 @@ export type UserCreateWithoutExpense_item_membersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2086,6 +2286,10 @@ export type UserUncheckedCreateWithoutExpense_item_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2137,6 +2341,10 @@ export type UserUpdateWithoutExpense_item_membersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2172,6 +2380,10 @@ export type UserUncheckedUpdateWithoutExpense_item_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2207,6 +2419,10 @@ export type UserCreateWithoutExpense_membersInput = {
   expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2242,6 +2458,10 @@ export type UserUncheckedCreateWithoutExpense_membersInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2293,6 +2513,10 @@ export type UserUpdateWithoutExpense_membersInput = {
   expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2328,6 +2552,10 @@ export type UserUncheckedUpdateWithoutExpense_membersInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2363,6 +2591,10 @@ export type UserCreateWithoutExpense_paymentsInput = {
   expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2398,6 +2630,10 @@ export type UserUncheckedCreateWithoutExpense_paymentsInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2449,6 +2685,10 @@ export type UserUpdateWithoutExpense_paymentsInput = {
   expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2484,6 +2724,10 @@ export type UserUncheckedUpdateWithoutExpense_paymentsInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2519,6 +2763,10 @@ export type UserCreateWithoutExpensesInput = {
   expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2554,6 +2802,10 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2605,6 +2857,10 @@ export type UserUpdateWithoutExpensesInput = {
   expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2640,6 +2896,10 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -2676,6 +2936,10 @@ export type UserCreateWithoutGroup_membersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -2711,6 +2975,10 @@ export type UserUncheckedCreateWithoutGroup_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -2762,6 +3030,10 @@ export type UserUpdateWithoutGroup_membersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -2797,6 +3069,10 @@ export type UserUncheckedUpdateWithoutGroup_membersInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -2832,6 +3108,10 @@ export type UserCreateWithoutInvitations_invitations_invitee_idTousersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -2867,6 +3147,10 @@ export type UserUncheckedCreateWithoutInvitations_invitations_invitee_idTousersI
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
@@ -2907,6 +3191,10 @@ export type UserCreateWithoutInvitations_invitations_inviter_idTousersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2942,6 +3230,10 @@ export type UserUncheckedCreateWithoutInvitations_invitations_inviter_idTousersI
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -2993,6 +3285,10 @@ export type UserUpdateWithoutInvitations_invitations_invitee_idTousersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -3028,6 +3324,10 @@ export type UserUncheckedUpdateWithoutInvitations_invitations_invitee_idTousersI
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
@@ -3074,6 +3374,10 @@ export type UserUpdateWithoutInvitations_invitations_inviter_idTousersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3109,9 +3413,701 @@ export type UserUncheckedUpdateWithoutInvitations_invitations_inviter_idTousersI
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type UserCreateWithoutFriend_requests_sentInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersCreateNestedManyWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutFriend_requests_sentInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersUncheckedCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsUncheckedCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type UserCreateOrConnectWithoutFriend_requests_sentInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_sentInput, Prisma.UserUncheckedCreateWithoutFriend_requests_sentInput>
+}
+
+export type UserCreateWithoutFriend_requests_receivedInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersCreateNestedManyWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutFriend_requests_receivedInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersUncheckedCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsUncheckedCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type UserCreateOrConnectWithoutFriend_requests_receivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedCreateWithoutFriend_requests_receivedInput>
+}
+
+export type UserUpsertWithoutFriend_requests_sentInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriend_requests_sentInput, Prisma.UserUncheckedUpdateWithoutFriend_requests_sentInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_sentInput, Prisma.UserUncheckedCreateWithoutFriend_requests_sentInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriend_requests_sentInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriend_requests_sentInput, Prisma.UserUncheckedUpdateWithoutFriend_requests_sentInput>
+}
+
+export type UserUpdateWithoutFriend_requests_sentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriend_requests_sentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUncheckedUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUpsertWithoutFriend_requests_receivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedUpdateWithoutFriend_requests_receivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedCreateWithoutFriend_requests_receivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriend_requests_receivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriend_requests_receivedInput, Prisma.UserUncheckedUpdateWithoutFriend_requests_receivedInput>
+}
+
+export type UserUpdateWithoutFriend_requests_receivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriend_requests_receivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUncheckedUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type UserCreateWithoutFriendships_aInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersCreateNestedManyWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutFriendships_aInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersUncheckedCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
+  group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsUncheckedCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type UserCreateOrConnectWithoutFriendships_aInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendships_aInput, Prisma.UserUncheckedCreateWithoutFriendships_aInput>
+}
+
+export type UserCreateWithoutFriendships_bInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersCreateNestedManyWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutFriendships_bInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  email_verified_at?: Date | string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  audit_logs?: Prisma.audit_logsUncheckedCreateNestedManyWithoutUsersInput
+  budgets?: Prisma.budgetsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  event_members?: Prisma.event_membersUncheckedCreateNestedManyWithoutUsersInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutUsersInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
+  expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
+  expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
+  groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_inviter_idTousersInput
+  notifications?: Prisma.notificationsUncheckedCreateNestedManyWithoutUsersInput
+  payment_methods?: Prisma.payment_methodsUncheckedCreateNestedManyWithoutUsersInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedOneWithoutUsersInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedCreateNestedManyWithoutUsersInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUsersInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedCreateNestedManyWithoutUsersInput
+  savings_goals?: Prisma.savings_goalsUncheckedCreateNestedManyWithoutUsersInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_from_user_idTousersInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedCreateNestedManyWithoutUsers_settlements_to_user_idTousersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  transfers?: Prisma.transfersUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type UserCreateOrConnectWithoutFriendships_bInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendships_bInput, Prisma.UserUncheckedCreateWithoutFriendships_bInput>
+}
+
+export type UserUpsertWithoutFriendships_aInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendships_aInput, Prisma.UserUncheckedUpdateWithoutFriendships_aInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendships_aInput, Prisma.UserUncheckedCreateWithoutFriendships_aInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendships_aInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendships_aInput, Prisma.UserUncheckedUpdateWithoutFriendships_aInput>
+}
+
+export type UserUpdateWithoutFriendships_aInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendships_aInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUncheckedUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
+  group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUncheckedUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUncheckedUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUncheckedUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUpsertWithoutFriendships_bInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendships_bInput, Prisma.UserUncheckedUpdateWithoutFriendships_bInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendships_bInput, Prisma.UserUncheckedCreateWithoutFriendships_bInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendships_bInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendships_bInput, Prisma.UserUncheckedUpdateWithoutFriendships_bInput>
+}
+
+export type UserUpdateWithoutFriendships_bInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
+  notifications?: Prisma.notificationsUpdateManyWithoutUsersNestedInput
+  payment_methods?: Prisma.payment_methodsUpdateManyWithoutUsersNestedInput
+  profiles?: Prisma.ProfileUpdateOneWithoutUsersNestedInput
+  recurring_transactions?: Prisma.recurring_transactionsUpdateManyWithoutUsersNestedInput
+  refresh_tokens?: Prisma.RefreshTokenUpdateManyWithoutUsersNestedInput
+  savings_contributions_made?: Prisma.savings_contributionsUpdateManyWithoutUsersNestedInput
+  savings_goals?: Prisma.savings_goalsUpdateManyWithoutUsersNestedInput
+  settlements_settlements_from_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_from_user_idTousersNestedInput
+  settlements_settlements_to_user_idTousers?: Prisma.settlementsUpdateManyWithoutUsers_settlements_to_user_idTousersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  transfers?: Prisma.transfersUpdateManyWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendships_bInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email_verified_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  audit_logs?: Prisma.audit_logsUncheckedUpdateManyWithoutUsersNestedInput
+  budgets?: Prisma.budgetsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  event_members?: Prisma.event_membersUncheckedUpdateManyWithoutUsersNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutUsersNestedInput
+  expense_item_members?: Prisma.expense_item_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
+  expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+  expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
+  groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
+  invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
+  invitations_invitations_inviter_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_inviter_idTousersNestedInput
   notifications?: Prisma.notificationsUncheckedUpdateManyWithoutUsersNestedInput
   payment_methods?: Prisma.payment_methodsUncheckedUpdateManyWithoutUsersNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateOneWithoutUsersNestedInput
@@ -3144,6 +4140,10 @@ export type UserCreateWithoutPayment_methodsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3179,6 +4179,10 @@ export type UserUncheckedCreateWithoutPayment_methodsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3230,6 +4234,10 @@ export type UserUpdateWithoutPayment_methodsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3265,6 +4273,10 @@ export type UserUncheckedUpdateWithoutPayment_methodsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3300,6 +4312,10 @@ export type UserCreateWithoutSettlements_settlements_from_user_idTousersInput = 
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3335,6 +4351,10 @@ export type UserUncheckedCreateWithoutSettlements_settlements_from_user_idTouser
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3375,6 +4395,10 @@ export type UserCreateWithoutSettlements_settlements_to_user_idTousersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3410,6 +4434,10 @@ export type UserUncheckedCreateWithoutSettlements_settlements_to_user_idTousersI
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3461,6 +4489,10 @@ export type UserUpdateWithoutSettlements_settlements_from_user_idTousersInput = 
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3496,6 +4528,10 @@ export type UserUncheckedUpdateWithoutSettlements_settlements_from_user_idTouser
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3542,6 +4578,10 @@ export type UserUpdateWithoutSettlements_settlements_to_user_idTousersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3577,6 +4617,10 @@ export type UserUncheckedUpdateWithoutSettlements_settlements_to_user_idTousersI
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3611,6 +4655,10 @@ export type UserCreateWithoutAudit_logsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3646,6 +4694,10 @@ export type UserUncheckedCreateWithoutAudit_logsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3697,6 +4749,10 @@ export type UserUpdateWithoutAudit_logsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3732,6 +4788,10 @@ export type UserUncheckedUpdateWithoutAudit_logsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3767,6 +4827,10 @@ export type UserCreateWithoutBudgetsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3802,6 +4866,10 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3853,6 +4921,10 @@ export type UserUpdateWithoutBudgetsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3888,6 +4960,10 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -3924,6 +5000,10 @@ export type UserCreateWithoutNotificationsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -3959,6 +5039,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4010,6 +5094,10 @@ export type UserUpdateWithoutNotificationsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4045,6 +5133,10 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4080,6 +5172,10 @@ export type UserCreateWithoutRecurring_transactionsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4115,6 +5211,10 @@ export type UserUncheckedCreateWithoutRecurring_transactionsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4166,6 +5266,10 @@ export type UserUpdateWithoutRecurring_transactionsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4201,6 +5305,10 @@ export type UserUncheckedUpdateWithoutRecurring_transactionsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4236,6 +5344,10 @@ export type UserCreateWithoutSavings_contributions_madeInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4271,6 +5383,10 @@ export type UserUncheckedCreateWithoutSavings_contributions_madeInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4322,6 +5438,10 @@ export type UserUpdateWithoutSavings_contributions_madeInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4357,6 +5477,10 @@ export type UserUncheckedUpdateWithoutSavings_contributions_madeInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4392,6 +5516,10 @@ export type UserCreateWithoutSavings_goalsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4427,6 +5555,10 @@ export type UserUncheckedCreateWithoutSavings_goalsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4478,6 +5610,10 @@ export type UserUpdateWithoutSavings_goalsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4513,6 +5649,10 @@ export type UserUncheckedUpdateWithoutSavings_goalsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4548,6 +5688,10 @@ export type UserCreateWithoutTransactionsInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4583,6 +5727,10 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4634,6 +5782,10 @@ export type UserUpdateWithoutTransactionsInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4669,6 +5821,10 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4704,6 +5860,10 @@ export type UserCreateWithoutTransfersInput = {
   expense_members?: Prisma.expense_membersCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4739,6 +5899,10 @@ export type UserUncheckedCreateWithoutTransfersInput = {
   expense_members?: Prisma.expense_membersUncheckedCreateNestedManyWithoutUsersInput
   expense_payments?: Prisma.expense_paymentsUncheckedCreateNestedManyWithoutUsersInput
   expenses?: Prisma.expensesUncheckedCreateNestedManyWithoutUsersInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_sender_idTousersInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedCreateNestedManyWithoutUsers_friend_requests_receiver_idTousersInput
+  friendships_a?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_a_idTousersInput
+  friendships_b?: Prisma.friendshipsUncheckedCreateNestedManyWithoutUsers_friendships_user_b_idTousersInput
   group_members?: Prisma.group_membersUncheckedCreateNestedManyWithoutUsersInput
   groups?: Prisma.groupsUncheckedCreateNestedManyWithoutUsersInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedCreateNestedManyWithoutUsers_invitations_invitee_idTousersInput
@@ -4790,6 +5954,10 @@ export type UserUpdateWithoutTransfersInput = {
   expense_members?: Prisma.expense_membersUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4825,6 +5993,10 @@ export type UserUncheckedUpdateWithoutTransfersInput = {
   expense_members?: Prisma.expense_membersUncheckedUpdateManyWithoutUsersNestedInput
   expense_payments?: Prisma.expense_paymentsUncheckedUpdateManyWithoutUsersNestedInput
   expenses?: Prisma.expensesUncheckedUpdateManyWithoutUsersNestedInput
+  friend_requests_sent?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_sender_idTousersNestedInput
+  friend_requests_received?: Prisma.friend_requestsUncheckedUpdateManyWithoutUsers_friend_requests_receiver_idTousersNestedInput
+  friendships_a?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_a_idTousersNestedInput
+  friendships_b?: Prisma.friendshipsUncheckedUpdateManyWithoutUsers_friendships_user_b_idTousersNestedInput
   group_members?: Prisma.group_membersUncheckedUpdateManyWithoutUsersNestedInput
   groups?: Prisma.groupsUncheckedUpdateManyWithoutUsersNestedInput
   invitations_invitations_invitee_idTousers?: Prisma.invitationsUncheckedUpdateManyWithoutUsers_invitations_invitee_idTousersNestedInput
@@ -4857,6 +6029,10 @@ export type UserCountOutputType = {
   expense_members: number
   expense_payments: number
   expenses: number
+  friend_requests_sent: number
+  friend_requests_received: number
+  friendships_a: number
+  friendships_b: number
   group_members: number
   groups: number
   invitations_invitations_invitee_idTousers: number
@@ -4884,6 +6060,10 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   expense_members?: boolean | UserCountOutputTypeCountExpense_membersArgs
   expense_payments?: boolean | UserCountOutputTypeCountExpense_paymentsArgs
   expenses?: boolean | UserCountOutputTypeCountExpensesArgs
+  friend_requests_sent?: boolean | UserCountOutputTypeCountFriend_requests_sentArgs
+  friend_requests_received?: boolean | UserCountOutputTypeCountFriend_requests_receivedArgs
+  friendships_a?: boolean | UserCountOutputTypeCountFriendships_aArgs
+  friendships_b?: boolean | UserCountOutputTypeCountFriendships_bArgs
   group_members?: boolean | UserCountOutputTypeCountGroup_membersArgs
   groups?: boolean | UserCountOutputTypeCountGroupsArgs
   invitations_invitations_invitee_idTousers?: boolean | UserCountOutputTypeCountInvitations_invitations_invitee_idTousersArgs
@@ -4978,6 +6158,34 @@ export type UserCountOutputTypeCountExpense_paymentsArgs<ExtArgs extends runtime
  */
 export type UserCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.expensesWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriend_requests_sentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.friend_requestsWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriend_requests_receivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.friend_requestsWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendships_aArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.friendshipsWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendships_bArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.friendshipsWhereInput
 }
 
 /**
@@ -5098,6 +6306,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   expense_members?: boolean | Prisma.User$expense_membersArgs<ExtArgs>
   expense_payments?: boolean | Prisma.User$expense_paymentsArgs<ExtArgs>
   expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  friend_requests_sent?: boolean | Prisma.User$friend_requests_sentArgs<ExtArgs>
+  friend_requests_received?: boolean | Prisma.User$friend_requests_receivedArgs<ExtArgs>
+  friendships_a?: boolean | Prisma.User$friendships_aArgs<ExtArgs>
+  friendships_b?: boolean | Prisma.User$friendships_bArgs<ExtArgs>
   group_members?: boolean | Prisma.User$group_membersArgs<ExtArgs>
   groups?: boolean | Prisma.User$groupsArgs<ExtArgs>
   invitations_invitations_invitee_idTousers?: boolean | Prisma.User$invitations_invitations_invitee_idTousersArgs<ExtArgs>
@@ -5141,6 +6353,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   expense_members?: boolean | Prisma.User$expense_membersArgs<ExtArgs>
   expense_payments?: boolean | Prisma.User$expense_paymentsArgs<ExtArgs>
   expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  friend_requests_sent?: boolean | Prisma.User$friend_requests_sentArgs<ExtArgs>
+  friend_requests_received?: boolean | Prisma.User$friend_requests_receivedArgs<ExtArgs>
+  friendships_a?: boolean | Prisma.User$friendships_aArgs<ExtArgs>
+  friendships_b?: boolean | Prisma.User$friendships_bArgs<ExtArgs>
   group_members?: boolean | Prisma.User$group_membersArgs<ExtArgs>
   groups?: boolean | Prisma.User$groupsArgs<ExtArgs>
   invitations_invitations_invitee_idTousers?: boolean | Prisma.User$invitations_invitations_invitee_idTousersArgs<ExtArgs>
@@ -5172,6 +6388,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     expense_members: Prisma.$expense_membersPayload<ExtArgs>[]
     expense_payments: Prisma.$expense_paymentsPayload<ExtArgs>[]
     expenses: Prisma.$expensesPayload<ExtArgs>[]
+    friend_requests_sent: Prisma.$friend_requestsPayload<ExtArgs>[]
+    friend_requests_received: Prisma.$friend_requestsPayload<ExtArgs>[]
+    friendships_a: Prisma.$friendshipsPayload<ExtArgs>[]
+    friendships_b: Prisma.$friendshipsPayload<ExtArgs>[]
     group_members: Prisma.$group_membersPayload<ExtArgs>[]
     groups: Prisma.$groupsPayload<ExtArgs>[]
     invitations_invitations_invitee_idTousers: Prisma.$invitationsPayload<ExtArgs>[]
@@ -5547,6 +6767,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   expense_members<T extends Prisma.User$expense_membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expense_membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$expense_membersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expense_payments<T extends Prisma.User$expense_paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expense_paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$expense_paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.User$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$expensesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friend_requests_sent<T extends Prisma.User$friend_requests_sentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friend_requests_sentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$friend_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friend_requests_received<T extends Prisma.User$friend_requests_receivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friend_requests_receivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$friend_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friendships_a<T extends Prisma.User$friendships_aArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendships_aArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$friendshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friendships_b<T extends Prisma.User$friendships_bArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendships_bArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$friendshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   group_members<T extends Prisma.User$group_membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$group_membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$group_membersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.User$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$groupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invitations_invitations_invitee_idTousers<T extends Prisma.User$invitations_invitations_invitee_idTousersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitations_invitations_invitee_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$invitationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6184,6 +7408,102 @@ export type User$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ExpensesScalarFieldEnum | Prisma.ExpensesScalarFieldEnum[]
+}
+
+/**
+ * User.friend_requests_sent
+ */
+export type User$friend_requests_sentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the friend_requests
+   */
+  select?: Prisma.friend_requestsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the friend_requests
+   */
+  omit?: Prisma.friend_requestsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.friend_requestsInclude<ExtArgs> | null
+  where?: Prisma.friend_requestsWhereInput
+  orderBy?: Prisma.friend_requestsOrderByWithRelationInput | Prisma.friend_requestsOrderByWithRelationInput[]
+  cursor?: Prisma.friend_requestsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Friend_requestsScalarFieldEnum | Prisma.Friend_requestsScalarFieldEnum[]
+}
+
+/**
+ * User.friend_requests_received
+ */
+export type User$friend_requests_receivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the friend_requests
+   */
+  select?: Prisma.friend_requestsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the friend_requests
+   */
+  omit?: Prisma.friend_requestsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.friend_requestsInclude<ExtArgs> | null
+  where?: Prisma.friend_requestsWhereInput
+  orderBy?: Prisma.friend_requestsOrderByWithRelationInput | Prisma.friend_requestsOrderByWithRelationInput[]
+  cursor?: Prisma.friend_requestsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Friend_requestsScalarFieldEnum | Prisma.Friend_requestsScalarFieldEnum[]
+}
+
+/**
+ * User.friendships_a
+ */
+export type User$friendships_aArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the friendships
+   */
+  select?: Prisma.friendshipsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the friendships
+   */
+  omit?: Prisma.friendshipsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.friendshipsInclude<ExtArgs> | null
+  where?: Prisma.friendshipsWhereInput
+  orderBy?: Prisma.friendshipsOrderByWithRelationInput | Prisma.friendshipsOrderByWithRelationInput[]
+  cursor?: Prisma.friendshipsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendshipsScalarFieldEnum | Prisma.FriendshipsScalarFieldEnum[]
+}
+
+/**
+ * User.friendships_b
+ */
+export type User$friendships_bArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the friendships
+   */
+  select?: Prisma.friendshipsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the friendships
+   */
+  omit?: Prisma.friendshipsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.friendshipsInclude<ExtArgs> | null
+  where?: Prisma.friendshipsWhereInput
+  orderBy?: Prisma.friendshipsOrderByWithRelationInput | Prisma.friendshipsOrderByWithRelationInput[]
+  cursor?: Prisma.friendshipsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendshipsScalarFieldEnum | Prisma.FriendshipsScalarFieldEnum[]
 }
 
 /**

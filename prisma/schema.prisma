@@ -26,6 +26,10 @@ model User {
   expense_members                             expense_members[]
   expense_payments                            expense_payments[]
   expenses                                    expenses[]
+  friend_requests_sent                        friend_requests[]                @relation("friend_requests_sender_idTousers")
+  friend_requests_received                    friend_requests[]                @relation("friend_requests_receiver_idTousers")
+  friendships_a                               friendships[]                    @relation("friendships_user_a_idTousers")
+  friendships_b                               friendships[]                    @relation("friendships_user_b_idTousers")
   group_members                               group_members[]
   groups                                      groups[]
   invitations_invitations_invitee_idTousers   invitations[]            @relation("invitations_invitee_idTousers")
@@ -321,6 +325,38 @@ model invitations {
   @@index([inviter_id], map: "fk_invitations_inviter")
   @@index([group_id], map: "idx_invitations_group_id")
   @@index([invitee_id], map: "idx_invitations_invitee_id")
+}
+
+model friend_requests {
+  id                     String                @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  sender_id              String                @db.VarChar(36)
+  receiver_id            String                @db.VarChar(36)
+  status                 friend_requests_status @default(pending)
+  message                String?               @db.Text
+  responded_at           DateTime?             @db.DateTime(0)
+  created_at             DateTime              @default(now()) @db.DateTime(0)
+  updated_at             DateTime              @updatedAt @db.DateTime(0)
+  users_friend_requests_sender_idTousers     User     @relation("friend_requests_sender_idTousers", fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_friend_requests_sender")
+  users_friend_requests_receiver_idTousers   User     @relation("friend_requests_receiver_idTousers", fields: [receiver_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_friend_requests_receiver")
+
+  @@unique([sender_id, receiver_id], map: "uk_friend_requests_pair")
+  @@index([receiver_id, status], map: "idx_friend_requests_receiver_status")
+  @@index([sender_id], map: "idx_friend_requests_sender_id")
+  @@map("friend_requests")
+}
+
+/// Relasi pertemanan dua arah (many-to-many self). Konvensi: user_a_id < user_b_id (urutan UUID) agar satu pasangan hanya punya satu baris.
+model friendships {
+  id                    String                       @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  user_a_id             String                       @db.VarChar(36)
+  user_b_id             String                       @db.VarChar(36)
+  created_at            DateTime                     @default(now()) @db.DateTime(0)
+  users_friendships_user_a_idTousers User             @relation("friendships_user_a_idTousers", fields: [user_a_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_friendships_user_a")
+  users_friendships_user_b_idTousers User             @relation("friendships_user_b_idTousers", fields: [user_b_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_friendships_user_b")
+
+  @@unique([user_a_id, user_b_id], map: "uk_friendships_pair")
+  @@index([user_b_id], map: "idx_friendships_user_b_id")
+  @@map("friendships")
 }
 
 model payment_methods {
@@ -624,6 +660,13 @@ enum invitations_status {
   cancelled
 }
 
+enum friend_requests_status {
+  pending
+  accepted
+  rejected
+  cancelled
+}
+
 enum settlements_status {
   pending
   confirmed
@@ -666,6 +709,7 @@ enum notifications_type {
   payment
   settlement
   invitation
+  friend
   budget
   savings
   recurring

@@ -100,6 +100,16 @@ export const invitations_status = {
 export type invitations_status = (typeof invitations_status)[keyof typeof invitations_status]
 
 
+export const friend_requests_status = {
+  pending: 'pending',
+  accepted: 'accepted',
+  rejected: 'rejected',
+  cancelled: 'cancelled'
+} as const
+
+export type friend_requests_status = (typeof friend_requests_status)[keyof typeof friend_requests_status]
+
+
 export const settlements_status = {
   pending: 'pending',
   confirmed: 'confirmed',
@@ -157,6 +167,7 @@ export const notifications_type = {
   payment: 'payment',
   settlement: 'settlement',
   invitation: 'invitation',
+  friend: 'friend',
   budget: 'budget',
   savings: 'savings',
   recurring: 'recurring',

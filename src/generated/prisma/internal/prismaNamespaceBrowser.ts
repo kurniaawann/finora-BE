@@ -66,6 +66,8 @@ export const ModelName = {
   expenses: 'expenses',
   group_members: 'group_members',
   invitations: 'invitations',
+  friend_requests: 'friend_requests',
+  friendships: 'friendships',
   payment_methods: 'payment_methods',
   settlements: 'settlements',
   audit_logs: 'audit_logs',
@@ -322,6 +324,30 @@ export const InvitationsScalarFieldEnum = {
 } as const
 
 export type InvitationsScalarFieldEnum = (typeof InvitationsScalarFieldEnum)[keyof typeof InvitationsScalarFieldEnum]
+
+
+export const Friend_requestsScalarFieldEnum = {
+  id: 'id',
+  sender_id: 'sender_id',
+  receiver_id: 'receiver_id',
+  status: 'status',
+  message: 'message',
+  responded_at: 'responded_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Friend_requestsScalarFieldEnum = (typeof Friend_requestsScalarFieldEnum)[keyof typeof Friend_requestsScalarFieldEnum]
+
+
+export const FriendshipsScalarFieldEnum = {
+  id: 'id',
+  user_a_id: 'user_a_id',
+  user_b_id: 'user_b_id',
+  created_at: 'created_at'
+} as const
+
+export type FriendshipsScalarFieldEnum = (typeof FriendshipsScalarFieldEnum)[keyof typeof FriendshipsScalarFieldEnum]
 
 
 export const Payment_methodsScalarFieldEnum = {
@@ -707,6 +733,25 @@ export const invitationsOrderByRelevanceFieldEnum = {
 } as const
 
 export type invitationsOrderByRelevanceFieldEnum = (typeof invitationsOrderByRelevanceFieldEnum)[keyof typeof invitationsOrderByRelevanceFieldEnum]
+
+
+export const friend_requestsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  sender_id: 'sender_id',
+  receiver_id: 'receiver_id',
+  message: 'message'
+} as const
+
+export type friend_requestsOrderByRelevanceFieldEnum = (typeof friend_requestsOrderByRelevanceFieldEnum)[keyof typeof friend_requestsOrderByRelevanceFieldEnum]
+
+
+export const friendshipsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_a_id: 'user_a_id',
+  user_b_id: 'user_b_id'
+} as const
+
+export type friendshipsOrderByRelevanceFieldEnum = (typeof friendshipsOrderByRelevanceFieldEnum)[keyof typeof friendshipsOrderByRelevanceFieldEnum]
 
 
 export const payment_methodsOrderByRelevanceFieldEnum = {

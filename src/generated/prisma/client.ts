@@ -117,6 +117,16 @@ export type group_members = Prisma.group_membersModel
  */
 export type invitations = Prisma.invitationsModel
 /**
+ * Model friend_requests
+ * 
+ */
+export type friend_requests = Prisma.friend_requestsModel
+/**
+ * Model friendships
+ * Relasi pertemanan dua arah (many-to-many self). Konvensi: user_a_id < user_b_id (urutan UUID) agar satu pasangan hanya punya satu baris.
+ */
+export type friendships = Prisma.friendshipsModel
+/**
  * Model payment_methods
  * 
  */

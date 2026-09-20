@@ -412,6 +412,8 @@ export const ModelName = {
   expenses: 'expenses',
   group_members: 'group_members',
   invitations: 'invitations',
+  friend_requests: 'friend_requests',
+  friendships: 'friendships',
   payment_methods: 'payment_methods',
   settlements: 'settlements',
   audit_logs: 'audit_logs',
@@ -438,7 +440,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "refreshToken" | "accounts" | "categories" | "groups" | "event_members" | "events" | "expense_item_members" | "expense_items" | "expense_members" | "expense_payments" | "expenses" | "group_members" | "invitations" | "payment_methods" | "settlements" | "audit_logs" | "budget_categories" | "budgets" | "notifications" | "recurring_transactions" | "savings_contributions" | "savings_goals" | "transactions" | "transfers"
+    modelProps: "user" | "profile" | "refreshToken" | "accounts" | "categories" | "groups" | "event_members" | "events" | "expense_item_members" | "expense_items" | "expense_members" | "expense_payments" | "expenses" | "group_members" | "invitations" | "friend_requests" | "friendships" | "payment_methods" | "settlements" | "audit_logs" | "budget_categories" | "budgets" | "notifications" | "recurring_transactions" | "savings_contributions" | "savings_goals" | "transactions" | "transfers"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1429,6 +1431,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.invitationsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InvitationsCountAggregateOutputType> | number
+        }
+      }
+    }
+    friend_requests: {
+      payload: Prisma.$friend_requestsPayload<ExtArgs>
+      fields: Prisma.friend_requestsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.friend_requestsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.friend_requestsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        findFirst: {
+          args: Prisma.friend_requestsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.friend_requestsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        findMany: {
+          args: Prisma.friend_requestsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>[]
+        }
+        create: {
+          args: Prisma.friend_requestsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        createMany: {
+          args: Prisma.friend_requestsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.friend_requestsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        update: {
+          args: Prisma.friend_requestsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        deleteMany: {
+          args: Prisma.friend_requestsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.friend_requestsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.friend_requestsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friend_requestsPayload>
+        }
+        aggregate: {
+          args: Prisma.Friend_requestsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFriend_requests>
+        }
+        groupBy: {
+          args: Prisma.friend_requestsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Friend_requestsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.friend_requestsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Friend_requestsCountAggregateOutputType> | number
+        }
+      }
+    }
+    friendships: {
+      payload: Prisma.$friendshipsPayload<ExtArgs>
+      fields: Prisma.friendshipsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.friendshipsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.friendshipsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        findFirst: {
+          args: Prisma.friendshipsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.friendshipsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        findMany: {
+          args: Prisma.friendshipsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>[]
+        }
+        create: {
+          args: Prisma.friendshipsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        createMany: {
+          args: Prisma.friendshipsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.friendshipsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        update: {
+          args: Prisma.friendshipsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        deleteMany: {
+          args: Prisma.friendshipsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.friendshipsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.friendshipsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$friendshipsPayload>
+        }
+        aggregate: {
+          args: Prisma.FriendshipsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFriendships>
+        }
+        groupBy: {
+          args: Prisma.friendshipsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendshipsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.friendshipsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendshipsCountAggregateOutputType> | number
         }
       }
     }
@@ -2426,6 +2560,30 @@ export const InvitationsScalarFieldEnum = {
 export type InvitationsScalarFieldEnum = (typeof InvitationsScalarFieldEnum)[keyof typeof InvitationsScalarFieldEnum]
 
 
+export const Friend_requestsScalarFieldEnum = {
+  id: 'id',
+  sender_id: 'sender_id',
+  receiver_id: 'receiver_id',
+  status: 'status',
+  message: 'message',
+  responded_at: 'responded_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Friend_requestsScalarFieldEnum = (typeof Friend_requestsScalarFieldEnum)[keyof typeof Friend_requestsScalarFieldEnum]
+
+
+export const FriendshipsScalarFieldEnum = {
+  id: 'id',
+  user_a_id: 'user_a_id',
+  user_b_id: 'user_b_id',
+  created_at: 'created_at'
+} as const
+
+export type FriendshipsScalarFieldEnum = (typeof FriendshipsScalarFieldEnum)[keyof typeof FriendshipsScalarFieldEnum]
+
+
 export const Payment_methodsScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -2811,6 +2969,25 @@ export const invitationsOrderByRelevanceFieldEnum = {
 export type invitationsOrderByRelevanceFieldEnum = (typeof invitationsOrderByRelevanceFieldEnum)[keyof typeof invitationsOrderByRelevanceFieldEnum]
 
 
+export const friend_requestsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  sender_id: 'sender_id',
+  receiver_id: 'receiver_id',
+  message: 'message'
+} as const
+
+export type friend_requestsOrderByRelevanceFieldEnum = (typeof friend_requestsOrderByRelevanceFieldEnum)[keyof typeof friend_requestsOrderByRelevanceFieldEnum]
+
+
+export const friendshipsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_a_id: 'user_a_id',
+  user_b_id: 'user_b_id'
+} as const
+
+export type friendshipsOrderByRelevanceFieldEnum = (typeof friendshipsOrderByRelevanceFieldEnum)[keyof typeof friendshipsOrderByRelevanceFieldEnum]
+
+
 export const payment_methodsOrderByRelevanceFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -3066,6 +3243,13 @@ export type Enuminvitations_statusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'friend_requests_status'
+ */
+export type Enumfriend_requests_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'friend_requests_status'>
+    
+
+
+/**
  * Reference to a field of type 'payment_methods_type'
  */
 export type Enumpayment_methods_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'payment_methods_type'>
@@ -3307,6 +3491,8 @@ export type GlobalOmitConfig = {
   expenses?: Prisma.expensesOmit
   group_members?: Prisma.group_membersOmit
   invitations?: Prisma.invitationsOmit
+  friend_requests?: Prisma.friend_requestsOmit
+  friendships?: Prisma.friendshipsOmit
   payment_methods?: Prisma.payment_methodsOmit
   settlements?: Prisma.settlementsOmit
   audit_logs?: Prisma.audit_logsOmit

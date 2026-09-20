@@ -372,6 +372,23 @@ export type Enuminvitations_statusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnuminvitations_statusFilter<$PrismaModel>
 }
 
+export type Enumfriend_requests_statusFilter<$PrismaModel = never> = {
+  equals?: $Enums.friend_requests_status | Prisma.Enumfriend_requests_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.friend_requests_status[]
+  notIn?: $Enums.friend_requests_status[]
+  not?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel> | $Enums.friend_requests_status
+}
+
+export type Enumfriend_requests_statusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.friend_requests_status | Prisma.Enumfriend_requests_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.friend_requests_status[]
+  notIn?: $Enums.friend_requests_status[]
+  not?: Prisma.NestedEnumfriend_requests_statusWithAggregatesFilter<$PrismaModel> | $Enums.friend_requests_status
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel>
+}
+
 export type Enumpayment_methods_typeFilter<$PrismaModel = never> = {
   equals?: $Enums.payment_methods_type | Prisma.Enumpayment_methods_typeFieldRefInput<$PrismaModel>
   in?: $Enums.payment_methods_type[]
@@ -983,6 +1000,23 @@ export type NestedEnuminvitations_statusWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnuminvitations_statusFilter<$PrismaModel>
   _max?: Prisma.NestedEnuminvitations_statusFilter<$PrismaModel>
+}
+
+export type NestedEnumfriend_requests_statusFilter<$PrismaModel = never> = {
+  equals?: $Enums.friend_requests_status | Prisma.Enumfriend_requests_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.friend_requests_status[]
+  notIn?: $Enums.friend_requests_status[]
+  not?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel> | $Enums.friend_requests_status
+}
+
+export type NestedEnumfriend_requests_statusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.friend_requests_status | Prisma.Enumfriend_requests_statusFieldRefInput<$PrismaModel>
+  in?: $Enums.friend_requests_status[]
+  notIn?: $Enums.friend_requests_status[]
+  not?: Prisma.NestedEnumfriend_requests_statusWithAggregatesFilter<$PrismaModel> | $Enums.friend_requests_status
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumfriend_requests_statusFilter<$PrismaModel>
 }
 
 export type NestedEnumpayment_methods_typeFilter<$PrismaModel = never> = {
