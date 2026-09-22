@@ -2,6 +2,7 @@ import { Router } from 'express';
 import accountRoutes from './account.routes.js';
 import budgetRoutes from './budget.routes.js';
 import categoryRoutes from './category.routes.js';
+import friendRoutes from './friend.routes.js';
 import paymentMethodRoutes from './payment-method.routes.js';
 import { prisma } from '../config/database.js';
 import authRoutes from './auth.routes.js';
@@ -32,6 +33,7 @@ router.use('/transactions', transactionRoutes);
 router.use('/transfers', transferRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/budgets', budgetRoutes);
+router.use('/friends', friendRoutes);
 router.use('/payment-methods', paymentMethodRoutes);
 
 export default router;
