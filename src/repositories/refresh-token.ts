@@ -51,21 +51,6 @@ export const revokeAllUserRefreshTokens = async (
   });
 };
 
-export const replaceRefreshToken = async (
-  oldTokenId: string,
-  newTokenId: string,
-) => {
-  return prisma.refreshToken.update({
-    where: {
-      id: oldTokenId,
-    },
-    data: {
-      revoked_at: new Date(),
-      replaced_by_token_id: newTokenId,
-    },
-  });
-};
-
 export const rotateRefreshToken = async (data: {
   oldTokenId: string;
   newToken: {
