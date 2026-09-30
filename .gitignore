@@ -5,6 +5,10 @@ node_modules/
 /dist
 /src/generated/
 
+# Kredensial service account (isi dipindah ke .env, file JSON jangan di-commit)
+*firebase-adminsdk*.json
+serviceAccountKey*.json
+
 # Environment — hanya .env.example yang di-commit
 .env
 .env.*
