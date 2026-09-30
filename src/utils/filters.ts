@@ -1,3 +1,4 @@
+import { unprocessable } from './app-error.js';
 import type { PaginationQuery } from './pagination.js';
 
 const UUID_REGEX =
@@ -5,6 +6,12 @@ const UUID_REGEX =
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 const MAX_SEARCH_LENGTH = 100;
+
+const invalidFilter = (key: string) =>
+  unprocessable(
+    'INVALID_FILTER',
+    `Parameter filter "${key}" tidak valid`,
+  );
 
 const readQuery = (
   query: PaginationQuery,
@@ -45,7 +52,7 @@ export const parseBooleanFilter = (
     return false;
   }
 
-  throw new TypeError('INVALID_BOOLEAN_FILTER');
+  throw invalidFilter(key);
 };
 
 export const parseIdFilter = (
@@ -59,7 +66,7 @@ export const parseIdFilter = (
   }
 
   if (!UUID_REGEX.test(raw)) {
-    throw new TypeError('INVALID_ID_FILTER');
+    throw invalidFilter(key);
   }
 
   return raw;
@@ -77,7 +84,7 @@ export const parseEnumFilter = <T extends string>(
   }
 
   if (!allowed.includes(raw as T)) {
-    throw new TypeError('INVALID_ENUM_FILTER');
+    throw invalidFilter(key);
   }
 
   return raw as T;
@@ -94,13 +101,13 @@ export const parseDateFilter = (
   }
 
   if (!DATE_REGEX.test(raw)) {
-    throw new TypeError('INVALID_DATE_FILTER');
+    throw invalidFilter(key);
   }
 
   const date = new Date(`${raw}T00:00:00.000Z`);
 
   if (Number.isNaN(date.getTime())) {
-    throw new TypeError('INVALID_DATE_FILTER');
+    throw invalidFilter(key);
   }
 
   return date;
@@ -126,7 +133,10 @@ export const parseDateRangeFilter = (
   const to = parseDateFilter(query, 'to_date');
 
   if (from && to && from.getTime() > to.getTime()) {
-    throw new TypeError('INVALID_DATE_RANGE');
+    throw unprocessable(
+      'INVALID_FILTER',
+      'from_date tidak boleh setelah to_date',
+    );
   }
 
   return {
@@ -148,7 +158,7 @@ export const parseAmountFilter = (
   const value = Number(raw);
 
   if (!Number.isFinite(value) || value < 0) {
-    throw new TypeError('INVALID_AMOUNT_FILTER');
+    throw invalidFilter(key);
   }
 
   return value;
