@@ -1,139 +1,79 @@
 import { z } from 'zod';
 
-export const transactionTypeSchema = z.enum([
+/** Tipe yang boleh dicatat manual; `transfer` hanya lewat /transfers. */
+const MANUAL_TRANSACTION_TYPES = [
   'income',
   'expense',
   'refund',
   'adjustment',
-]);
+] as const;
+
+export const TRANSACTION_TYPES = [
+  ...MANUAL_TRANSACTION_TYPES,
+  'transfer',
+] as const;
+
+// Batas aman kolom DECIMAL(18,2).
+const MAX_AMOUNT = 1_000_000_000_000_000;
+
+const nullableText = (max: number, label: string) =>
+  z
+    .string()
+    .trim()
+    .max(max, `${label} maksimal ${max} karakter`)
+    .transform((value) => (value === '' ? null : value))
+    .nullable()
+    .optional();
+
+const typeSchema = z.enum(MANUAL_TRANSACTION_TYPES, {
+  error: 'Jenis transaksi harus income, expense, refund, atau adjustment',
+});
+
+// Tanda nominal dicek terhadap jenis transaksi (adjustment boleh negatif).
+const amountSchema = z
+  .number({ error: 'Nominal harus berupa angka' })
+  .refine((value) => value !== 0, 'Nominal tidak boleh 0')
+  .refine(
+    (value) => Math.abs(value) < MAX_AMOUNT,
+    'Nominal terlalu besar',
+  );
+
+const fields = {
+  account_id: z.uuid('Rekening tidak valid'),
+  category_id: z.uuid('Kategori tidak valid').nullable().optional(),
+  type: typeSchema,
+  amount: amountSchema,
+  transaction_date: z.iso.date({
+    error: 'Tanggal transaksi harus berformat YYYY-MM-DD',
+  }),
+  description: nullableText(500, 'Deskripsi'),
+  merchant: nullableText(255, 'Nama merchant'),
+  reference_number: nullableText(255, 'Nomor referensi'),
+};
 
 export const createTransactionSchema = z
-  .object({
-    account_id: z
-      .string()
-      .uuid('Account ID tidak valid'),
-
-    category_id: z
-      .string()
-      .uuid('Category ID tidak valid')
-      .nullable()
-      .optional(),
-
-    type: transactionTypeSchema,
-
-    amount: z
-      .number()
-      .refine(
-        (value) => value !== 0,
-        'Nominal tidak boleh 0',
-      ),
-
-    transaction_date: z
-      .string()
-      .date('Tanggal transaksi tidak valid'),
-
-    description: z
-      .string()
-      .trim()
-      .max(
-        500,
-        'Deskripsi maksimal 500 karakter',
-      )
-      .nullable()
-      .optional(),
-
-    merchant: z
-      .string()
-      .trim()
-      .max(
-        255,
-        'Nama merchant maksimal 255 karakter',
-      )
-      .nullable()
-      .optional(),
-
-    reference_number: z
-      .string()
-      .trim()
-      .max(
-        255,
-        'Nomor referensi maksimal 255 karakter',
-      )
-      .nullable()
-      .optional(),
-  })
+  .object(fields)
   .superRefine((data, ctx) => {
-    if (
-      data.type !== 'adjustment' &&
-      data.amount <= 0
-    ) {
+    if (data.type !== 'adjustment' && data.amount < 0) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['amount'],
-        message:
-          'Nominal harus lebih besar dari 0',
+        message: 'Nominal harus lebih besar dari 0',
       });
     }
   });
 
 export const updateTransactionSchema = z.object({
-  account_id: z
-    .string()
-    .uuid('Account ID tidak valid')
-    .optional(),
-
-  category_id: z
-    .string()
-    .uuid('Category ID tidak valid')
-    .nullable()
-    .optional(),
-
-  amount: z
-    .number()
-    .refine(
-      (value) => value !== 0,
-      'Nominal tidak boleh 0',
-    )
-    .optional(),
-
-  transaction_date: z
-    .string()
-    .date('Tanggal transaksi tidak valid')
-    .optional(),
-
-  description: z
-    .string()
-    .trim()
-    .max(
-      500,
-      'Deskripsi maksimal 500 karakter',
-    )
-    .nullable()
-    .optional(),
-
-  merchant: z
-    .string()
-    .trim()
-    .max(
-      255,
-      'Nama merchant maksimal 255 karakter',
-    )
-    .nullable()
-    .optional(),
-
-  reference_number: z
-    .string()
-    .trim()
-    .max(
-      255,
-      'Nomor referensi maksimal 255 karakter',
-    )
-    .nullable()
-    .optional(),
+  account_id: fields.account_id.optional(),
+  category_id: fields.category_id,
+  type: typeSchema.optional(),
+  amount: amountSchema.optional(),
+  transaction_date: fields.transaction_date.optional(),
+  description: fields.description,
+  merchant: fields.merchant,
+  reference_number: fields.reference_number,
 });
 
-export type CreateTransactionInput =
-  z.infer<typeof createTransactionSchema>;
+export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 
-export type UpdateTransactionInput =
-  z.infer<typeof updateTransactionSchema>;
+export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;

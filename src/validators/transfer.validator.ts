@@ -1,80 +1,40 @@
 import { z } from 'zod';
 
-export const createTransferSchema = z.object({
-  from_account_id: z
-    .string()
-    .uuid('From Account ID tidak valid'),
+// Batas aman kolom DECIMAL(18,2).
+const MAX_AMOUNT = 1_000_000_000_000_000;
 
-  to_account_id: z
-    .string()
-    .uuid('To Account ID tidak valid'),
+const amountSchema = z
+  .number({ error: 'Nominal harus berupa angka' })
+  .positive('Nominal transfer harus lebih besar dari 0')
+  .lt(MAX_AMOUNT, 'Nominal terlalu besar');
 
-  amount: z
-    .number()
-    .positive('Nominal transfer harus lebih besar dari 0'),
-
-  transfer_date: z
-    .string()
-    .date('Tanggal transfer tidak valid'),
-
-  note: z
-    .string()
-    .trim()
-    .max(500, 'Catatan maksimal 500 karakter')
-    .nullable()
-    .optional(),
-}).superRefine((data, ctx) => {
-  if (data.from_account_id === data.to_account_id) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['to_account_id'],
-      message: 'Akun asal dan akun tujuan tidak boleh sama',
-    });
-  }
+const dateSchema = z.iso.date({
+  error: 'Tanggal transfer harus berformat YYYY-MM-DD',
 });
 
-export const updateTransferSchema = z
-  .object({
-    from_account_id: z
-      .string()
-      .uuid('From Account ID tidak valid')
-      .optional(),
+const noteSchema = z
+  .string()
+  .trim()
+  .max(500, 'Catatan maksimal 500 karakter')
+  .transform((value) => (value === '' ? null : value))
+  .nullable()
+  .optional();
 
-    to_account_id: z
-      .string()
-      .uuid('To Account ID tidak valid')
-      .optional(),
+export const createTransferSchema = z.object({
+  from_account_id: z.uuid('Rekening asal tidak valid'),
+  to_account_id: z.uuid('Rekening tujuan tidak valid'),
+  amount: amountSchema,
+  transfer_date: dateSchema,
+  note: noteSchema,
+});
 
-    amount: z
-      .number()
-      .positive('Nominal transfer harus lebih besar dari 0')
-      .optional(),
-
-    transfer_date: z
-      .string()
-      .date('Tanggal transfer tidak valid')
-      .optional(),
-
-    note: z
-      .string()
-      .trim()
-      .max(500, 'Catatan maksimal 500 karakter')
-      .nullable()
-      .optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (
-      data.from_account_id &&
-      data.to_account_id &&
-      data.from_account_id === data.to_account_id
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['to_account_id'],
-        message: 'Akun asal dan akun tujuan tidak boleh sama',
-      });
-    }
-  });
+export const updateTransferSchema = z.object({
+  from_account_id: z.uuid('Rekening asal tidak valid').optional(),
+  to_account_id: z.uuid('Rekening tujuan tidak valid').optional(),
+  amount: amountSchema.optional(),
+  transfer_date: dateSchema.optional(),
+  note: noteSchema,
+});
 
 export type CreateTransferInput = z.infer<typeof createTransferSchema>;
 

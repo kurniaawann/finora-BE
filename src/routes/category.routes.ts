@@ -3,14 +3,12 @@ import { Router } from 'express';
 import {
   createCategoryController,
   deleteCategoryController,
-  getCategoriesController,
   getCategoryController,
+  listCategoriesController,
   updateCategoryController,
 } from '../controllers/category.controller.js';
-
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validation.middleware.js';
-
 import {
   createCategorySchema,
   updateCategorySchema,
@@ -20,31 +18,10 @@ const router = Router();
 
 router.use(authMiddleware);
 
-router.post(
-  '/',
-  validate(createCategorySchema),
-  createCategoryController,
-);
-
-router.get(
-  '/',
-  getCategoriesController,
-);
-
-router.get(
-  '/:id',
-  getCategoryController,
-);
-
-router.put(
-  '/:id',
-  validate(updateCategorySchema),
-  updateCategoryController,
-);
-
-router.delete(
-  '/:id',
-  deleteCategoryController,
-);
+router.get('/', listCategoriesController);
+router.post('/', validate(createCategorySchema), createCategoryController);
+router.get('/:id', getCategoryController);
+router.put('/:id', validate(updateCategorySchema), updateCategoryController);
+router.delete('/:id', deleteCategoryController);
 
 export default router;

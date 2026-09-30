@@ -2,49 +2,36 @@ import { Router } from 'express';
 
 import {
   createTransactionController,
-  getTransactionsController,
-  getTransactionController,
-  updateTransactionController,
   deleteTransactionController,
+  getTransactionController,
+  getTransactionSummaryController,
+  listTransactionsController,
+  updateTransactionController,
 } from '../controllers/transaction.controller.js';
-
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validation.middleware.js';
 import {
   createTransactionSchema,
   updateTransactionSchema,
 } from '../validators/transaction.validator.js';
 
-import { validate } from '../middlewares/validation.middleware.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
-
 const router = Router();
 
 router.use(authMiddleware);
 
+router.get('/', listTransactionsController);
 router.post(
   '/',
   validate(createTransactionSchema),
   createTransactionController,
 );
-
-router.get(
-  '/',
-  getTransactionsController,
-);
-
-router.get(
-  '/:id',
-  getTransactionController,
-);
-
+router.get('/summary', getTransactionSummaryController);
+router.get('/:id', getTransactionController);
 router.put(
   '/:id',
   validate(updateTransactionSchema),
   updateTransactionController,
 );
-
-router.delete(
-  '/:id',
-  deleteTransactionController,
-);
+router.delete('/:id', deleteTransactionController);
 
 export default router;

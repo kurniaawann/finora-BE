@@ -1,58 +1,136 @@
-import { toMoneyString } from './user.dto.js';
+import {
+  toAccountRef,
+  toCategoryRef,
+  toDateOnly,
+  toMoney,
+  type AccountRefDTO,
+  type CategoryRefDTO,
+  type DecimalLike,
+} from './common.dto.js';
 
-type Amount = { toString(): string };
-
-export interface CategoryDTO {
-  id: string;
-  name: string;
-  type: string;
-  icon: string | null;
-  color: string | null;
-}
-
-export interface TransactionAccountDTO {
-  id: string;
-  name: string;
-  type: string;
-  currency: string;
-}
+export type TransactionSource =
+  | 'manual'
+  | 'transfer'
+  | 'group_expense'
+  | 'settlement'
+  | 'savings'
+  | 'recurring';
 
 export interface TransactionDTO {
   id: string;
   type: string;
   status: string;
   amount: string;
+  /** Arah uang terhadap rekening: masuk atau keluar. */
+  direction: 'in' | 'out';
   transaction_date: string;
   description: string | null;
   merchant: string | null;
   reference_number: string | null;
-  account: TransactionAccountDTO;
-  category: CategoryDTO | null;
+  account: AccountRefDTO;
+  category: CategoryRefDTO | null;
+  source: TransactionSource;
+  /** Hanya terisi untuk kaki transaksi transfer (kelola lewat /transfers). */
+  transfer_id: string | null;
 }
 
-const toIsoDate = (value: Date | string): string =>
-  new Date(value).toISOString();
+export interface TransactionSummaryDTO {
+  income: string;
+  expense: string;
+  saved: string;
+  net: string;
+  by_category: {
+    category: CategoryRefDTO | null;
+    amount: string;
+    percentage: number;
+  }[];
+}
 
-export const toTransactionDTO = (transaction: {
-  id: string;
+type TransactionSourceFields = {
   type: string;
-  status: string;
-  amount: Amount;
-  transaction_date: Date | string;
-  description?: string | null;
-  merchant?: string | null;
-  reference_number?: string | null;
-  accounts: TransactionAccountDTO;
-  categories?: CategoryDTO | null;
-}): TransactionDTO => ({
-  id: transaction.id,
-  type: transaction.type,
-  status: transaction.status,
-  amount: toMoneyString(transaction.amount),
-  transaction_date: toIsoDate(transaction.transaction_date),
-  description: transaction.description ?? null,
-  merchant: transaction.merchant ?? null,
-  reference_number: transaction.reference_number ?? null,
-  account: transaction.accounts,
-  category: transaction.categories ?? null,
-});
+  reference_number: string | null;
+  expense_payment_id: string | null;
+  settlement_id: string | null;
+  savings_contribution_id: string | null;
+};
+
+export const getTransactionSource = (
+  transaction: TransactionSourceFields,
+): TransactionSource => {
+  if (transaction.type === 'transfer') {
+    return 'transfer';
+  }
+
+  if (transaction.expense_payment_id) {
+    return 'group_expense';
+  }
+
+  if (transaction.settlement_id) {
+    return 'settlement';
+  }
+
+  if (transaction.savings_contribution_id) {
+    return 'savings';
+  }
+
+  // Transaksi hasil transaksi berulang diberi nomor referensi "REC-...".
+  if (transaction.reference_number?.startsWith('REC-')) {
+    return 'recurring';
+  }
+
+  return 'manual';
+};
+
+export const toTransactionDTO = (
+  transaction: TransactionSourceFields & {
+    id: string;
+    status: string;
+    amount: DecimalLike;
+    transaction_date: Date;
+    description: string | null;
+    merchant: string | null;
+    accounts: AccountRefDTO;
+    categories: Parameters<typeof toCategoryRef>[0] | null;
+    transfers_transfers_from_transaction_idTotransactions: { id: string }[];
+    transfers_transfers_to_transaction_idTotransactions: { id: string }[];
+  },
+): TransactionDTO => {
+  const outgoingTransfer =
+    transaction.transfers_transfers_from_transaction_idTotransactions[0];
+  const incomingTransfer =
+    transaction.transfers_transfers_to_transaction_idTotransactions[0];
+
+  let direction: 'in' | 'out';
+
+  switch (transaction.type) {
+    case 'expense':
+      direction = 'out';
+      break;
+    case 'transfer':
+      direction = outgoingTransfer ? 'out' : 'in';
+      break;
+    case 'adjustment':
+      direction = Number(transaction.amount.toString()) < 0 ? 'out' : 'in';
+      break;
+    default:
+      direction = 'in';
+  }
+
+  return {
+    id: transaction.id,
+    type: transaction.type,
+    status: transaction.status,
+    amount: toMoney(transaction.amount),
+    direction,
+    transaction_date: toDateOnly(transaction.transaction_date),
+    description: transaction.description,
+    merchant: transaction.merchant,
+    reference_number: transaction.reference_number,
+    account: toAccountRef(transaction.accounts),
+    category: transaction.categories
+      ? toCategoryRef(transaction.categories)
+      : null,
+    source: getTransactionSource(transaction),
+    transfer_id: (outgoingTransfer ?? incomingTransfer)?.id ?? null,
+  };
+};
