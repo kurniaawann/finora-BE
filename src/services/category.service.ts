@@ -1,205 +1,195 @@
+import type { categories_type } from '../generated/prisma/enums.js';
 import {
-  countCategoryReferences,
-  countChildCategories,
-  createCategory,
-  deleteCategory,
-  findCategoriesByUser,
-  findCategoryByIdAndUser,
-  findOwnCategoryById,
-  findUserCategoryByName,
-  updateCategory,
+  createCategory as insertCategory,
+  deleteCategory as removeCategory,
+  findCategories,
+  findCategoryByName,
+  findUsableCategory,
+  hasChildCategories,
+  isCategoryInUse,
+  updateCategory as saveCategory,
+  type CategoryFilters,
 } from '../repositories/category.repository.js';
-
+import {
+  conflict,
+  forbidden,
+  notFound,
+  unprocessable,
+} from '../utils/app-error.js';
+import type { PaginationParams } from '../utils/pagination.js';
 import type {
   CreateCategoryInput,
   UpdateCategoryInput,
 } from '../validators/category.validator.js';
 
-import type { categories_type } from '../generated/prisma/enums.js';
-
-const validateParentCategory = async (
-  userId: string,
-  parentId: string | null | undefined,
-  type: categories_type,
-) => {
-  const parent = parentId
-    ? await findCategoryByIdAndUser(parentId, userId)
-    : null;
-
-  if (parentId && !parent) {
-    throw new Error('PARENT_CATEGORY_NOT_FOUND');
-  }
-
-  if (parent && parent.type !== type) {
-    throw new Error('INVALID_PARENT_CATEGORY_TYPE');
-  }
-
-  return parent;
-};
-
-export const create = async (
-  userId: string,
-  input: CreateCategoryInput,
-) => {
-  const parentId = input.parent_id ?? null;
-
-  await validateParentCategory(
-    userId,
-    parentId,
-    input.type,
-  );
-
-  const duplicate = await findUserCategoryByName(
-    userId,
-    input.name,
-    input.type,
-    parentId,
-  );
-
-  if (duplicate) {
-    throw new Error('CATEGORY_NAME_EXISTS');
-  }
-
-  return createCategory({
-    userId,
-    name: input.name,
-    type: input.type,
-    parentId,
-    icon: input.icon ?? null,
-    color: input.color ?? null,
-  });
-};
-
-export const getAll = async (
-  userId: string,
-  page: number,
-  perPage: number,
-  type?: categories_type,
-  parentId?: string | null,
-  search?: string,
-) => {
-  return findCategoriesByUser({
-    userId,
-    page,
-    perPage,
-    type,
-    parentId,
-    search,
-  });
-};
-
-export const getById = async (
-  userId: string,
-  categoryId: string,
-) => {
-  const category = await findCategoryByIdAndUser(
-    categoryId,
-    userId,
-  );
+const requireCategory = async (userId: string, categoryId: string) => {
+  const category = await findUsableCategory(categoryId, userId);
 
   if (!category) {
-    throw new Error('CATEGORY_NOT_FOUND');
+    throw notFound('CATEGORY_NOT_FOUND', 'Kategori tidak ditemukan');
   }
 
   return category;
 };
 
-export const update = async (
+const requireOwnCategory = async (userId: string, categoryId: string) => {
+  const category = await requireCategory(userId, categoryId);
+
+  if (category.is_system || category.user_id !== userId) {
+    throw forbidden(
+      'CATEGORY_READ_ONLY',
+      'Kategori bawaan tidak bisa diubah atau dihapus',
+    );
+  }
+
+  return category;
+};
+
+/** Kategori maksimal 2 level: induk harus kategori level atas bertipe sama. */
+const assertValidParent = async (
+  userId: string,
+  parentId: string,
+  type: categories_type,
+) => {
+  const parent = await findUsableCategory(parentId, userId);
+
+  if (!parent) {
+    throw notFound(
+      'PARENT_CATEGORY_NOT_FOUND',
+      'Kategori induk tidak ditemukan',
+    );
+  }
+
+  if (parent.type !== type) {
+    throw unprocessable(
+      'INVALID_PARENT_CATEGORY',
+      'Jenis kategori induk harus sama dengan kategori ini',
+    );
+  }
+
+  if (parent.parent_id) {
+    throw unprocessable(
+      'INVALID_PARENT_CATEGORY',
+      'Sub-kategori tidak bisa menjadi kategori induk',
+    );
+  }
+};
+
+const assertUniqueName = async (params: {
+  userId: string;
+  name: string;
+  type: categories_type;
+  parentId: string | null;
+  excludeId?: string;
+}) => {
+  const existing = await findCategoryByName(params);
+
+  if (existing && existing.id !== params.excludeId) {
+    throw conflict(
+      'CATEGORY_NAME_EXISTS',
+      'Nama kategori sudah dipakai di tingkat yang sama',
+    );
+  }
+};
+
+export const listCategories = (
+  userId: string,
+  pagination: PaginationParams,
+  filters: CategoryFilters,
+) => findCategories({ userId, ...pagination, filters });
+
+export const getCategory = requireCategory;
+
+export const createCategory = async (
+  userId: string,
+  input: CreateCategoryInput,
+) => {
+  const parentId = input.parent_id ?? null;
+
+  if (parentId) {
+    await assertValidParent(userId, parentId, input.type);
+  }
+
+  await assertUniqueName({
+    userId,
+    name: input.name,
+    type: input.type,
+    parentId,
+  });
+
+  return insertCategory({
+    user_id: userId,
+    name: input.name,
+    type: input.type,
+    parent_id: parentId,
+    icon: input.icon ?? null,
+    color: input.color ?? null,
+    is_system: false,
+  });
+};
+
+export const updateCategory = async (
   userId: string,
   categoryId: string,
   input: UpdateCategoryInput,
 ) => {
-  const category = await findOwnCategoryById(
-    categoryId,
-    userId,
-  );
+  const category = await requireOwnCategory(userId, categoryId);
 
-  if (!category) {
-    throw new Error('CATEGORY_NOT_FOUND');
-  }
+  const parentId =
+    input.parent_id !== undefined ? input.parent_id : category.parent_id;
 
-  if (input.parent_id === categoryId) {
-    throw new Error('SELF_PARENT_NOT_ALLOWED');
-  }
-
-  if (input.parent_id !== undefined) {
-    await validateParentCategory(
-      userId,
-      input.parent_id,
-      category.type,
-    );
-  }
-
-  if (input.name !== undefined) {
-    const duplicate = await findUserCategoryByName(
-      userId,
-      input.name,
-      category.type,
-      input.parent_id ?? category.parent_id ?? null,
-    );
-
-    if (duplicate && duplicate.id !== categoryId) {
-      throw new Error('CATEGORY_NAME_EXISTS');
+  if (input.parent_id && input.parent_id !== category.parent_id) {
+    if (input.parent_id === categoryId) {
+      throw unprocessable(
+        'INVALID_PARENT_CATEGORY',
+        'Kategori tidak bisa menjadi induk dirinya sendiri',
+      );
     }
+
+    if (await hasChildCategories(categoryId)) {
+      throw unprocessable(
+        'INVALID_PARENT_CATEGORY',
+        'Kategori yang memiliki sub-kategori tidak bisa dijadikan sub-kategori',
+      );
+    }
+
+    await assertValidParent(userId, input.parent_id, category.type);
   }
 
-  await updateCategory(
-    categoryId,
-    userId,
-    {
-      ...(input.name !== undefined
-        ? { name: input.name }
-        : {}),
-      ...(input.parent_id !== undefined
-        ? { parent_id: input.parent_id }
-        : {}),
-      ...(input.icon !== undefined
-        ? { icon: input.icon }
-        : {}),
-      ...(input.color !== undefined
-        ? { color: input.color }
-        : {}),
-    },
-  );
+  if (input.name !== undefined || parentId !== category.parent_id) {
+    await assertUniqueName({
+      userId,
+      name: input.name ?? category.name,
+      type: category.type,
+      parentId,
+      excludeId: categoryId,
+    });
+  }
 
-  return findOwnCategoryById(categoryId, userId);
+  return saveCategory(categoryId, {
+    ...(input.name !== undefined ? { name: input.name } : {}),
+    ...(input.parent_id !== undefined ? { parent_id: input.parent_id } : {}),
+    ...(input.icon !== undefined ? { icon: input.icon } : {}),
+    ...(input.color !== undefined ? { color: input.color } : {}),
+  });
 };
 
-export const remove = async (
-  userId: string,
-  categoryId: string,
-) => {
-  const category = await findOwnCategoryById(
-    categoryId,
-    userId,
-  );
+export const deleteCategory = async (userId: string, categoryId: string) => {
+  await requireOwnCategory(userId, categoryId);
 
-  if (!category) {
-    throw new Error('CATEGORY_NOT_FOUND');
+  if (await hasChildCategories(categoryId)) {
+    throw conflict(
+      'CATEGORY_HAS_CHILDREN',
+      'Hapus atau pindahkan sub-kategorinya terlebih dahulu',
+    );
   }
 
-  const children = await countChildCategories(categoryId);
-
-  if (children > 0) {
-    throw new Error('CATEGORY_HAS_CHILDREN');
+  if (await isCategoryInUse(categoryId)) {
+    throw conflict(
+      'CATEGORY_IN_USE',
+      'Kategori masih dipakai transaksi, anggaran, atau transaksi berulang',
+    );
   }
 
-  const references = await countCategoryReferences(
-    categoryId,
-  );
-
-  if (references > 0) {
-    throw new Error('CATEGORY_IN_USE');
-  }
-
-  const result = await deleteCategory(
-    categoryId,
-    userId,
-  );
-
-  if (result.count === 0) {
-    throw new Error('CATEGORY_NOT_FOUND');
-  }
-
-  return true;
+  await removeCategory(categoryId);
 };

@@ -1,77 +1,55 @@
 import { z } from 'zod';
 
-export const categoryTypeSchema = z.enum([
-  'income',
-  'expense',
-]);
+export const CATEGORY_TYPES = ['income', 'expense'] as const;
 
-const nullableOptionalString = (
-  schema: z.ZodString,
-) => schema.trim().nullable().optional();
+const nameSchema = z
+  .string({ error: 'Nama kategori wajib diisi' })
+  .trim()
+  .min(1, 'Nama kategori wajib diisi')
+  .max(100, 'Nama kategori maksimal 100 karakter');
+
+const parentIdSchema = z
+  .uuid('ID kategori induk tidak valid')
+  .nullable()
+  .optional();
+
+// Nama ikon Material, mis. "restaurant" atau "directions_car".
+const iconSchema = z
+  .string()
+  .trim()
+  .max(100, 'Ikon maksimal 100 karakter')
+  .transform((value) => (value === '' ? null : value))
+  .nullable()
+  .optional();
+
+const colorSchema = z
+  .string()
+  .trim()
+  .regex(
+    /^#[0-9a-fA-F]{6}$/,
+    'Format warna harus hex 6 digit, contoh: #FF5733',
+  )
+  .toUpperCase()
+  .nullable()
+  .optional();
 
 export const createCategorySchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Nama kategori wajib diisi')
-    .max(100, 'Nama kategori maksimal 100 karakter'),
-
-  type: categoryTypeSchema,
-
-  parent_id: z
-    .string()
-    .uuid('ID kategori induk tidak valid')
-    .nullable()
-    .optional(),
-
-  icon: nullableOptionalString(
-    z.string().max(100, 'Icon maksimal 100 karakter'),
-  ),
-
-  color: nullableOptionalString(
-    z
-      .string()
-      .max(50, 'Warna maksimal 50 karakter')
-      .regex(
-        /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/,
-        'Format warna harus hex, contoh: #FF5733',
-      ),
-  ),
+  name: nameSchema,
+  type: z.enum(CATEGORY_TYPES, {
+    error: 'Jenis kategori harus income atau expense',
+  }),
+  parent_id: parentIdSchema,
+  icon: iconSchema,
+  color: colorSchema,
 });
 
 export const updateCategorySchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Nama kategori wajib diisi')
-    .max(100, 'Nama kategori maksimal 100 karakter')
-    .optional(),
-
-  parent_id: z
-    .string()
-    .uuid('ID kategori induk tidak valid')
-    .nullable()
-    .optional(),
-
-  icon: nullableOptionalString(
-    z.string().max(100, 'Icon maksimal 100 karakter'),
-  ),
-
-  color: nullableOptionalString(
-    z
-      .string()
-      .max(50, 'Warna maksimal 50 karakter')
-      .regex(
-        /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/,
-        'Format warna harus hex, contoh: #FF5733',
-      ),
-  ),
+  name: nameSchema.optional(),
+  parent_id: parentIdSchema,
+  icon: iconSchema,
+  color: colorSchema,
 });
 
-export type CreateCategoryInput = z.infer<
-  typeof createCategorySchema
->;
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 
-export type UpdateCategoryInput = z.infer<
-  typeof updateCategorySchema
->;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

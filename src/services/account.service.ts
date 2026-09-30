@@ -1,115 +1,146 @@
+import { Prisma } from '../generated/prisma/client.js';
 import {
-  createAccount,
-  findAccountByIdAndUserId,
-  findAccountsByUserId,
-  updateAccount,
+  createAccount as insertAccount,
+  deleteAccount as removeAccount,
+  findAccountById,
+  findAccounts,
+  getAccountBalances,
+  hasAccountActivity,
+  isAccountReferenced,
+  updateAccount as saveAccount,
+  type AccountFilters,
 } from '../repositories/account.repository.js';
-
+import { conflict, notFound, unprocessable } from '../utils/app-error.js';
+import type { PaginationParams } from '../utils/pagination.js';
 import type {
   CreateAccountInput,
   UpdateAccountInput,
 } from '../validators/account.validator.js';
 
-import type { accounts_type } from '../generated/prisma/enums.js';
+type AccountRow = NonNullable<Awaited<ReturnType<typeof findAccountById>>>;
 
-export interface AccountFilters {
-  search?: string;
-  type?: accounts_type;
-  isActive?: boolean;
-}
-
-export const create = async (
-  userId: string,
-  input: CreateAccountInput,
-) => {
-  return createAccount({
+const withBalances = async (userId: string, accounts: AccountRow[]) => {
+  const balances = await getAccountBalances(
     userId,
-    name: input.name,
-    type: input.type,
-    initial_balance: input.initial_balance,
-    currency: input.currency,
-  });
-};
-
-export const getAll = async (
-  userId: string,
-  page: number,
-  perPage: number,
-  filters: AccountFilters = {},
-) => {
-  return findAccountsByUserId({
-    userId,
-    page,
-    perPage,
-    ...filters,
-  });
-};
-
-export const getById = async (
-  userId: string,
-  accountId: string,
-) => {
-  const account = await findAccountByIdAndUserId(
-    accountId,
-    userId,
+    accounts.map((account) => account.id),
   );
 
+  return accounts.map((account) => ({
+    ...account,
+    current_balance: account.initial_balance.add(
+      balances.get(account.id) ?? 0,
+    ),
+  }));
+};
+
+const requireAccount = async (userId: string, accountId: string) => {
+  const account = await findAccountById(accountId, userId);
+
   if (!account) {
-    throw new Error('ACCOUNT_NOT_FOUND');
+    throw notFound('ACCOUNT_NOT_FOUND', 'Rekening tidak ditemukan');
   }
 
   return account;
 };
 
-export const update = async (
+export const listAccounts = async (
+  userId: string,
+  pagination: PaginationParams,
+  filters: AccountFilters,
+) => {
+  const result = await findAccounts({ userId, ...pagination, filters });
+
+  return {
+    data: await withBalances(userId, result.data),
+    total: result.total,
+  };
+};
+
+export const getAccount = async (userId: string, accountId: string) => {
+  const account = await requireAccount(userId, accountId);
+
+  return (await withBalances(userId, [account]))[0];
+};
+
+export const createAccount = async (
+  userId: string,
+  input: CreateAccountInput,
+) => {
+  const account = await insertAccount({
+    user_id: userId,
+    name: input.name,
+    type: input.type,
+    initial_balance: input.initial_balance,
+    currency: input.currency,
+    institution_name: input.institution_name ?? null,
+    account_number_masked: input.account_number_masked ?? null,
+    include_in_total_balance: input.include_in_total_balance,
+  });
+
+  return { ...account, current_balance: account.initial_balance };
+};
+
+export const updateAccount = async (
   userId: string,
   accountId: string,
   input: UpdateAccountInput,
 ) => {
-  const account = await findAccountByIdAndUserId(
-    accountId,
-    userId,
+  const account = await requireAccount(userId, accountId);
+
+  const type = input.type ?? account.type;
+  const initialBalance = new Prisma.Decimal(
+    input.initial_balance ?? account.initial_balance,
   );
 
-  if (!account) {
-    throw new Error('ACCOUNT_NOT_FOUND');
+  if (type !== 'credit_card' && initialBalance.isNegative()) {
+    throw unprocessable(
+      'NEGATIVE_INITIAL_BALANCE',
+      'Saldo awal tidak boleh negatif kecuali kartu kredit',
+    );
   }
 
-  await updateAccount(
-    accountId,
-    userId,
-    input,
-  );
+  if (
+    input.currency !== undefined &&
+    input.currency !== account.currency &&
+    (await hasAccountActivity(accountId))
+  ) {
+    throw conflict(
+      'ACCOUNT_CURRENCY_LOCKED',
+      'Mata uang tidak bisa diubah karena rekening sudah memiliki transaksi',
+    );
+  }
 
-  return findAccountByIdAndUserId(
-    accountId,
-    userId,
-  );
+  const data: Prisma.accountsUpdateInput = {};
+
+  for (const [key, value] of Object.entries(input)) {
+    if (value !== undefined) {
+      (data as Record<string, unknown>)[key] = value;
+    }
+  }
+
+  const updated = await saveAccount(accountId, data);
+
+  return (await withBalances(userId, [updated]))[0];
 };
 
-export const remove = async (
-  userId: string,
-  accountId: string,
-) => {
-  const account = await findAccountByIdAndUserId(
-    accountId,
-    userId,
-  );
+/**
+ * Rekening yang belum pernah dipakai dihapus permanen. Rekening yang
+ * sudah direferensikan hanya diarsipkan agar riwayat tetap utuh.
+ * Mengembalikan `true` bila rekening diarsipkan.
+ */
+export const deleteAccount = async (userId: string, accountId: string) => {
+  await requireAccount(userId, accountId);
 
-  if (!account) {
-    throw new Error('ACCOUNT_NOT_FOUND');
-  }
-
-  // Soft delete: akun dinonaktifkan dan tidak dihitung lagi
-  // dalam total saldo, agar history transaksi tetap terjaga.
-  await updateAccount(
-    accountId,
-    userId,
-    {
+  if (await isAccountReferenced(accountId)) {
+    await saveAccount(accountId, {
       is_active: false,
       include_in_total_balance: false,
-    },
-  );
+    });
 
-  return true;
+    return { archived: true };
+  }
+
+  await removeAccount(accountId);
+
+  return { archived: false };
 };
