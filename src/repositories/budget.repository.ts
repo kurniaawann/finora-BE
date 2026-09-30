@@ -1,43 +1,114 @@
 import { prisma } from '../config/database.js';
+import { categoryRefSelect } from '../dtos/common.dto.js';
 import { Prisma } from '../generated/prisma/client.js';
+import type { PaginationParams } from '../utils/pagination.js';
+
+export type BudgetPeriod = 'current' | 'upcoming' | 'past';
 
 export interface BudgetFilters {
   search?: string;
   isActive?: boolean;
-  categoryId?: string;
-  from?: Date;
-  to?: Date;
+  period?: BudgetPeriod;
+  /** Tanggal acuan `period` ("hari ini" menurut zona waktu user). */
+  today?: Date;
 }
 
-const budgetInclude = {
-  budget_categories: {
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          icon: true,
-          color: true,
-        },
-      },
-    },
-  },
-} satisfies Prisma.budgetsInclude;
+const budgetSelect = {
+  id: true,
+  name: true,
+  amount: true,
+  start_date: true,
+  end_date: true,
+  is_active: true,
+} satisfies Prisma.budgetsSelect;
 
-export const createBudget = async (data: {
+const budgetDetailSelect = {
+  ...budgetSelect,
+  budget_categories: {
+    select: {
+      category_id: true,
+      amount: true,
+      categories: { select: categoryRefSelect },
+    },
+    orderBy: { created_at: 'asc' },
+  },
+} satisfies Prisma.budgetsSelect;
+
+export type BudgetDetailRecord = Prisma.budgetsGetPayload<{
+  select: typeof budgetDetailSelect;
+}>;
+
+const periodWhere = (
+  period: BudgetPeriod,
+  today: Date,
+): Prisma.budgetsWhereInput => {
+  switch (period) {
+    case 'current':
+      return { start_date: { lte: today }, end_date: { gte: today } };
+    case 'upcoming':
+      return { start_date: { gt: today } };
+    case 'past':
+      return { end_date: { lt: today } };
+  }
+};
+
+export const findBudgets = async (
+  userId: string,
+  { page, perPage }: PaginationParams,
+  filters: BudgetFilters,
+) => {
+  const where: Prisma.budgetsWhereInput = {
+    user_id: userId,
+    ...(filters.search && { name: { contains: filters.search } }),
+    ...(filters.isActive !== undefined && { is_active: filters.isActive }),
+    ...(filters.period &&
+      filters.today &&
+      periodWhere(filters.period, filters.today)),
+  };
+
+  const [data, total] = await prisma.$transaction([
+    prisma.budgets.findMany({
+      where,
+      orderBy: [{ start_date: 'desc' }, { created_at: 'desc' }],
+      skip: (page - 1) * perPage,
+      take: perPage,
+      select: budgetSelect,
+    }),
+    prisma.budgets.count({ where }),
+  ]);
+
+  return { data, total };
+};
+
+export const findBudgetById = (budgetId: string, userId: string) =>
+  prisma.budgets.findFirst({
+    where: { id: budgetId, user_id: userId },
+    select: budgetDetailSelect,
+  });
+
+/** Anggaran aktif yang rentang tanggalnya mencakup `date`. */
+export const findActiveBudgetsOn = (userId: string, date: Date) =>
+  prisma.budgets.findMany({
+    where: {
+      user_id: userId,
+      is_active: true,
+      start_date: { lte: date },
+      end_date: { gte: date },
+    },
+    orderBy: [{ end_date: 'asc' }, { created_at: 'asc' }],
+    select: budgetDetailSelect,
+  });
+
+export const createBudget = (data: {
   userId: string;
   name: string;
   amount: number;
   startDate: Date;
   endDate: Date;
   isActive: boolean;
-  categories: {
-    categoryId: string;
-    amount: number;
-  }[];
-}) => {
-  return prisma.budgets.create({
+  categories: { category_id: string; amount: number }[];
+}) =>
+  prisma.budgets.create({
     data: {
       user_id: data.userId,
       name: data.name,
@@ -45,203 +116,122 @@ export const createBudget = async (data: {
       start_date: data.startDate,
       end_date: data.endDate,
       is_active: data.isActive,
-
-      ...(data.categories.length > 0
-        ? {
-            budget_categories: {
-              create: data.categories.map(
-                (category) => ({
-                  category_id: category.categoryId,
-                  amount: category.amount,
-                }),
-              ),
-            },
-          }
-        : {}),
+      budget_categories: { create: data.categories },
     },
-    include: budgetInclude,
+    select: budgetDetailSelect,
   });
-};
 
-export const findBudgetsByUser = async (params: {
-  userId: string;
-  page: number;
-  perPage: number;
-  filters?: BudgetFilters;
-}) => {
-  const skip =
-    (params.page - 1) * params.perPage;
-  const filters = params.filters ?? {};
-
-  const conditions: Prisma.budgetsWhereInput[] = [
-    {
-      user_id: params.userId,
-    },
-  ];
-
-  if (filters.search) {
-    conditions.push({
-      name: {
-        contains: filters.search,
-      },
-    });
-  }
-
-  if (filters.isActive !== undefined) {
-    conditions.push({
-      is_active: filters.isActive,
-    });
-  }
-
-  if (filters.categoryId) {
-    conditions.push({
-      budget_categories: {
-        some: {
-          category_id: filters.categoryId,
-        },
-      },
-    });
-  }
-
-  if (filters.from) {
-    conditions.push({
-      end_date: {
-        gte: filters.from,
-      },
-    });
-  }
-
-  if (filters.to) {
-    conditions.push({
-      start_date: {
-        lte: filters.to,
-      },
-    });
-  }
-
-  const where: Prisma.budgetsWhereInput = {
-    AND: conditions,
-  };
-
-  const [data, total] = await prisma.$transaction([
-    prisma.budgets.findMany({
-      where,
-      orderBy: [
-        {
-          start_date: 'desc',
-        },
-        {
-          created_at: 'desc',
-        },
-      ],
-      skip,
-      take: params.perPage,
-      include: budgetInclude,
-    }),
-
-    prisma.budgets.count({
-      where,
-    }),
-  ]);
-
-  return {
-    data,
-    total,
-  };
-};
-
-export const findBudgetByIdAndUser = async (
-  budgetId: string,
-  userId: string,
-) => {
-  return prisma.budgets.findFirst({
-    where: {
-      id: budgetId,
-      user_id: userId,
-    },
-    include: budgetInclude,
-  });
-};
-
-export const updateBudget = async (
+export const updateBudget = (
   budgetId: string,
   data: Prisma.budgetsUpdateInput,
-) => {
-  return prisma.budgets.update({
-    where: {
-      id: budgetId,
-    },
+) =>
+  prisma.budgets.update({
+    where: { id: budgetId },
     data,
-    include: budgetInclude,
+    select: budgetDetailSelect,
   });
-};
 
-export const deleteBudget = async (
-  budgetId: string,
+export const deleteBudget = (budgetId: string, userId: string) =>
+  prisma.budgets.deleteMany({
+    where: { id: budgetId, user_id: userId },
+  });
+
+export const findUserProfileSettings = (userId: string) =>
+  prisma.profile.findUnique({
+    where: { user_id: userId },
+    select: { currency: true, timezone: true },
+  });
+
+/* ------------------------------------------------------------------ */
+/* Pemakaian anggaran                                                  */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Pengeluaran yang dihitung ke anggaran: transaksi expense selesai
+ * milik user dalam rentang tanggal. Setoran tabungan juga tercatat
+ * sebagai expense, tetapi bukan belanja, jadi dikecualikan.
+ */
+const spendingWhere = (
   userId: string,
-) => {
-  return prisma.budgets.deleteMany({
-    where: {
-      id: budgetId,
-      user_id: userId,
-    },
+  from: Date,
+  to: Date,
+): Prisma.transactionsWhereInput => ({
+  user_id: userId,
+  type: 'expense',
+  status: 'completed',
+  savings_contribution_id: null,
+  transaction_date: { gte: from, lte: to },
+});
+
+export const sumSpending = async (userId: string, from: Date, to: Date) => {
+  const result = await prisma.transactions.aggregate({
+    where: spendingWhere(userId, from, to),
+    _sum: { amount: true },
   });
+
+  return result._sum.amount ?? new Prisma.Decimal(0);
 };
 
-export const findCategoriesByIdsForUser = async (
+/** Total pengeluaran per tanggal, untuk menghitung banyak anggaran sekaligus. */
+export const sumSpendingByDate = async (
+  userId: string,
+  from: Date,
+  to: Date,
+) => {
+  const rows = await prisma.transactions.groupBy({
+    by: ['transaction_date'],
+    where: spendingWhere(userId, from, to),
+    _sum: { amount: true },
+  });
+
+  return rows.map((row) => ({
+    date: row.transaction_date,
+    amount: row._sum.amount ?? new Prisma.Decimal(0),
+  }));
+};
+
+export const sumSpendingByCategory = async (
   userId: string,
   categoryIds: string[],
+  from: Date,
+  to: Date,
 ) => {
-  return prisma.categories.findMany({
-    where: {
-      id: {
-        in: categoryIds,
-      },
-      OR: [
-        {
-          user_id: userId,
-        },
-        {
-          is_system: true,
-        },
-      ],
-    },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      icon: true,
-      color: true,
-    },
-  });
-};
+  const spent = new Map<string, Prisma.Decimal>();
 
-export const sumExpenseByCategory = async (params: {
-  userId: string;
-  categoryIds: string[];
-  from: Date;
-  to: Date;
-}) => {
-  if (params.categoryIds.length === 0) {
-    return [];
+  if (categoryIds.length === 0) {
+    return spent;
   }
 
-  return prisma.transactions.groupBy({
+  const rows = await prisma.transactions.groupBy({
     by: ['category_id'],
     where: {
-      user_id: params.userId,
-      type: 'expense',
-      status: 'completed',
-      category_id: {
-        in: params.categoryIds,
-      },
-      transaction_date: {
-        gte: params.from,
-        lte: params.to,
-      },
+      ...spendingWhere(userId, from, to),
+      category_id: { in: categoryIds },
     },
-    _sum: {
-      amount: true,
-    },
+    _sum: { amount: true },
   });
+
+  for (const row of rows) {
+    if (row.category_id) {
+      spent.set(row.category_id, row._sum.amount ?? new Prisma.Decimal(0));
+    }
+  }
+
+  return spent;
 };
+
+/** Notifikasi peringatan anggaran yang sudah pernah dikirim. */
+export const findBudgetAlertNotifications = (
+  userId: string,
+  budgetIds: string[],
+) =>
+  prisma.notifications.findMany({
+    where: {
+      user_id: userId,
+      type: 'budget',
+      OR: budgetIds.map((budgetId) => ({
+        data: { path: '$.budget_id', equals: budgetId },
+      })),
+    },
+    select: { data: true },
+  });

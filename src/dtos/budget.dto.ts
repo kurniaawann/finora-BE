@@ -1,213 +1,138 @@
-type Amount = { toString(): string };
+import { Prisma } from '../generated/prisma/client.js';
+import {
+  type CategoryRefDTO,
+  type DecimalLike,
+  toCategoryRef,
+  toDateOnly,
+  toMoney,
+  toNumber,
+  toPercentage,
+} from './common.dto.js';
 
-export interface BudgetCategoryRefDTO {
-  id: string;
-  name: string;
-  type: string;
-  icon: string | null;
-  color: string | null;
-}
+export type BudgetStatus = 'safe' | 'warning' | 'exceeded';
 
-export interface BudgetCategoryDTO {
-  id: string;
-  category_id: string;
-  category: BudgetCategoryRefDTO | null;
-  amount: string;
-  spent: string;
-  remaining: string;
-  progress_percentage: number;
-}
+export const BUDGET_WARNING_PERCENTAGE = 80;
+export const BUDGET_EXCEEDED_PERCENTAGE = 100;
 
-export interface BudgetSummaryDTO {
+const toDecimal = (value: DecimalLike) =>
+  new Prisma.Decimal(value.toString());
+
+/** true bila pemakaian sudah mencapai `percentage` persen dari batas. */
+export const hasReachedPercentage = (
+  spent: DecimalLike,
+  limit: DecimalLike,
+  percentage: number,
+): boolean => {
+  const limitValue = toDecimal(limit);
+
+  return (
+    limitValue.gt(0) &&
+    toDecimal(spent).mul(100).gte(limitValue.mul(percentage))
+  );
+};
+
+export const getBudgetStatus = (
+  spent: DecimalLike,
+  limit: DecimalLike,
+): BudgetStatus => {
+  if (hasReachedPercentage(spent, limit, BUDGET_EXCEEDED_PERCENTAGE)) {
+    return 'exceeded';
+  }
+
+  if (hasReachedPercentage(spent, limit, BUDGET_WARNING_PERCENTAGE)) {
+    return 'warning';
+  }
+
+  return 'safe';
+};
+
+/** `remaining` boleh negatif: nilai minus = kelebihan pengeluaran. */
+const toUsage = (limit: DecimalLike, spent: DecimalLike) => ({
+  spent: toMoney(spent),
+  remaining: toMoney(toDecimal(limit).sub(toDecimal(spent))),
+  progress_percentage: toPercentage(toNumber(spent), toNumber(limit)),
+  status: getBudgetStatus(spent, limit),
+});
+
+export interface BudgetDTO {
   id: string;
   name: string;
   amount: string;
   start_date: string;
   end_date: string;
   is_active: boolean;
-  total_allocated: string;
-  unallocated: string;
   spent: string;
   remaining: string;
   progress_percentage: number;
-  created_at: string;
-  updated_at: string;
+  status: BudgetStatus;
 }
 
-export interface BudgetDTO extends BudgetSummaryDTO {
+export interface BudgetCategoryDTO {
+  category: CategoryRefDTO;
+  amount: string;
+  spent: string;
+  remaining: string;
+  progress_percentage: number;
+  status: BudgetStatus;
+}
+
+export interface BudgetDetailDTO extends BudgetDTO {
+  total_allocated: string;
+  unallocated: string;
   categories: BudgetCategoryDTO[];
 }
 
-const toNumber = (
-  value: Amount | number | null | undefined,
-): number => {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  return Number(value.toString());
-};
-
-const toMoney = (value: number): string =>
-  value.toFixed(2);
-
-const toPercentage = (
-  part: number,
-  whole: number,
-): number => {
-  if (whole <= 0) {
-    return 0;
-  }
-
-  return Math.round((part / whole) * 10000) / 100;
-};
-
-const toDateOnly = (
-  value: Date | string,
-): string => new Date(value).toISOString().slice(0, 10);
-
-const toIsoDateTime = (
-  value: Date | string,
-): string => new Date(value).toISOString();
-
-type BudgetInput = {
+type BudgetSource = {
   id: string;
   name: string;
-  amount: Amount;
-  start_date: Date | string;
-  end_date: Date | string;
+  amount: DecimalLike;
+  start_date: Date;
+  end_date: Date;
   is_active: boolean;
-  created_at: Date | string;
-  updated_at: Date | string;
+};
+
+type BudgetDetailSource = BudgetSource & {
   budget_categories: {
-    id: string;
     category_id: string;
-    amount: Amount;
-    categories?: BudgetCategoryRefDTO | null;
+    amount: DecimalLike;
+    categories: CategoryRefDTO;
   }[];
 };
 
-const computeSummary = (
-  budget: BudgetInput,
-  spentByCategory: Map<
-    string,
-    Amount | number
-  > = new Map(),
-) => {
-  const amount = toNumber(budget.amount);
-
-  const categories: BudgetCategoryDTO[] =
-    budget.budget_categories.map(
-      (budgetCategory) => {
-        const allocated = toNumber(
-          budgetCategory.amount,
-        );
-        const spent = toNumber(
-          spentByCategory.get(
-            budgetCategory.category_id,
-          ),
-        );
-
-        return {
-          id: budgetCategory.id,
-          category_id:
-            budgetCategory.category_id,
-          category:
-            budgetCategory.categories ?? null,
-          amount: toMoney(allocated),
-          spent: toMoney(spent),
-          remaining: toMoney(allocated - spent),
-          progress_percentage: toPercentage(
-            spent,
-            allocated,
-          ),
-        };
-      },
-    );
-
-  const totalAllocated = categories.reduce(
-    (sum, category) =>
-      sum + Number(category.amount),
-    0,
-  );
-
-  const spent = categories.reduce(
-    (sum, category) =>
-      sum + Number(category.spent),
-    0,
-  );
-
-  return {
-    amount: toMoney(amount),
-    total_allocated: toMoney(totalAllocated),
-    unallocated: toMoney(amount - totalAllocated),
-    spent: toMoney(spent),
-    remaining: toMoney(amount - spent),
-    progress_percentage: toPercentage(
-      spent,
-      amount,
-    ),
-    categories,
-  };
-};
-
-export const toBudgetSummaryDTO = (
-  budget: BudgetInput,
-  spentByCategory: Map<
-    string,
-    Amount | number
-  > = new Map(),
-): BudgetSummaryDTO => {
-  const summary = computeSummary(
-    budget,
-    spentByCategory,
-  );
-
-  return {
-    id: budget.id,
-    name: budget.name,
-    amount: summary.amount,
-    start_date: toDateOnly(budget.start_date),
-    end_date: toDateOnly(budget.end_date),
-    is_active: budget.is_active,
-    total_allocated: summary.total_allocated,
-    unallocated: summary.unallocated,
-    spent: summary.spent,
-    remaining: summary.remaining,
-    progress_percentage:
-      summary.progress_percentage,
-    created_at: toIsoDateTime(budget.created_at),
-    updated_at: toIsoDateTime(budget.updated_at),
-  };
-};
-
 export const toBudgetDTO = (
-  budget: BudgetInput,
-  spentByCategory: Map<
-    string,
-    Amount | number
-  > = new Map(),
-): BudgetDTO => {
-  const summary = computeSummary(
-    budget,
-    spentByCategory,
+  budget: BudgetSource,
+  spent: DecimalLike,
+): BudgetDTO => ({
+  id: budget.id,
+  name: budget.name,
+  amount: toMoney(budget.amount),
+  start_date: toDateOnly(budget.start_date),
+  end_date: toDateOnly(budget.end_date),
+  is_active: budget.is_active,
+  ...toUsage(budget.amount, spent),
+});
+
+export const toBudgetDetailDTO = (
+  budget: BudgetDetailSource,
+  spent: DecimalLike,
+  spentByCategory: Map<string, DecimalLike>,
+): BudgetDetailDTO => {
+  const totalAllocated = budget.budget_categories.reduce(
+    (sum, allocation) => sum.add(toDecimal(allocation.amount)),
+    new Prisma.Decimal(0),
   );
 
   return {
-    id: budget.id,
-    name: budget.name,
-    amount: summary.amount,
-    start_date: toDateOnly(budget.start_date),
-    end_date: toDateOnly(budget.end_date),
-    is_active: budget.is_active,
-    total_allocated: summary.total_allocated,
-    unallocated: summary.unallocated,
-    spent: summary.spent,
-    remaining: summary.remaining,
-    progress_percentage:
-      summary.progress_percentage,
-    categories: summary.categories,
-    created_at: toIsoDateTime(budget.created_at),
-    updated_at: toIsoDateTime(budget.updated_at),
+    ...toBudgetDTO(budget, spent),
+    total_allocated: toMoney(totalAllocated),
+    unallocated: toMoney(toDecimal(budget.amount).sub(totalAllocated)),
+    categories: budget.budget_categories.map((allocation) => ({
+      category: toCategoryRef(allocation.categories),
+      amount: toMoney(allocation.amount),
+      ...toUsage(
+        allocation.amount,
+        spentByCategory.get(allocation.category_id) ?? 0,
+      ),
+    })),
   };
 };
