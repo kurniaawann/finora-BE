@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const groupTypeSchema = z.enum([
+export const GROUP_TYPES = [
   'personal',
   'club',
   'trip',
@@ -8,117 +8,100 @@ export const groupTypeSchema = z.enum([
   'project',
   'event',
   'other',
-]);
+] as const;
 
-export const groupMemberRoleSchema = z.enum([
-  'owner',
-  'admin',
-  'member',
-]);
+const groupTypeSchema = z.enum(GROUP_TYPES, {
+  error: 'Jenis grup tidak valid',
+});
+
+const nameSchema = z
+  .string({ error: 'Nama grup wajib diisi' })
+  .trim()
+  .min(1, 'Nama grup wajib diisi')
+  .max(150, 'Nama grup maksimal 150 karakter');
+
+const descriptionSchema = z
+  .string()
+  .trim()
+  .max(500, 'Deskripsi grup maksimal 500 karakter')
+  .transform((value) => (value === '' ? null : value))
+  .nullable()
+  .optional();
+
+const currencySchema = z
+  .string()
+  .trim()
+  .regex(/^[A-Za-z]{3}$/, 'Kode mata uang harus 3 huruf, mis. IDR')
+  .toUpperCase();
+
+const nicknameSchema = z
+  .string()
+  .trim()
+  .max(100, 'Nama panggilan maksimal 100 karakter')
+  .transform((value) => (value === '' ? null : value))
+  .nullable()
+  .optional();
+
+const userIdSchema = z.uuid('ID pengguna tidak valid');
+
+const hasAnyField = (data: Record<string, unknown>) =>
+  Object.values(data).some((value) => value !== undefined);
 
 export const createGroupSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Nama grup wajib diisi')
-    .max(150, 'Nama grup maksimal 150 karakter'),
-
-  description: z
-    .string()
-    .trim()
-    .max(500, 'Deskripsi grup maksimal 500 karakter')
-    .nullable()
-    .optional(),
-
+  name: nameSchema,
+  description: descriptionSchema,
   type: groupTypeSchema.default('other'),
-
-  avatar_url: z
-    .string()
-    .trim()
-    .max(500, 'URL avatar maksimal 500 karakter')
-    .nullable()
-    .optional(),
-
-  currency: z
-    .string()
-    .trim()
-    .length(3, 'Currency harus terdiri dari 3 karakter')
-    .toUpperCase()
-    .default('IDR'),
+  currency: currencySchema.default('IDR'),
 });
 
-export const updateGroupSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Nama grup wajib diisi')
-    .max(150, 'Nama grup maksimal 150 karakter')
-    .optional(),
-
-  description: z
-    .string()
-    .trim()
-    .max(500, 'Deskripsi grup maksimal 500 karakter')
-    .nullable()
-    .optional(),
-
-  type: groupTypeSchema.optional(),
-
-  avatar_url: z
-    .string()
-    .trim()
-    .max(500, 'URL avatar maksimal 500 karakter')
-    .nullable()
-    .optional(),
-
-  is_archived: z.boolean().optional(),
-});
+export const updateGroupSchema = z
+  .object({
+    name: nameSchema.optional(),
+    description: descriptionSchema,
+    type: groupTypeSchema.optional(),
+    currency: currencySchema.optional(),
+    is_archived: z
+      .boolean({ error: 'is_archived harus boolean' })
+      .optional(),
+  })
+  .refine(hasAnyField, { message: 'Tidak ada data yang diubah' });
 
 export const joinGroupSchema = z.object({
   invite_code: z
-    .string()
+    .string({ error: 'Kode undangan wajib diisi' })
     .trim()
     .min(1, 'Kode undangan wajib diisi')
-    .max(50, 'Kode undangan maksimal 50 karakter'),
+    .max(50, 'Kode undangan tidak valid')
+    .toUpperCase(),
 });
 
 export const addGroupMemberSchema = z.object({
-  user_id: z.string().uuid('ID pengguna tidak valid'),
-
-  nickname: z
-    .string()
-    .trim()
-    .max(255, 'Panggilan maksimal 255 karakter')
-    .optional(),
+  user_id: userIdSchema,
+  nickname: nicknameSchema,
 });
 
-export const updateGroupMemberSchema = z.object({
-  role: groupMemberRoleSchema.optional(),
+export const updateGroupMemberSchema = z
+  .object({
+    // Role owner hanya bisa dipindahkan lewat transfer kepemilikan.
+    role: z
+      .enum(['admin', 'member'], {
+        error: 'Role harus admin atau member',
+      })
+      .optional(),
+    nickname: nicknameSchema,
+  })
+  .refine(hasAnyField, { message: 'Tidak ada data yang diubah' });
 
-  nickname: z
-    .string()
-    .trim()
-    .max(255, 'Panggilan maksimal 255 karakter')
-    .nullable()
-    .optional(),
+export const transferOwnershipSchema = z.object({
+  user_id: userIdSchema,
 });
 
-export type CreateGroupInput = z.infer<
-  typeof createGroupSchema
->;
-
-export type UpdateGroupInput = z.infer<
-  typeof updateGroupSchema
->;
-
-export type JoinGroupInput = z.infer<
-  typeof joinGroupSchema
->;
-
-export type AddGroupMemberInput = z.infer<
-  typeof addGroupMemberSchema
->;
-
+export type CreateGroupInput = z.infer<typeof createGroupSchema>;
+export type UpdateGroupInput = z.infer<typeof updateGroupSchema>;
+export type AddGroupMemberInput = z.infer<typeof addGroupMemberSchema>;
 export type UpdateGroupMemberInput = z.infer<
   typeof updateGroupMemberSchema
+>;
+export type TransferOwnershipInput = z.infer<
+  typeof transferOwnershipSchema
 >;
