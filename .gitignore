@@ -1,6 +1,21 @@
+# Dependencies
 node_modules/
+
+# Build output & generated code (dibuat ulang oleh `npm install` / `npm run build`)
+/dist
+/src/generated/
+
+# Environment — hanya .env.example yang di-commit
 .env
-/generated/prisma
-/dist*
-/src/public/images/*
-!/src/public/images/.gitkeep
+.env.*
+!.env.example
+
+# Dokumen produk internal (PRD & PRD desain) — disimpan lokal, tidak dipublikasikan
+/PRD*.md
+
+# Foto yang diunggah user
+/uploads/
+
+# Log & OS
+*.log
+.DS_Store
