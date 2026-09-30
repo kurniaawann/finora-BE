@@ -1,62 +1,36 @@
 import { Router } from 'express';
 
 import {
+  acceptFriendRequestController,
   cancelFriendRequestController,
-  getFriendRequestsController,
-  getFriendsController,
-  respondFriendRequestController,
+  listFriendRequestsController,
+  listFriendsController,
+  rejectFriendRequestController,
   searchUsersController,
   sendFriendRequestController,
   unfriendController,
 } from '../controllers/friend.controller.js';
-
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validation.middleware.js';
-
-import {
-  respondFriendRequestSchema,
-  sendFriendRequestSchema,
-} from '../validators/friend.validator.js';
+import { sendFriendRequestSchema } from '../validators/friend.validator.js';
 
 const router = Router();
 
 router.use(authMiddleware);
 
-router.get(
-  '/search',
-  searchUsersController,
-);
+router.get('/search', searchUsersController);
 
+router.get('/requests', listFriendRequestsController);
 router.post(
   '/requests',
   validate(sendFriendRequestSchema),
   sendFriendRequestController,
 );
+router.post('/requests/:id/accept', acceptFriendRequestController);
+router.post('/requests/:id/reject', rejectFriendRequestController);
+router.post('/requests/:id/cancel', cancelFriendRequestController);
 
-router.get(
-  '/requests',
-  getFriendRequestsController,
-);
-
-router.patch(
-  '/requests/:id',
-  validate(respondFriendRequestSchema),
-  respondFriendRequestController,
-);
-
-router.delete(
-  '/requests/:id',
-  cancelFriendRequestController,
-);
-
-router.get(
-  '/',
-  getFriendsController,
-);
-
-router.delete(
-  '/:friendId',
-  unfriendController,
-);
+router.get('/', listFriendsController);
+router.delete('/:userId', unfriendController);
 
 export default router;

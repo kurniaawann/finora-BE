@@ -1,25 +1,23 @@
 import { z } from 'zod';
 
-export const sendFriendRequestSchema = z.object({
-  receiver_id: z
-    .string()
-    .uuid('ID penerima tidak valid'),
+export const FRIEND_REQUEST_STATUSES = [
+  'pending',
+  'accepted',
+  'rejected',
+  'cancelled',
+] as const;
 
+export const FRIEND_REQUEST_DIRECTIONS = ['received', 'sent'] as const;
+
+export const sendFriendRequestSchema = z.object({
+  receiver_id: z.uuid('ID pengguna tidak valid'),
   message: z
     .string()
     .trim()
     .max(500, 'Pesan maksimal 500 karakter')
+    .transform((value) => (value === '' ? null : value))
+    .nullable()
     .optional(),
 });
 
-export const respondFriendRequestSchema = z.object({
-  action: z.enum(['accept', 'reject']),
-});
-
-export type SendFriendRequestInput = z.infer<
-  typeof sendFriendRequestSchema
->;
-
-export type RespondFriendRequestInput = z.infer<
-  typeof respondFriendRequestSchema
->;
+export type SendFriendRequestInput = z.infer<typeof sendFriendRequestSchema>;
