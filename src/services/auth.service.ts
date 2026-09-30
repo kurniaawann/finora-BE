@@ -1,238 +1,454 @@
+import crypto from 'node:crypto';
+
+import { prisma } from '../config/database.js';
+import type { AuthTokensDTO } from '../dtos/user.dto.js';
 import {
   createRefreshToken,
   findRefreshToken,
-  pruneExpiredRefreshTokens,
   revokeAllUserRefreshTokens,
   revokeRefreshToken,
   rotateRefreshToken,
 } from '../repositories/refresh-token.js';
+import { deleteUserDeviceTokens } from '../repositories/device-token.repository.js';
 import {
+  anonymizeUser,
   createUser,
   findUserByEmail,
-  findUserByEmailGetProfile,
   findUserById,
+  markEmailVerified,
+  updateUserPassword,
 } from '../repositories/user.repository.js';
-import { getRefreshTokenExpiry } from '../utils/date.js';
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
-import { logger } from '../config/logger.js';
-
+import {
+  AppError,
+  conflict,
+  forbidden,
+  notFound,
+  unauthorized,
+  unprocessable,
+} from '../utils/app-error.js';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from '../utils/jwt.js';
 import { comparePassword, hashPassword } from '../utils/password.js';
 import { hashToken } from '../utils/token.js';
-import type { LoginInput, RegisterInput } from '../validators/auth.validator.js';
+import type {
+  ChangePasswordInput,
+  DeleteAccountInput,
+  LoginInput,
+  RegisterInput,
+  ResetPasswordInput,
+} from '../validators/auth.validator.js';
+import { getMemberNetBalance } from './balance.service.js';
+import { buildCodeEmail, sendMailInBackground } from './mail.service.js';
+import { deleteImage } from './storage.service.js';
+import {
+  CODE_TTL_MINUTES,
+  consumeVerificationCode,
+  isInResendCooldown,
+  issueVerificationCode,
+} from './verification.service.js';
 
-const PRUNE_INTERVAL_MS = 60 * 60 * 1000;
+// Dipakai saat email tidak terdaftar agar waktu respons login tetap
+// setara dan tidak bisa dipakai untuk menebak email yang terdaftar.
+const DUMMY_PASSWORD_HASH =
+  '$2b$12$2Sraj/Tz3OCPSIXrLqmLeu1Vs1fgAan/BEPcvXeGIrijRhOKjFJV2';
 
-let lastPruneAt = 0;
+const invalidRefreshToken = () =>
+  unauthorized(
+    'INVALID_REFRESH_TOKEN',
+    'Sesi tidak valid, silakan login ulang',
+  );
 
-const pruneRefreshTokensIfNeeded = async () => {
-  const now = Date.now();
+/** Buat pasangan token baru dan simpan hash refresh token-nya. */
+const issueTokens = async (userId: string): Promise<AuthTokensDTO> => {
+  const access = generateAccessToken(userId);
+  const refresh = generateRefreshToken(userId);
 
-  if (now - lastPruneAt < PRUNE_INTERVAL_MS) {
-    return;
-  }
+  await createRefreshToken({
+    userId,
+    tokenHash: hashToken(refresh.token),
+    expiresAt: refresh.expiresAt,
+  });
 
-  lastPruneAt = now;
-
-  try {
-    await pruneExpiredRefreshTokens();
-  } catch (error) {
-    logger.error('Prune refresh tokens error:', error);
-  }
+  return {
+    access_token: access.token,
+    refresh_token: refresh.token,
+    token_type: 'Bearer',
+    expires_in: access.expiresIn,
+  };
 };
 
+const requireActiveUser = async (userId: string) => {
+  const user = await findUserById(userId);
 
+  if (!user) {
+    throw notFound('USER_NOT_FOUND', 'User tidak ditemukan');
+  }
 
-export const register = async (input:RegisterInput) => {
-    const existingUser = await findUserByEmail(input.email);
-    if (existingUser) {
-        throw new Error('EMAIL_ALREADY_EXISTS')
-    }
+  if (!user.is_active) {
+    throw forbidden('USER_INACTIVE', 'Akun kamu tidak aktif');
+  }
 
-    const hashedPassword = await hashPassword(input.password);
-    await  createUser({
-        name : input.name,
-        email : input.email,
-        password : hashedPassword,
-    });
-}
+  return user;
+};
+
+const sendVerificationEmail = async (user: {
+  id: string;
+  name: string;
+  email: string;
+}) => {
+  const code = await issueVerificationCode(user.id, 'email_verification');
+
+  sendMailInBackground(
+    buildCodeEmail({
+      to: user.email,
+      name: user.name,
+      subject: `${code} adalah kode verifikasi email Finora`,
+      intro: 'Masukkan kode berikut di aplikasi Finora untuk memverifikasi email kamu.',
+      code,
+      expiresInMinutes: CODE_TTL_MINUTES,
+    }),
+  );
+};
+
+/** Cabut semua sesi & perangkat (dipakai saat password berubah). */
+const revokeAllAccess = async (userId: string) => {
+  await revokeAllUserRefreshTokens(userId);
+  await deleteUserDeviceTokens(userId);
+};
+
+export const register = async (input: RegisterInput) => {
+  const existing = await findUserByEmail(input.email);
+
+  if (existing) {
+    throw conflict('EMAIL_ALREADY_EXISTS', 'Email sudah terdaftar');
+  }
+
+  const user = await createUser({
+    name: input.name,
+    email: input.email,
+    password: await hashPassword(input.password),
+  });
+
+  await sendVerificationEmail(user);
+
+  return {
+    user,
+    tokens: await issueTokens(user.id),
+  };
+};
 
 export const login = async (input: LoginInput) => {
   const user = await findUserByEmail(input.email);
 
-  if (!user) {
-    throw new Error('INVALID_CREDENTIALS');
-  }
-
-  if (!user.is_active) {
-    throw new Error('USER_INACTIVE');
-  }
-
   const passwordValid = await comparePassword(
     input.password,
-    user.password,
+    user?.password ?? DUMMY_PASSWORD_HASH,
   );
 
-  if (!passwordValid) {
-    throw new Error('INVALID_CREDENTIALS');
-  }
-
-  const accessToken = generateAccessToken(user.id);
-
-  const refreshToken = generateRefreshToken(user.id);
-
-  const tokenHash = hashToken(refreshToken);
-
-  await createRefreshToken({
-    userId: user.id,
-    tokenHash,
-    expiresAt: getRefreshTokenExpiry(),
-  });
-
-  await pruneRefreshTokensIfNeeded();
-
-  return {
-    accessToken,
-    refreshToken,
-
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      email_verified_at: user.email_verified_at,
-      createdAt: user.created_at,
-      updatedAt: user.updated_at,
-    },
-  };
-};
-
-export const getCurrentUser = async (userId: string) => {
-  const user = await findUserById(userId);
-
-  if (!user) {
-    throw new Error('USER_NOT_FOUND');
+  if (!user || !passwordValid) {
+    throw unauthorized(
+      'INVALID_CREDENTIALS',
+      'Email atau password salah',
+    );
   }
 
   if (!user.is_active) {
-    throw new Error('USER_INACTIVE');
+    throw forbidden('USER_INACTIVE', 'Akun kamu tidak aktif');
   }
 
   return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    email_verified_at: user.email_verified_at,
-    profile: user.profiles,
+    user,
+    tokens: await issueTokens(user.id),
   };
 };
 
-export const refreshAccessToken = async (
+export const getCurrentUser = requireActiveUser;
+
+/**
+ * Rotasi refresh token. Token lama langsung dicabut; bila token yang
+ * sudah dicabut dipakai lagi (indikasi pencurian), seluruh sesi user
+ * dicabut sesuai rekomendasi OWASP.
+ */
+export const refreshTokens = async (
   refreshToken: string,
-) => {
-  const tokenHash = hashToken(refreshToken);
-
-  const storedToken = await findRefreshToken(tokenHash);
-
-  if (!storedToken) {
-    throw new Error('INVALID_REFRESH_TOKEN');
-  }
-
-  /**
-   * Token sudah pernah digunakan.
-   *
-   * Ini dapat mengindikasikan refresh token dicuri
-   * dan digunakan kembali setelah rotation.
-   *
-   * Sesuai OWASP best practice, langsung revoke SELURUH
-   * refresh token milik user untuk membatasi dampak pencurian.
-   */
-  if (storedToken.revoked_at) {
-    await revokeAllUserRefreshTokens(
-      storedToken.user_id,
-    );
-
-    throw new Error('REFRESH_TOKEN_REUSED');
-  }
-
-  if (storedToken.expires_at < new Date()) {
-    throw new Error('REFRESH_TOKEN_EXPIRED');
-  }
-
+): Promise<AuthTokensDTO> => {
   let payload;
 
   try {
     payload = verifyRefreshToken(refreshToken);
   } catch {
-    throw new Error('INVALID_REFRESH_TOKEN');
+    throw invalidRefreshToken();
   }
 
-  if (payload.id !== storedToken.user_id) {
-    throw new Error('INVALID_REFRESH_TOKEN');
+  const stored = await findRefreshToken(hashToken(refreshToken));
+
+  if (!stored || stored.user_id !== payload.id) {
+    throw invalidRefreshToken();
   }
 
-  const newRefreshToken =
-    generateRefreshToken(storedToken.user_id);
+  if (stored.revoked_at) {
+    await revokeAllUserRefreshTokens(stored.user_id);
 
-  const newRefreshTokenHash =
-    hashToken(newRefreshToken);
+    throw unauthorized(
+      'REFRESH_TOKEN_REUSED',
+      'Sesi sudah tidak berlaku, silakan login ulang',
+    );
+  }
 
-  let newRefreshTokenRecord;
+  if (stored.expires_at < new Date()) {
+    throw unauthorized(
+      'REFRESH_TOKEN_EXPIRED',
+      'Sesi sudah berakhir, silakan login ulang',
+    );
+  }
+
+  const user = await findUserById(stored.user_id);
+
+  if (!user || !user.is_active) {
+    throw invalidRefreshToken();
+  }
+
+  const access = generateAccessToken(stored.user_id);
+  const refresh = generateRefreshToken(stored.user_id);
 
   try {
-    newRefreshTokenRecord =
-      await rotateRefreshToken({
-        oldTokenId: storedToken.id,
-
-        newToken: {
-          userId: storedToken.user_id,
-          tokenHash: newRefreshTokenHash,
-          expiresAt: getRefreshTokenExpiry(),
-        },
-      });
+    await rotateRefreshToken({
+      oldTokenId: stored.id,
+      newToken: {
+        userId: stored.user_id,
+        tokenHash: hashToken(refresh.token),
+        expiresAt: refresh.expiresAt,
+      },
+    });
   } catch (error) {
-    /**
-     * Token lama ternyata sudah dirotasi proses lain yang berjalan
-     * bersamaan (race). Perlakukan seperti pemakaian ulang sesuai
-     * OWASP: revoke seluruh refresh token user.
-     */
+    // Token lama sudah dirotasi request lain secara bersamaan (race).
     if (
       error instanceof Error &&
       error.message === 'REFRESH_TOKEN_REUSED'
     ) {
-      await revokeAllUserRefreshTokens(
-        storedToken.user_id,
-      );
+      await revokeAllUserRefreshTokens(stored.user_id);
 
-      throw new Error('REFRESH_TOKEN_REUSED');
+      throw unauthorized(
+        'REFRESH_TOKEN_REUSED',
+        'Sesi sudah tidak berlaku, silakan login ulang',
+      );
     }
 
     throw error;
   }
 
-  await pruneRefreshTokensIfNeeded();
-
-  const accessToken = generateAccessToken(
-    storedToken.user_id,
-  );
-
   return {
-    accessToken,
-    refreshToken: newRefreshToken,
-    refreshTokenId: newRefreshTokenRecord.id,
+    access_token: access.token,
+    refresh_token: refresh.token,
+    token_type: 'Bearer',
+    expires_in: access.expiresIn,
   };
 };
 
-export const logout = async (
-  refreshToken: string,
+/** Logout satu perangkat. Token tak dikenal diabaikan (idempotent). */
+export const logout = async (refreshToken: string) => {
+  const stored = await findRefreshToken(hashToken(refreshToken));
+
+  if (stored && !stored.revoked_at) {
+    await revokeRefreshToken(stored.id);
+  }
+};
+
+/** Keluar dari semua perangkat (sesi & token push). */
+export const logoutAll = revokeAllAccess;
+
+/**
+ * Ganti password: semua sesi lain dicabut, perangkat saat ini
+ * mendapat token baru agar tetap login.
+ */
+export const changePassword = async (
+  userId: string,
+  input: ChangePasswordInput,
 ) => {
-  const tokenHash = hashToken(refreshToken);
+  const user = await requireActiveUser(userId);
 
-  const storedToken = await findRefreshToken(tokenHash);
+  const valid = await comparePassword(
+    input.current_password,
+    user.password,
+  );
 
-  if (!storedToken) {
+  if (!valid) {
+    throw unprocessable(
+      'INVALID_CURRENT_PASSWORD',
+      'Password lama tidak sesuai',
+    );
+  }
+
+  await updateUserPassword(userId, await hashPassword(input.new_password));
+  await revokeAllAccess(userId);
+
+  return issueTokens(userId);
+};
+
+/**
+ * Lupa password: selalu sukses dari sisi client agar tidak bisa dipakai
+ * untuk menebak email terdaftar. Kode hanya dikirim ke akun aktif dan
+ * paling cepat 60 detik sekali.
+ */
+export const requestPasswordReset = async (email: string) => {
+  const user = await findUserByEmail(email);
+
+  if (
+    !user ||
+    !user.is_active ||
+    (await isInResendCooldown(user.id, 'password_reset'))
+  ) {
     return;
   }
 
-  if (!storedToken.revoked_at) {
-    await revokeRefreshToken(storedToken.id);
+  const code = await issueVerificationCode(user.id, 'password_reset');
+
+  sendMailInBackground(
+    buildCodeEmail({
+      to: user.email,
+      name: user.name,
+      subject: `${code} adalah kode reset password Finora`,
+      intro: 'Kami menerima permintaan untuk mengatur ulang password akun Finora kamu. Masukkan kode berikut di aplikasi.',
+      code,
+      expiresInMinutes: CODE_TTL_MINUTES,
+    }),
+  );
+};
+
+/**
+ * Reset password dengan kode OTP. Semua sesi & perangkat dicabut;
+ * user login ulang dengan password baru. Kode yang valid sekaligus
+ * membuktikan kepemilikan email.
+ */
+export const resetPassword = async (input: ResetPasswordInput) => {
+  const user = await findUserByEmail(input.email);
+
+  const valid =
+    user !== null &&
+    user.is_active &&
+    (await consumeVerificationCode(user.id, 'password_reset', input.code));
+
+  if (!user || !valid) {
+    throw unprocessable(
+      'INVALID_RESET_CODE',
+      'Kode tidak valid atau sudah kedaluwarsa',
+    );
   }
+
+  await updateUserPassword(user.id, await hashPassword(input.new_password));
+  await revokeAllAccess(user.id);
+
+  if (!user.email_verified_at) {
+    await markEmailVerified(user.id);
+  }
+};
+
+export const resendEmailVerification = async (userId: string) => {
+  const user = await requireActiveUser(userId);
+
+  if (user.email_verified_at) {
+    throw conflict('EMAIL_ALREADY_VERIFIED', 'Email sudah terverifikasi');
+  }
+
+  if (await isInResendCooldown(userId, 'email_verification')) {
+    throw new AppError(
+      429,
+      'VERIFICATION_COOLDOWN',
+      'Tunggu 1 menit sebelum meminta kode baru',
+    );
+  }
+
+  await sendVerificationEmail(user);
+};
+
+export const verifyEmail = async (userId: string, code: string) => {
+  const user = await requireActiveUser(userId);
+
+  if (user.email_verified_at) {
+    throw conflict('EMAIL_ALREADY_VERIFIED', 'Email sudah terverifikasi');
+  }
+
+  if (!(await consumeVerificationCode(userId, 'email_verification', code))) {
+    throw unprocessable(
+      'INVALID_VERIFICATION_CODE',
+      'Kode tidak valid atau sudah kedaluwarsa',
+    );
+  }
+
+  return markEmailVerified(userId);
+};
+
+/**
+ * Hapus akun (wajib tersedia di aplikasi mobile menurut kebijakan
+ * App Store/Play Store). Ditolak bila user masih punya utang-piutang
+ * atau masih menjadi pemilik grup yang beranggota lain.
+ */
+export const deleteAccount = async (
+  userId: string,
+  input: DeleteAccountInput,
+) => {
+  const user = await requireActiveUser(userId);
+
+  if (!(await comparePassword(input.password, user.password))) {
+    throw unprocessable('INVALID_PASSWORD', 'Password tidak sesuai');
+  }
+
+  const memberships = await prisma.group_members.findMany({
+    where: { user_id: userId },
+    select: {
+      group_id: true,
+      role: true,
+      groups: {
+        select: { _count: { select: { group_members: true } } },
+      },
+    },
+  });
+
+  const ownsSharedGroup = memberships.some(
+    (membership) =>
+      membership.role === 'owner' &&
+      membership.groups._count.group_members > 1,
+  );
+
+  if (ownsSharedGroup) {
+    throw conflict(
+      'OWNERSHIP_TRANSFER_REQUIRED',
+      'Pindahkan kepemilikan grup yang masih beranggota sebelum menghapus akun',
+    );
+  }
+
+  for (const membership of memberships) {
+    const net = await getMemberNetBalance(membership.group_id, userId);
+
+    if (Math.abs(net) >= 0.01) {
+      throw conflict(
+        'OUTSTANDING_BALANCE',
+        'Selesaikan utang-piutang di semua grup sebelum menghapus akun',
+      );
+    }
+  }
+
+  // Grup yang hanya berisi dirinya sendiri ikut dihapus.
+  const soloGroupIds = memberships
+    .filter((membership) => membership.role === 'owner')
+    .map((membership) => membership.group_id);
+
+  if (soloGroupIds.length > 0) {
+    await prisma.groups.deleteMany({
+      where: { id: { in: soloGroupIds } },
+    });
+  }
+
+  await prisma.group_members.deleteMany({ where: { user_id: userId } });
+
+  const avatar = user.profiles?.avatar_url;
+  const randomPassword = await hashPassword(
+    crypto.randomBytes(32).toString('hex'),
+  );
+
+  await anonymizeUser(userId, randomPassword);
+  await deleteImage(avatar);
 };
