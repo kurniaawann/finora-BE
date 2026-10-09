@@ -6,7 +6,9 @@ import {
   deleteTransfer,
   getTransfer,
   listTransfers,
+  removeTransferProofPhoto,
   updateTransfer,
+  updateTransferProofPhoto,
 } from '../services/transfer.service.js';
 import { getAuthenticatedUserId, getParam } from '../utils/auth.js';
 import {
@@ -82,4 +84,33 @@ export const deleteTransferController = async (
   await deleteTransfer(getAuthenticatedUserId(req), getParam(req, 'id'));
 
   return success(res, 200, 'Transfer berhasil dihapus');
+};
+
+export const updateTransferProofController = async (
+  req: Request,
+  res: Response,
+) => {
+  const transfer = await updateTransferProofPhoto(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+    req.file,
+  );
+
+  return success(res, 200, 'Bukti transfer berhasil diunggah', {
+    data: toTransferDTO(transfer),
+  });
+};
+
+export const removeTransferProofController = async (
+  req: Request,
+  res: Response,
+) => {
+  const transfer = await removeTransferProofPhoto(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+  );
+
+  return success(res, 200, 'Bukti transfer berhasil dihapus', {
+    data: toTransferDTO(transfer),
+  });
 };

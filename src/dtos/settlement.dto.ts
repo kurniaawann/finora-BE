@@ -30,6 +30,8 @@ export interface SettlementDTO {
   is_incoming: boolean;
   can_confirm: boolean;
   can_cancel: boolean;
+  /** Pengirim boleh mengunggah/mengganti bukti, juga setelah dikonfirmasi. */
+  can_upload_proof: boolean;
 }
 
 export const toSettlementDTO = (
@@ -63,5 +65,7 @@ export const toSettlementDTO = (
     is_incoming: isRecipient,
     can_confirm: isRecipient && isPending,
     can_cancel: isSender && isPending,
+    can_upload_proof:
+      isSender && (isPending || settlement.status === 'confirmed'),
   };
 };

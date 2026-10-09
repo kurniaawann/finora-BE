@@ -92,6 +92,8 @@ export interface ExpensePaymentDTO {
   payment_method: PaymentMethodRefDTO | null;
   can_confirm: boolean;
   can_cancel: boolean;
+  /** Pembayar boleh mengunggah/mengganti bukti, juga setelah dikonfirmasi. */
+  can_upload_proof: boolean;
 }
 
 const EMPTY_TOTALS: PaymentTotals = { confirmedCents: 0, pendingCents: 0 };
@@ -230,5 +232,6 @@ export const toExpensePaymentDTO = ({
     can_confirm:
       canManage && isOpen && payment.expenses.status === 'active',
     can_cancel: isPayer && isOpen,
+    can_upload_proof: isPayer && (isOpen || payment.status === 'confirmed'),
   };
 };

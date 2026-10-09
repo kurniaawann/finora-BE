@@ -414,22 +414,34 @@ export const cancelPayment = async (userId: string, paymentId: string) => {
 /* Bukti bayar                                                         */
 /* ------------------------------------------------------------------ */
 
-/** Unggah bukti → status `submitted` (siap diverifikasi). */
+/**
+ * Unggah bukti. Pembayaran yang menunggu → status `submitted` (siap
+ * diverifikasi). Pembayaran yang sudah dikonfirmasi (mis. otomatis karena
+ * dibayar pembuat/admin) tetap boleh dilengkapi buktinya tanpa mengubah
+ * status, agar penalang tetap bisa menyimpan bukti bayar ke merchant.
+ */
 export const updatePaymentProof = async (
   userId: string,
   paymentId: string,
   file: Express.Multer.File | undefined,
 ) => {
   const view = await loadPayment(userId, paymentId);
+  const isConfirmed = view.payment.status === 'confirmed';
 
   requirePayer(view, 'mengunggah bukti pembayaran');
-  requireOpenPayment(view.payment);
+
+  if (!isConfirmed) {
+    requireOpenPayment(view.payment);
+  }
 
   const path = await saveImage(file, 'proofs');
-  const updated = await transitionPaymentStatus(paymentId, OPEN_STATUSES, {
-    status: 'submitted',
-    proof_url: path,
-  }).catch(async (error: unknown) => {
+  const updated = await (isConfirmed
+    ? transitionPaymentStatus(paymentId, ['confirmed'], { proof_url: path })
+    : transitionPaymentStatus(paymentId, OPEN_STATUSES, {
+        status: 'submitted',
+        proof_url: path,
+      })
+  ).catch(async (error: unknown) => {
     await deleteImage(path);
     throw error;
   });

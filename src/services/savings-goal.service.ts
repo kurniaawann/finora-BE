@@ -661,19 +661,24 @@ export const uploadContributionProof = async (
   file: Express.Multer.File | undefined,
 ) => {
   const contribution = await requireOwnContribution(userId, contributionId);
+  // Setoran yang sudah dikonfirmasi (mis. setoran pemilik sendiri yang
+  // otomatis terkonfirmasi) tetap boleh dilengkapi buktinya.
+  const isConfirmed = contribution.status === 'confirmed';
 
-  if (!isAwaiting(contribution.status)) {
+  if (!isConfirmed && !isAwaiting(contribution.status)) {
     throw contributionProcessed();
   }
 
   const proofPath = await saveImage(file, 'proofs');
 
-  const updated = await transitionContribution(
-    prisma,
-    contributionId,
-    AWAITING_STATUSES,
-    { proof_url: proofPath, status: 'submitted' },
-  );
+  const updated = await (isConfirmed
+    ? transitionContribution(prisma, contributionId, ['confirmed'], {
+        proof_url: proofPath,
+      })
+    : transitionContribution(prisma, contributionId, AWAITING_STATUSES, {
+        proof_url: proofPath,
+        status: 'submitted',
+      }));
 
   if (!updated) {
     await deleteImage(proofPath);

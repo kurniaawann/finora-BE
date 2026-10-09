@@ -110,6 +110,8 @@ export interface SavingsContributionDTO {
   payment_method: PaymentMethodRefDTO | null;
   can_confirm: boolean;
   can_edit: boolean;
+  /** Penyetor boleh mengunggah/mengganti bukti, juga setelah dikonfirmasi. */
+  can_upload_proof: boolean;
 }
 
 export interface SavingsContributionSource {
@@ -159,5 +161,7 @@ export const toSavingsContributionDTO = (
     can_confirm:
       isAwaiting && contribution.savings_goals.user_id === viewerId,
     can_edit: isAwaiting && isContributor,
+    can_upload_proof:
+      isContributor && (isAwaiting || contribution.status === 'confirmed'),
   };
 };

@@ -1,4 +1,5 @@
 import { prisma } from '../config/database.js';
+import type { settlements_status } from '../generated/prisma/enums.js';
 import {
   findGroupMemberIds,
   findUserNameAndTimezone,
@@ -94,6 +95,8 @@ const requireRecipient = (
     );
   }
 };
+
+const PROOF_EDITABLE_STATUSES: settlements_status[] = ['pending', 'confirmed'];
 
 const requirePending = (settlement: SettlementRow) => {
   if (settlement.status !== 'pending') {
@@ -399,10 +402,14 @@ export const updateSettlementProof = async (
   const settlement = await getSettlement(userId, id);
 
   requireSender(settlement, userId, 'mengunggah bukti pelunasan');
-  requirePending(settlement);
+
+  // Bukti tetap bisa dilengkapi setelah penerima mengonfirmasi.
+  if (!PROOF_EDITABLE_STATUSES.includes(settlement.status)) {
+    throw settlementAlreadyProcessed();
+  }
 
   const path = await saveImage(file, 'proofs');
-  const updated = await updateSettlementIfStatus(id, ['pending'], {
+  const updated = await updateSettlementIfStatus(id, PROOF_EDITABLE_STATUSES, {
     proof_url: path,
   }).catch(async (error: unknown) => {
     await deleteImage(path);

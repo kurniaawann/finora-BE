@@ -8,8 +8,10 @@ import {
   getTransaction,
   getTransactionSummary,
   listTransactions,
+  removeTransactionReceipt,
   resolveSummaryPeriod,
   updateTransaction,
+  updateTransactionReceipt,
 } from '../services/transaction.service.js';
 import { getAuthenticatedUserId, getParam } from '../utils/auth.js';
 import {
@@ -124,4 +126,33 @@ export const deleteTransactionController = async (
   await deleteTransaction(getAuthenticatedUserId(req), getParam(req, 'id'));
 
   return success(res, 200, 'Transaksi berhasil dihapus');
+};
+
+export const updateTransactionReceiptController = async (
+  req: Request,
+  res: Response,
+) => {
+  const transaction = await updateTransactionReceipt(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+    req.file,
+  );
+
+  return success(res, 200, 'Foto struk berhasil diunggah', {
+    data: toTransactionDTO(transaction),
+  });
+};
+
+export const removeTransactionReceiptController = async (
+  req: Request,
+  res: Response,
+) => {
+  const transaction = await removeTransactionReceipt(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+  );
+
+  return success(res, 200, 'Foto struk berhasil dihapus', {
+    data: toTransactionDTO(transaction),
+  });
 };

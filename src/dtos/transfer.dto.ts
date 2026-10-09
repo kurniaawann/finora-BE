@@ -1,6 +1,7 @@
 import {
   toAccountRef,
   toDateOnly,
+  toFileUrl,
   toMoney,
   type AccountRefDTO,
   type DecimalLike,
@@ -11,6 +12,8 @@ export interface TransferDTO {
   amount: string;
   transfer_date: string;
   note: string | null;
+  /** Foto bukti transfer (opsional). */
+  proof_url: string | null;
   from_account: AccountRefDTO;
   to_account: AccountRefDTO;
 }
@@ -20,6 +23,7 @@ export const toTransferDTO = (transfer: {
   amount: DecimalLike;
   transfer_date: Date;
   note: string | null;
+  proof_url: string | null;
   accounts_transfers_from_account_idToaccounts: AccountRefDTO;
   accounts_transfers_to_account_idToaccounts: AccountRefDTO;
 }): TransferDTO => ({
@@ -27,6 +31,7 @@ export const toTransferDTO = (transfer: {
   amount: toMoney(transfer.amount),
   transfer_date: toDateOnly(transfer.transfer_date),
   note: transfer.note,
+  proof_url: toFileUrl(transfer.proof_url),
   from_account: toAccountRef(
     transfer.accounts_transfers_from_account_idToaccounts,
   ),

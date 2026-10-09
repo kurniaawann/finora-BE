@@ -23,6 +23,7 @@ import type {
   UpdateTransactionInput,
 } from '../validators/transaction.validator.js';
 import { checkBudgetAlerts } from './budget-alert.service.js';
+import { deleteImage, saveImage } from './storage.service.js';
 import {
   requireOwnedAccount,
   requireUsableCategory,
@@ -238,6 +239,55 @@ export const deleteTransaction = async (
   }
 
   await removeTransaction(transactionId);
+  await deleteImage(transaction.receipt_url);
+};
+
+/** Foto struk tidak dipakai di kaki transfer; buktinya ada di transfer. */
+const requireReceiptEditable = async (userId: string, transactionId: string) => {
+  const transaction = await requireTransaction(userId, transactionId);
+
+  if (transaction.type === 'transfer') {
+    throw conflict(
+      'TRANSFER_TRANSACTION_NOT_ALLOWED',
+      'Bukti transfer diunggah lewat menu Transfer',
+    );
+  }
+
+  return transaction;
+};
+
+export const updateTransactionReceipt = async (
+  userId: string,
+  transactionId: string,
+  file: Express.Multer.File | undefined,
+) => {
+  const transaction = await requireReceiptEditable(userId, transactionId);
+  const path = await saveImage(file, 'receipts');
+
+  let updated;
+
+  try {
+    updated = await saveTransaction(transactionId, { receipt_url: path });
+  } catch (error) {
+    await deleteImage(path);
+    throw error;
+  }
+
+  await deleteImage(transaction.receipt_url);
+
+  return updated;
+};
+
+export const removeTransactionReceipt = async (
+  userId: string,
+  transactionId: string,
+) => {
+  const transaction = await requireReceiptEditable(userId, transactionId);
+  const updated = await saveTransaction(transactionId, { receipt_url: null });
+
+  await deleteImage(transaction.receipt_url);
+
+  return updated;
 };
 
 /**

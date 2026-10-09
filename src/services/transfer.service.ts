@@ -9,10 +9,12 @@ import {
   lockAccounts,
   lockTransfer,
   updateTransfer as saveTransfer,
+  updateTransferProof,
   type TransferFilters,
 } from '../repositories/transfer.repository.js';
 import { conflict, notFound, unprocessable } from '../utils/app-error.js';
 import type { PaginationParams } from '../utils/pagination.js';
+import { deleteImage, saveImage } from './storage.service.js';
 import type {
   CreateTransferInput,
   UpdateTransferInput,
@@ -240,8 +242,8 @@ export const updateTransfer = async (
     );
   });
 
-export const deleteTransfer = async (userId: string, transferId: string) =>
-  prisma.$transaction(async (tx) => {
+export const deleteTransfer = async (userId: string, transferId: string) => {
+  const proofUrl = await prisma.$transaction(async (tx) => {
     if (!(await lockTransfer(tx, userId, transferId))) {
       throw transferNotFound();
     }
@@ -253,4 +255,43 @@ export const deleteTransfer = async (userId: string, transferId: string) =>
     }
 
     await removeTransfer(tx, existing);
+
+    return existing.proof_url;
   });
+
+  await deleteImage(proofUrl);
+};
+
+export const updateTransferProofPhoto = async (
+  userId: string,
+  transferId: string,
+  file: Express.Multer.File | undefined,
+) => {
+  const transfer = await getTransfer(userId, transferId);
+  const path = await saveImage(file, 'proofs');
+
+  let updated;
+
+  try {
+    updated = await updateTransferProof(transferId, path);
+  } catch (error) {
+    await deleteImage(path);
+    throw error;
+  }
+
+  await deleteImage(transfer.proof_url);
+
+  return updated;
+};
+
+export const removeTransferProofPhoto = async (
+  userId: string,
+  transferId: string,
+) => {
+  const transfer = await getTransfer(userId, transferId);
+  const updated = await updateTransferProof(transferId, null);
+
+  await deleteImage(transfer.proof_url);
+
+  return updated;
+};

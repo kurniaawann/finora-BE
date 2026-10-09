@@ -2,6 +2,7 @@ import {
   toAccountRef,
   toCategoryRef,
   toDateOnly,
+  toFileUrl,
   toMoney,
   type AccountRefDTO,
   type CategoryRefDTO,
@@ -32,6 +33,13 @@ export interface TransactionDTO {
   source: TransactionSource;
   /** Hanya terisi untuk kaki transaksi transfer (kelola lewat /transfers). */
   transfer_id: string | null;
+  /** Foto struk/nota yang diunggah user untuk transaksi ini. */
+  receipt_url: string | null;
+  /**
+   * Bukti dari sumber transaksi otomatis (pembayaran patungan, pelunasan,
+   * setoran tabungan, atau transfer). Hanya bisa diubah dari sumbernya.
+   */
+  source_proof_url: string | null;
 }
 
 export interface TransactionSummaryDTO {
@@ -89,10 +97,20 @@ export const toTransactionDTO = (
     transaction_date: Date;
     description: string | null;
     merchant: string | null;
+    receipt_url: string | null;
     accounts: AccountRefDTO;
     categories: Parameters<typeof toCategoryRef>[0] | null;
-    transfers_transfers_from_transaction_idTotransactions: { id: string }[];
-    transfers_transfers_to_transaction_idTotransactions: { id: string }[];
+    expense_payments: { proof_url: string | null } | null;
+    settlements: { proof_url: string | null } | null;
+    savings_contributions: { proof_url: string | null } | null;
+    transfers_transfers_from_transaction_idTotransactions: {
+      id: string;
+      proof_url: string | null;
+    }[];
+    transfers_transfers_to_transaction_idTotransactions: {
+      id: string;
+      proof_url: string | null;
+    }[];
   },
 ): TransactionDTO => {
   const outgoingTransfer =
@@ -132,5 +150,12 @@ export const toTransactionDTO = (
       : null,
     source: getTransactionSource(transaction),
     transfer_id: (outgoingTransfer ?? incomingTransfer)?.id ?? null,
+    receipt_url: toFileUrl(transaction.receipt_url),
+    source_proof_url: toFileUrl(
+      transaction.expense_payments?.proof_url ??
+        transaction.settlements?.proof_url ??
+        transaction.savings_contributions?.proof_url ??
+        (outgoingTransfer ?? incomingTransfer)?.proof_url,
+    ),
   };
 };

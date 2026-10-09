@@ -581,7 +581,7 @@ export const createPayment = (
 export const transitionPaymentStatus = async (
   id: string,
   from: expense_payments_status[],
-  data: { status: expense_payments_status; proof_url?: string | null },
+  data: { status?: expense_payments_status; proof_url?: string | null },
   db: Db = prisma,
 ) => {
   const result = await db.expense_payments.updateMany({

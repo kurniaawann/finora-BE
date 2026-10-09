@@ -563,6 +563,8 @@ model transactions {
   description                                           String?             @db.Text
   merchant                                              String?             @db.VarChar(255)
   reference_number                                      String?             @db.VarChar(255)
+  /// Foto struk/nota transaksi pribadi (path relatif di folder upload).
+  receipt_url                                           String?             @db.Text
   expense_payment_id                                    String?             @unique(map: "expense_payment_id") @db.VarChar(36)
   settlement_id                                         String?             @db.VarChar(36)
   savings_contribution_id                               String?             @unique(map: "savings_contribution_id") @db.VarChar(36)
@@ -591,6 +593,8 @@ model transfers {
   amount                                                   Decimal       @db.Decimal(18, 2)
   transfer_date                                            DateTime      @default(dbgenerated("(curdate())")) @db.Date
   note                                                     String?       @db.Text
+  /// Foto bukti transfer antar rekening (path relatif di folder upload).
+  proof_url                                                String?       @db.Text
   from_transaction_id                                      String?       @db.VarChar(36)
   to_transaction_id                                        String?       @db.VarChar(36)
   created_at                                               DateTime      @default(now()) @db.DateTime(0)

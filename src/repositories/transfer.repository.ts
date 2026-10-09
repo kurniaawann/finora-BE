@@ -233,3 +233,13 @@ export const deleteTransfer = async (
     await tx.transactions.deleteMany({ where: { id: { in: legIds } } });
   }
 };
+
+export const updateTransferProof = (
+  transferId: string,
+  proofUrl: string | null,
+) =>
+  prisma.transfers.update({
+    where: { id: transferId },
+    data: { proof_url: proofUrl },
+    include: transferInclude,
+  });

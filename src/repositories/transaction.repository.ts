@@ -17,12 +17,16 @@ export interface TransactionFilters {
 const transactionInclude = {
   accounts: { select: accountRefSelect },
   categories: { select: categoryRefSelect },
-  // Dipakai untuk menentukan arah & id transfer pada kaki transaksi transfer.
+  // Bukti dari sumber transaksi otomatis, ditampilkan di detail transaksi.
+  expense_payments: { select: { proof_url: true } },
+  settlements: { select: { proof_url: true } },
+  savings_contributions: { select: { proof_url: true } },
+  // Dipakai untuk menentukan arah, id, dan bukti transfer pada kakinya.
   transfers_transfers_from_transaction_idTotransactions: {
-    select: { id: true },
+    select: { id: true, proof_url: true },
   },
   transfers_transfers_to_transaction_idTotransactions: {
-    select: { id: true },
+    select: { id: true, proof_url: true },
   },
 } satisfies Prisma.transactionsInclude;
 

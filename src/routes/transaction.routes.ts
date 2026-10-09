@@ -6,9 +6,12 @@ import {
   getTransactionController,
   getTransactionSummaryController,
   listTransactionsController,
+  removeTransactionReceiptController,
   updateTransactionController,
+  updateTransactionReceiptController,
 } from '../controllers/transaction.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { uploadPhoto } from '../middlewares/upload.middleware.js';
 import { validate } from '../middlewares/validation.middleware.js';
 import {
   createTransactionSchema,
@@ -33,5 +36,7 @@ router.put(
   updateTransactionController,
 );
 router.delete('/:id', deleteTransactionController);
+router.put('/:id/receipt', uploadPhoto, updateTransactionReceiptController);
+router.delete('/:id/receipt', removeTransactionReceiptController);
 
 export default router;
