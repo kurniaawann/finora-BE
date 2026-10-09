@@ -1,91 +1,63 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
 import cors from 'cors';
+import express from 'express';
 import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 
 import { env } from './config/env.js';
-import { httpLogStream, logger } from './config/logger.js';
-import routes from './routes/index.js';
-import { fail } from './utils/response.js';
-import { generalRateLimiter } from './middlewares/rateLimiter.middleware.js';
+import { httpLogStream } from './config/logger.js';
 import {
   ensureUploadDir,
   uploadDir,
+  uploadUrlPrefix,
 } from './config/upload.js';
+import {
+  errorHandler,
+  notFoundHandler,
+} from './middlewares/error.middleware.js';
+import { generalRateLimiter } from './middlewares/rateLimiter.middleware.js';
+import routes from './routes/index.js';
 
 ensureUploadDir();
 
 const app = express();
 
-app.set(
-  'trust proxy',
-  env.nodeEnv === 'production' ? 1 : false,
-);
+app.set('trust proxy', env.trustProxy);
+app.disable('x-powered-by');
 
 app.use(helmet());
-
-app.use(morgan(env.nodeEnv === 'development' ? 'dev' : 'combined', { stream: httpLogStream }));
-
-app.use(generalRateLimiter);
-
 app.use(
-  cors({
-    origin: env.frontendUrl,
-    credentials: true,
+  morgan(env.isProduction ? 'combined' : 'dev', {
+    stream: httpLogStream,
   }),
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(cookieParser());
-
+// Aplikasi mobile native tidak terikat CORS; origin web hanya diizinkan
+// bila didaftarkan lewat CORS_ORIGINS (mis. dashboard admin).
 app.use(
-  '/uploads/images',
+  cors({
+    origin: env.corsOrigins.length > 0 ? env.corsOrigins : false,
+  }),
+);
+
+// Foto disajikan statis; nama file acak 128-bit sehingga tidak bisa ditebak.
+app.use(
+  uploadUrlPrefix,
   express.static(uploadDir, {
+    immutable: true,
+    maxAge: '30d',
+    index: false,
     setHeaders: (res) => {
-      res.setHeader(
-        'Cross-Origin-Resource-Policy',
-        'cross-origin',
-      );
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     },
   }),
 );
 
-app.use('/api', routes);
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-app.use((_req: Request, res: Response) => {
-  return fail(res, 404, 'Endpoint tidak ditemukan');
-});
+app.use('/api', generalRateLimiter, routes);
 
-app.use(
-  (
-    error: Error & { status?: number; type?: string },
-    _req: Request,
-    res: Response,
-    _next: NextFunction,
-  ) => {
-    if (
-      error instanceof SyntaxError &&
-      error.status === 400 &&
-      'body' in error
-    ) {
-      return fail(res, 400, 'Format JSON tidak valid');
-    }
-
-    if (error.type === 'entity.too.large') {
-      return fail(res, 413, 'Ukuran payload terlalu besar');
-    }
-
-    logger.error('Unhandled error:', error);
-
-    return fail(res, 500, 'Terjadi kesalahan pada server');
-  },
-);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;

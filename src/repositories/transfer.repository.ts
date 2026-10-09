@@ -1,6 +1,6 @@
 import { prisma } from '../config/database.js';
 import { Prisma } from '../generated/prisma/client.js';
-import { getAccountBalances } from './account.repository.js';
+import { accountRefSelect } from '../dtos/common.dto.js';
 
 export interface TransferFilters {
   search?: string;
@@ -12,515 +12,234 @@ export interface TransferFilters {
   maxAmount?: number;
 }
 
-const lockAccounts = async (
+interface TransferWriteData {
+  fromAccountId: string;
+  toAccountId: string;
+  amount: Prisma.Decimal;
+  transferDate: Date;
+  note: string | null;
+  /** Deskripsi kaki transaksi keluar & masuk. */
+  fromDescription: string;
+  toDescription: string;
+}
+
+const transferInclude = {
+  accounts_transfers_from_account_idToaccounts: { select: accountRefSelect },
+  accounts_transfers_to_account_idToaccounts: { select: accountRefSelect },
+} satisfies Prisma.transfersInclude;
+
+/**
+ * Kunci baris rekening (urut id agar tidak deadlock) supaya cek saldo
+ * atomik terhadap transfer lain yang berjalan bersamaan, lalu kembalikan
+ * data rekening yang ditemukan.
+ */
+export const lockAccounts = async (
   tx: Prisma.TransactionClient,
   userId: string,
   accountIds: string[],
 ) => {
-  const sortedIds = [...accountIds].sort();
+  const ids = [...new Set(accountIds)].sort();
 
-  for (const id of sortedIds) {
-    await tx.$queryRaw`SELECT id FROM accounts WHERE id = ${id} AND user_id = ${userId} FOR UPDATE`;
-  }
-};
+  await tx.$queryRaw`
+    SELECT id FROM accounts
+    WHERE user_id = ${userId} AND id IN (${Prisma.join(ids)})
+    ORDER BY id
+    FOR UPDATE
+  `;
 
-export interface CreateTransferData {
-  userId: string;
-  fromAccountId: string;
-  toAccountId: string;
-  amount: number;
-  transferDate: Date;
-  note?: string | null;
-}
-
-export interface UpdateTransferData {
-  fromAccountId: string;
-  toAccountId: string;
-  amount: number;
-  transferDate: Date;
-  note: string | null;
-}
-
-export const findAccountByIdAndUser = async (
-  accountId: string,
-  userId: string,
-) => {
-  const account = await prisma.accounts.findFirst({
-    where: {
-      id: accountId,
-      user_id: userId,
+  const accounts = await tx.accounts.findMany({
+    where: { user_id: userId, id: { in: ids } },
+    select: {
+      ...accountRefSelect,
       is_active: true,
+      initial_balance: true,
     },
   });
 
-  if (!account) {
-    return null;
-  }
-
-  const balances = await getAccountBalances(
-    userId,
-    [account.id],
-  );
-
-  return {
-    ...account,
-    current_balance: new Prisma.Decimal(
-      account.initial_balance,
-    ).add(
-      balances.get(account.id) ??
-        new Prisma.Decimal(0),
-    ),
-  };
+  return new Map(accounts.map((account) => [account.id, account]));
 };
 
-export const createTransfer = async (
-  data: CreateTransferData,
+/** Kunci baris transfer; `false` bila transfer tidak ditemukan. */
+export const lockTransfer = async (
+  tx: Prisma.TransactionClient,
+  userId: string,
+  transferId: string,
 ) => {
-  return prisma.$transaction(async (tx) => {
-    // Kunci baris akun agar pengecekan saldo atomic terhadap
-    // transfer/transaksi lain yang berjalan bersamaan.
-    await lockAccounts(
-      tx,
-      data.userId,
-      [data.fromAccountId, data.toAccountId],
-    );
+  const rows = await tx.$queryRaw<{ id: string }[]>`
+    SELECT id FROM transfers
+    WHERE id = ${transferId} AND user_id = ${userId}
+    FOR UPDATE
+  `;
 
-    const fromAccountRow = await tx.accounts.findUnique({
-      where: {
-        id: data.fromAccountId,
-      },
-      select: {
-        initial_balance: true,
-      },
-    });
-
-    const transactionsSum =
-      (await getAccountBalances(
-        data.userId,
-        [data.fromAccountId],
-        tx,
-      )).get(data.fromAccountId) ?? new Prisma.Decimal(0);
-
-    const fromBalance = transactionsSum.add(
-      new Prisma.Decimal(
-        fromAccountRow?.initial_balance ?? 0,
-      ),
-    );
-
-    if (
-      fromBalance.lessThan(
-        new Prisma.Decimal(data.amount),
-      )
-    ) {
-      throw new Error('INSUFFICIENT_FUNDS');
-    }
-
-    const fromTransaction = await tx.transactions.create({
-      data: {
-        users: {
-          connect: {
-            id: data.userId,
-          },
-        },
-        accounts: {
-          connect: {
-            id: data.fromAccountId,
-          },
-        },
-        type: 'transfer',
-        status: 'completed',
-        amount: data.amount,
-        transaction_date: data.transferDate,
-        description: data.note ?? null,
-      },
-    });
-
-    const toTransaction = await tx.transactions.create({
-      data: {
-        users: {
-          connect: {
-            id: data.userId,
-          },
-        },
-        accounts: {
-          connect: {
-            id: data.toAccountId,
-          },
-        },
-        type: 'transfer',
-        status: 'completed',
-        amount: data.amount,
-        transaction_date: data.transferDate,
-        description: data.note ?? null,
-      },
-    });
-
-    const transfer = await tx.transfers.create({
-      data: {
-        users: {
-          connect: {
-            id: data.userId,
-          },
-        },
-        accounts_transfers_from_account_idToaccounts: {
-          connect: {
-            id: data.fromAccountId,
-          },
-        },
-        accounts_transfers_to_account_idToaccounts: {
-          connect: {
-            id: data.toAccountId,
-          },
-        },
-        amount: data.amount,
-        transfer_date: data.transferDate,
-        note: data.note ?? null,
-        transactions_transfers_from_transaction_idTotransactions: {
-          connect: {
-            id: fromTransaction.id,
-          },
-        },
-        transactions_transfers_to_transaction_idTotransactions: {
-          connect: {
-            id: toTransaction.id,
-          },
-        },
-      },
-      include: {
-        accounts_transfers_from_account_idToaccounts: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            currency: true,
-          },
-        },
-        accounts_transfers_to_account_idToaccounts: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            currency: true,
-          },
-        },
-      },
-    });
-
-    return {
-      transfer,
-      fromTransaction,
-      toTransaction,
-    };
-  });
+  return rows.length > 0;
 };
-export const findTransfersByUser = async (params: {
+
+export const findTransfers = async (params: {
   userId: string;
   page: number;
   perPage: number;
-  filters?: TransferFilters;
+  filters: TransferFilters;
 }) => {
-  const skip = (params.page - 1) * params.perPage;
-  const filters = params.filters ?? {};
-
-  const include = {
-    accounts_transfers_from_account_idToaccounts: {
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        currency: true,
-      },
-    },
-    accounts_transfers_to_account_idToaccounts: {
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        currency: true,
-      },
-    },
-  };
-
+  const { filters } = params;
   const conditions: Prisma.transfersWhereInput[] = [
-    {
-      user_id: params.userId,
-    },
+    { user_id: params.userId },
   ];
 
   if (filters.search) {
-    conditions.push({
-      note: {
-        contains: filters.search,
-      },
-    });
+    conditions.push({ note: { contains: filters.search } });
   }
 
   if (filters.fromAccountId) {
-    conditions.push({
-      from_account_id: filters.fromAccountId,
-    });
+    conditions.push({ from_account_id: filters.fromAccountId });
   }
 
   if (filters.toAccountId) {
-    conditions.push({
-      to_account_id: filters.toAccountId,
-    });
+    conditions.push({ to_account_id: filters.toAccountId });
   }
 
   if (filters.from || filters.to) {
+    conditions.push({ transfer_date: { gte: filters.from, lte: filters.to } });
+  }
+
+  if (filters.minAmount !== undefined || filters.maxAmount !== undefined) {
     conditions.push({
-      transfer_date: {
-        ...(filters.from ? { gte: filters.from } : {}),
-        ...(filters.to ? { lte: filters.to } : {}),
-      },
+      amount: { gte: filters.minAmount, lte: filters.maxAmount },
     });
   }
 
-  if (
-    filters.minAmount !== undefined ||
-    filters.maxAmount !== undefined
-  ) {
-    conditions.push({
-      amount: {
-        ...(filters.minAmount !== undefined
-          ? { gte: filters.minAmount }
-          : {}),
-        ...(filters.maxAmount !== undefined
-          ? { lte: filters.maxAmount }
-          : {}),
-      },
-    });
-  }
-
-  const where: Prisma.transfersWhereInput = {
-    AND: conditions,
-  };
+  const where: Prisma.transfersWhereInput = { AND: conditions };
 
   const [data, total] = await prisma.$transaction([
     prisma.transfers.findMany({
       where,
-      orderBy: [
-        {
-          transfer_date: 'desc',
-        },
-        {
-          created_at: 'desc',
-        },
-      ],
-      skip,
+      include: transferInclude,
+      orderBy: [{ transfer_date: 'desc' }, { created_at: 'desc' }],
+      skip: (params.page - 1) * params.perPage,
       take: params.perPage,
-      include,
     }),
-
-    prisma.transfers.count({
-      where,
-    }),
+    prisma.transfers.count({ where }),
   ]);
 
-  return {
-    data,
-    total,
-  };
+  return { data, total };
 };
 
-export const findTransferById = async (
+export const findTransferById = (
   transferId: string,
   userId: string,
+  db: Prisma.TransactionClient = prisma,
+) =>
+  db.transfers.findFirst({
+    where: { id: transferId, user_id: userId },
+    include: transferInclude,
+  });
+
+export const createTransfer = async (
+  tx: Prisma.TransactionClient,
+  userId: string,
+  data: TransferWriteData,
 ) => {
-  return prisma.transfers.findFirst({
-    where: {
-      id: transferId,
+  const leg = (accountId: string, description: string) =>
+    tx.transactions.create({
+      data: {
+        user_id: userId,
+        account_id: accountId,
+        type: 'transfer',
+        status: 'completed',
+        amount: data.amount,
+        transaction_date: data.transferDate,
+        description,
+      },
+      select: { id: true },
+    });
+
+  const fromTransaction = await leg(data.fromAccountId, data.fromDescription);
+  const toTransaction = await leg(data.toAccountId, data.toDescription);
+
+  return tx.transfers.create({
+    data: {
       user_id: userId,
+      from_account_id: data.fromAccountId,
+      to_account_id: data.toAccountId,
+      amount: data.amount,
+      transfer_date: data.transferDate,
+      note: data.note,
+      from_transaction_id: fromTransaction.id,
+      to_transaction_id: toTransaction.id,
     },
-    include: {
-      accounts_transfers_from_account_idToaccounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      accounts_transfers_to_account_idToaccounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      transactions_transfers_from_transaction_idTotransactions: {
-        select: {
-          id: true,
-          account_id: true,
-          type: true,
-          status: true,
-          amount: true,
-          transaction_date: true,
-          description: true,
-        },
-      },
-      transactions_transfers_to_transaction_idTotransactions: {
-        select: {
-          id: true,
-          account_id: true,
-          type: true,
-          status: true,
-          amount: true,
-          transaction_date: true,
-          description: true,
-        },
-      },
-    },
+    include: transferInclude,
   });
 };
 
 export const updateTransfer = async (
-  transferId: string,
-  data: UpdateTransferData,
-  fromTransactionId: string,
-  toTransactionId: string,
-  userId: string,
+  tx: Prisma.TransactionClient,
+  transfer: {
+    id: string;
+    from_transaction_id: string;
+    to_transaction_id: string;
+  },
+  data: TransferWriteData,
 ) => {
-  return prisma.$transaction(async (tx) => {
-    const existing = await tx.transfers.findUnique({
-      where: {
-        id: transferId,
-      },
-      select: {
-        from_account_id: true,
-        amount: true,
-      },
-    });
+  const legData = {
+    amount: data.amount,
+    transaction_date: data.transferDate,
+  };
 
-    if (!existing) {
-      throw new Error('TRANSFER_NOT_FOUND');
-    }
+  await tx.transactions.update({
+    where: { id: transfer.from_transaction_id },
+    data: {
+      ...legData,
+      account_id: data.fromAccountId,
+      description: data.fromDescription,
+    },
+  });
 
-    // Kunci baris akun agar pengecekan saldo atomic.
-    await lockAccounts(
-      tx,
-      userId,
-      [data.fromAccountId, data.toAccountId],
-    );
+  await tx.transactions.update({
+    where: { id: transfer.to_transaction_id },
+    data: {
+      ...legData,
+      account_id: data.toAccountId,
+      description: data.toDescription,
+    },
+  });
 
-    const fromAccountRow = await tx.accounts.findUnique({
-      where: {
-        id: data.fromAccountId,
-      },
-      select: {
-        initial_balance: true,
-      },
-    });
-
-    const transactionsSum =
-      (await getAccountBalances(
-        userId,
-        [data.fromAccountId],
-        tx,
-      )).get(data.fromAccountId) ?? new Prisma.Decimal(0);
-
-    const fromBalance = transactionsSum.add(
-      new Prisma.Decimal(
-        fromAccountRow?.initial_balance ?? 0,
-      ),
-    );
-
-    // Jika akun asal tidak berubah, saldo saat ini sudah termasuk
-    // pengurangan transfer lama, jadi kembalikan dulu untuk dicek.
-    const available = existing.from_account_id === data.fromAccountId
-      ? fromBalance.add(new Prisma.Decimal(existing.amount))
-      : fromBalance;
-
-    if (available.lessThan(new Prisma.Decimal(data.amount))) {
-      throw new Error('INSUFFICIENT_FUNDS');
-    }
-
-    const transactionUpdate: Prisma.transactionsUncheckedUpdateInput = {
+  return tx.transfers.update({
+    where: { id: transfer.id },
+    data: {
+      from_account_id: data.fromAccountId,
+      to_account_id: data.toAccountId,
       amount: data.amount,
-      transaction_date: data.transferDate,
-      description: data.note,
-    };
-
-    await tx.transactions.update({
-      where: {
-        id: fromTransactionId,
-      },
-      data: {
-        ...transactionUpdate,
-        account_id: data.fromAccountId,
-      },
-    });
-
-    await tx.transactions.update({
-      where: {
-        id: toTransactionId,
-      },
-      data: {
-        ...transactionUpdate,
-        account_id: data.toAccountId,
-      },
-    });
-
-    return tx.transfers.update({
-      where: {
-        id: transferId,
-      },
-      data: {
-        from_account_id: data.fromAccountId,
-        to_account_id: data.toAccountId,
-        amount: data.amount,
-        transfer_date: data.transferDate,
-        note: data.note,
-      },
-      include: {
-        accounts_transfers_from_account_idToaccounts: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            currency: true,
-          },
-        },
-        accounts_transfers_to_account_idToaccounts: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            currency: true,
-          },
-        },
-      },
-    });
+      transfer_date: data.transferDate,
+      note: data.note,
+    },
+    include: transferInclude,
   });
 };
 
 export const deleteTransfer = async (
-  transferId: string,
-  fromTransactionId?: string,
-  toTransactionId?: string,
+  tx: Prisma.TransactionClient,
+  transfer: {
+    id: string;
+    from_transaction_id: string | null;
+    to_transaction_id: string | null;
+  },
 ) => {
-  return prisma.$transaction(async (tx) => {
-    // Hapus transfer dulu karena transfers mereferensikan transaksi (FK).
-    await tx.transfers.delete({
-      where: {
-        id: transferId,
-      },
-    });
+  // Transfer dihapus lebih dulu karena mereferensikan kedua transaksinya.
+  await tx.transfers.delete({ where: { id: transfer.id } });
 
-    const transactionIds = [
-      fromTransactionId,
-      toTransactionId,
-    ].filter((id): id is string => Boolean(id));
+  const legIds = [transfer.from_transaction_id, transfer.to_transaction_id]
+    .filter((id): id is string => Boolean(id));
 
-    if (transactionIds.length > 0) {
-      await tx.transactions.deleteMany({
-        where: {
-          id: {
-            in: transactionIds,
-          },
-        },
-      });
-    }
-  });
+  if (legIds.length > 0) {
+    await tx.transactions.deleteMany({ where: { id: { in: legIds } } });
+  }
 };
+
+export const updateTransferProof = (
+  transferId: string,
+  proofUrl: string | null,
+) =>
+  prisma.transfers.update({
+    where: { id: transferId },
+    data: { proof_url: proofUrl },
+    include: transferInclude,
+  });

@@ -1,40 +1,39 @@
-import { toMoneyString } from './user.dto.js';
-
-type Amount = { toString(): string };
-
-export interface TransferAccountDTO {
-  id: string;
-  name: string;
-  type: string;
-  currency: string;
-}
+import {
+  toAccountRef,
+  toDateOnly,
+  toFileUrl,
+  toMoney,
+  type AccountRefDTO,
+  type DecimalLike,
+} from './common.dto.js';
 
 export interface TransferDTO {
   id: string;
   amount: string;
   transfer_date: string;
   note: string | null;
-  from_account: TransferAccountDTO;
-  to_account: TransferAccountDTO;
+  /** Foto bukti transfer (opsional). */
+  proof_url: string | null;
+  from_account: AccountRefDTO;
+  to_account: AccountRefDTO;
 }
-
-const toIsoDate = (value: Date | string): string =>
-  new Date(value).toISOString();
 
 export const toTransferDTO = (transfer: {
   id: string;
-  amount: Amount;
-  transfer_date: Date | string;
-  note?: string | null;
-  accounts_transfers_from_account_idToaccounts: TransferAccountDTO;
-  accounts_transfers_to_account_idToaccounts: TransferAccountDTO;
+  amount: DecimalLike;
+  transfer_date: Date;
+  note: string | null;
+  proof_url: string | null;
+  accounts_transfers_from_account_idToaccounts: AccountRefDTO;
+  accounts_transfers_to_account_idToaccounts: AccountRefDTO;
 }): TransferDTO => ({
   id: transfer.id,
-  amount: toMoneyString(transfer.amount),
-  transfer_date: toIsoDate(transfer.transfer_date),
-  note: transfer.note ?? null,
-  from_account:
+  amount: toMoney(transfer.amount),
+  transfer_date: toDateOnly(transfer.transfer_date),
+  note: transfer.note,
+  proof_url: toFileUrl(transfer.proof_url),
+  from_account: toAccountRef(
     transfer.accounts_transfers_from_account_idToaccounts,
-  to_account:
-    transfer.accounts_transfers_to_account_idToaccounts,
+  ),
+  to_account: toAccountRef(transfer.accounts_transfers_to_account_idToaccounts),
 });

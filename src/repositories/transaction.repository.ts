@@ -1,11 +1,11 @@
 import { prisma } from '../config/database.js';
 import type { Prisma } from '../generated/prisma/client.js';
-import type { transactions_type, transactions_status } from '../generated/prisma/enums.js';
+import type { transactions_type } from '../generated/prisma/enums.js';
+import { accountRefSelect, categoryRefSelect } from '../dtos/common.dto.js';
 
 export interface TransactionFilters {
   search?: string;
   type?: transactions_type;
-  status?: transactions_status;
   accountId?: string;
   categoryId?: string;
   from?: Date;
@@ -14,88 +14,47 @@ export interface TransactionFilters {
   maxAmount?: number;
 }
 
-export const createTransaction = async (
-  data: Prisma.transactionsCreateInput,
-) => {
-  return prisma.transactions.create({
-    data,
-    include: {
-      accounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          icon: true,
-          color: true,
-        },
-      },
-    },
-  });
-};
+const transactionInclude = {
+  accounts: { select: accountRefSelect },
+  categories: { select: categoryRefSelect },
+  // Bukti dari sumber transaksi otomatis, ditampilkan di detail transaksi.
+  expense_payments: { select: { proof_url: true } },
+  settlements: { select: { proof_url: true } },
+  savings_contributions: { select: { proof_url: true } },
+  // Dipakai untuk menentukan arah, id, dan bukti transfer pada kakinya.
+  transfers_transfers_from_transaction_idTotransactions: {
+    select: { id: true, proof_url: true },
+  },
+  transfers_transfers_to_transaction_idTotransactions: {
+    select: { id: true, proof_url: true },
+  },
+} satisfies Prisma.transactionsInclude;
 
-export const findTransactionsByUser = async (params: {
+export const createTransaction = (data: Prisma.transactionsCreateInput) =>
+  prisma.transactions.create({ data, include: transactionInclude });
+
+export const findTransactions = async (params: {
   userId: string;
   page: number;
   perPage: number;
-  filters?: TransactionFilters;
+  filters: TransactionFilters;
 }) => {
-  const skip = (params.page - 1) * params.perPage;
-  const filters = params.filters ?? {};
-
-  const include = {
-    accounts: {
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        currency: true,
-      },
-    },
-    categories: {
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        icon: true,
-        color: true,
-      },
-    },
-  };
-
+  const { filters } = params;
   const conditions: Prisma.transactionsWhereInput[] = [
-    {
-      user_id: params.userId,
-    },
+    { user_id: params.userId },
   ];
 
   if (filters.search) {
-    const contains = {
-      contains: filters.search,
-    };
-
     conditions.push({
       OR: [
-        { description: contains },
-        { merchant: contains },
-        { reference_number: contains },
+        { description: { contains: filters.search } },
+        { merchant: { contains: filters.search } },
       ],
     });
   }
 
   if (filters.type) {
     conditions.push({ type: filters.type });
-  }
-
-  if (filters.status) {
-    conditions.push({ status: filters.status });
   }
 
   if (filters.accountId) {
@@ -108,141 +67,92 @@ export const findTransactionsByUser = async (params: {
 
   if (filters.from || filters.to) {
     conditions.push({
-      transaction_date: {
-        ...(filters.from ? { gte: filters.from } : {}),
-        ...(filters.to ? { lte: filters.to } : {}),
-      },
+      transaction_date: { gte: filters.from, lte: filters.to },
     });
   }
 
   if (filters.minAmount !== undefined || filters.maxAmount !== undefined) {
     conditions.push({
-      amount: {
-        ...(filters.minAmount !== undefined
-          ? { gte: filters.minAmount }
-          : {}),
-        ...(filters.maxAmount !== undefined
-          ? { lte: filters.maxAmount }
-          : {}),
-      },
+      amount: { gte: filters.minAmount, lte: filters.maxAmount },
     });
   }
 
-  const where: Prisma.transactionsWhereInput = {
-    AND: conditions,
-  };
+  const where: Prisma.transactionsWhereInput = { AND: conditions };
 
   const [data, total] = await prisma.$transaction([
     prisma.transactions.findMany({
       where,
-      orderBy: [
-        {
-          transaction_date: 'desc',
-        },
-        {
-          created_at: 'desc',
-        },
-      ],
-      skip,
+      include: transactionInclude,
+      orderBy: [{ transaction_date: 'desc' }, { created_at: 'desc' }],
+      skip: (params.page - 1) * params.perPage,
       take: params.perPage,
-      include,
     }),
+    prisma.transactions.count({ where }),
+  ]);
 
-    prisma.transactions.count({
-      where,
+  return { data, total };
+};
+
+export const findTransactionById = (transactionId: string, userId: string) =>
+  prisma.transactions.findFirst({
+    where: { id: transactionId, user_id: userId },
+    include: transactionInclude,
+  });
+
+export const updateTransaction = (
+  transactionId: string,
+  data: Prisma.transactionsUncheckedUpdateInput,
+) =>
+  prisma.transactions.update({
+    where: { id: transactionId },
+    data,
+    include: transactionInclude,
+  });
+
+export const deleteTransaction = (transactionId: string) =>
+  prisma.transactions.delete({ where: { id: transactionId } });
+
+/**
+ * Total transaksi completed pada periode. Transaksi setoran tabungan
+ * dipisah karena bukan pemasukan/pengeluaran biasa.
+ */
+export const sumTransactionsInPeriod = async (
+  userId: string,
+  from: Date,
+  to: Date,
+) => {
+  const base: Prisma.transactionsWhereInput = {
+    user_id: userId,
+    status: 'completed',
+    transaction_date: { gte: from, lte: to },
+  };
+
+  const [regular, savings] = await Promise.all([
+    prisma.transactions.groupBy({
+      by: ['type', 'category_id'],
+      where: {
+        ...base,
+        type: { in: ['income', 'refund', 'expense'] },
+        savings_contribution_id: null,
+      },
+      _sum: { amount: true },
+    }),
+    prisma.transactions.groupBy({
+      by: ['type'],
+      where: {
+        ...base,
+        type: { in: ['income', 'refund', 'expense'] },
+        savings_contribution_id: { not: null },
+      },
+      _sum: { amount: true },
     }),
   ]);
 
-  return {
-    data,
-    total,
-  };
+  return { regular, savings };
 };
 
-export const findTransactionById = async (
-  transactionId: string,
-  userId: string,
-) => {
-  return prisma.transactions.findFirst({
-    where: {
-      id: transactionId,
-      user_id: userId,
-    },
-    include: {
-      accounts: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          currency: true,
-        },
-      },
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          icon: true,
-          color: true,
-        },
-      },
-    },
+export const findCategoryRefs = (categoryIds: string[]) =>
+  prisma.categories.findMany({
+    where: { id: { in: categoryIds } },
+    select: categoryRefSelect,
   });
-};
-
-export const updateTransaction = async (
-  transactionId: string,
-  userId: string,
-  data: Prisma.transactionsUpdateInput,
-) => {
-  return prisma.transactions.update({
-    where: {
-      id: transactionId,
-    },
-    data,
-  });
-};
-
-export const deleteTransaction = async (
-  transactionId: string,
-  userId: string,
-) => {
-  return prisma.transactions.deleteMany({
-    where: {
-      id: transactionId,
-      user_id: userId,
-    },
-  });
-};
-
-export const findAccountByIdAndUser = async (
-  accountId: string,
-  userId: string,
-) => {
-  return prisma.accounts.findFirst({
-    where: {
-      id: accountId,
-      user_id: userId,
-      is_active: true,
-    },
-  });
-};
-
-export const findCategoryByIdAndUser = async (
-  categoryId: string,
-  userId: string,
-) => {
-  return prisma.categories.findFirst({
-    where: {
-      id: categoryId,
-      OR: [
-        {
-          user_id: userId,
-        },
-        {
-          is_system: true,
-        },
-      ],
-    },
-  });
-};

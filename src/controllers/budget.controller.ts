@@ -1,306 +1,74 @@
 import type { Request, Response } from 'express';
 
+import { toBudgetDTO, toBudgetDetailDTO } from '../dtos/budget.dto.js';
 import {
-  create,
-  getAll,
-  getById,
-  remove,
-  update,
+  addBudget,
+  editBudget,
+  getBudget,
+  listBudgets,
+  removeBudget,
 } from '../services/budget.service.js';
-
-import { getAuthenticatedUserId } from '../utils/auth.js';
-import {
-  buildPaginationMeta,
-  parsePagination,
-} from '../utils/pagination.js';
+import { getAuthenticatedUserId, getParam } from '../utils/auth.js';
 import {
   parseBooleanFilter,
-  parseDateRangeFilter,
-  parseIdFilter,
+  parseEnumFilter,
   parseSearchQuery,
 } from '../utils/filters.js';
-import {
-  toBudgetDTO,
-  toBudgetSummaryDTO,
-} from '../dtos/budget.dto.js';
-import { fail, success } from '../utils/response.js';
-import { logger } from '../config/logger.js';
+import { buildPaginationMeta, parsePagination } from '../utils/pagination.js';
+import { success } from '../utils/response.js';
+import { BUDGET_PERIODS } from '../validators/budget.validator.js';
 
-export const createBudgetController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
+export const listBudgetsController = async (req: Request, res: Response) => {
+  const pagination = parsePagination(req.query);
 
-    const budget = await create(userId, req.body);
+  const result = await listBudgets(getAuthenticatedUserId(req), pagination, {
+    search: parseSearchQuery(req.query),
+    isActive: parseBooleanFilter(req.query, 'is_active'),
+    period: parseEnumFilter(req.query, 'period', BUDGET_PERIODS),
+  });
 
-    return success(
-      res,
-      201,
-      'Budget berhasil dibuat',
-      { data: toBudgetDTO(budget) },
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      switch (error.message) {
-        case 'CATEGORY_NOT_FOUND':
-          return fail(
-            res,
-            404,
-            'Kategori tidak ditemukan',
-          );
-
-        case 'INVALID_CATEGORY_TYPE':
-          return fail(
-            res,
-            422,
-            'Budget hanya boleh memakai kategori pengeluaran',
-          );
-
-        case 'INVALID_DATE_RANGE':
-          return fail(
-            res,
-            422,
-            'Tanggal selesai tidak boleh sebelum tanggal mulai',
-          );
-
-        case 'ALLOCATION_EXCEEDS_BUDGET':
-          return fail(
-            res,
-            422,
-            'Total alokasi kategori tidak boleh melebihi total budget',
-          );
-      }
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal membuat budget',
-    );
-  }
+  return success(res, 200, 'Anggaran berhasil diambil', {
+    data: result.data.map(({ budget, spent }) => toBudgetDTO(budget, spent)),
+    pagination: buildPaginationMeta(pagination, result.total),
+  });
 };
 
-export const getBudgetsController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
+export const getBudgetController = async (req: Request, res: Response) => {
+  const { budget, spent, spentByCategory } = await getBudget(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+  );
 
-    const { page, perPage } = parsePagination(
-      req.query,
-    );
-
-    const dateRange = parseDateRangeFilter(req.query);
-
-    const result = await getAll(
-      userId,
-      page,
-      perPage,
-      {
-        search: parseSearchQuery(req.query),
-        isActive: parseBooleanFilter(
-          req.query,
-          'is_active',
-        ),
-        categoryId: parseIdFilter(
-          req.query,
-          'category_id',
-        ),
-        from: dateRange.from,
-        to: dateRange.to,
-      },
-    );
-
-    return success(
-      res,
-      200,
-      'Data budget berhasil diambil',
-      {
-        data: result.data.map((budget) =>
-          toBudgetSummaryDTO(
-            budget,
-            result.spentMap.get(budget.id),
-          ),
-        ),
-        pagination: buildPaginationMeta(
-          { page, perPage },
-          result.total,
-        ),
-      },
-    );
-  } catch (error) {
-    if (error instanceof TypeError) {
-      return fail(
-        res,
-        422,
-        'Parameter filter tidak valid',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal mengambil budget',
-    );
-  }
+  return success(res, 200, 'Anggaran berhasil diambil', {
+    data: toBudgetDetailDTO(budget, spent, spentByCategory),
+  });
 };
 
-export const getBudgetController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const budgetId = req.params.id as string;
+export const createBudgetController = async (req: Request, res: Response) => {
+  const { budget, spent, spentByCategory } = await addBudget(
+    getAuthenticatedUserId(req),
+    req.body,
+  );
 
-    const { budget, spentByCategory } =
-      await getById(userId, budgetId);
-
-    return success(
-      res,
-      200,
-      'Data budget berhasil diambil',
-      {
-        data: toBudgetDTO(
-          budget,
-          spentByCategory,
-        ),
-      },
-    );
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'BUDGET_NOT_FOUND'
-    ) {
-      return fail(
-        res,
-        404,
-        'Budget tidak ditemukan',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal mengambil budget',
-    );
-  }
+  return success(res, 201, 'Anggaran berhasil dibuat', {
+    data: toBudgetDetailDTO(budget, spent, spentByCategory),
+  });
 };
 
-export const updateBudgetController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const budgetId = req.params.id as string;
+export const updateBudgetController = async (req: Request, res: Response) => {
+  const { budget, spent, spentByCategory } = await editBudget(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+    req.body,
+  );
 
-    const { budget, spentByCategory } =
-      await update(userId, budgetId, req.body);
-
-    return success(
-      res,
-      200,
-      'Budget berhasil diperbarui',
-      {
-        data: toBudgetDTO(
-          budget,
-          spentByCategory,
-        ),
-      },
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      switch (error.message) {
-        case 'BUDGET_NOT_FOUND':
-          return fail(
-            res,
-            404,
-            'Budget tidak ditemukan',
-          );
-
-        case 'CATEGORY_NOT_FOUND':
-          return fail(
-            res,
-            404,
-            'Kategori tidak ditemukan',
-          );
-
-        case 'INVALID_CATEGORY_TYPE':
-          return fail(
-            res,
-            422,
-            'Budget hanya boleh memakai kategori pengeluaran',
-          );
-
-        case 'INVALID_DATE_RANGE':
-          return fail(
-            res,
-            422,
-            'Tanggal selesai tidak boleh sebelum tanggal mulai',
-          );
-
-        case 'ALLOCATION_EXCEEDS_BUDGET':
-          return fail(
-            res,
-            422,
-            'Total alokasi kategori tidak boleh melebihi total budget',
-          );
-      }
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal memperbarui budget',
-    );
-  }
+  return success(res, 200, 'Anggaran berhasil diperbarui', {
+    data: toBudgetDetailDTO(budget, spent, spentByCategory),
+  });
 };
 
-export const deleteBudgetController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const budgetId = req.params.id as string;
+export const deleteBudgetController = async (req: Request, res: Response) => {
+  await removeBudget(getAuthenticatedUserId(req), getParam(req, 'id'));
 
-    await remove(userId, budgetId);
-
-    return success(
-      res,
-      200,
-      'Budget berhasil dihapus',
-    );
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'BUDGET_NOT_FOUND'
-    ) {
-      return fail(
-        res,
-        404,
-        'Budget tidak ditemukan',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal menghapus budget',
-    );
-  }
+  return success(res, 200, 'Anggaran berhasil dihapus');
 };

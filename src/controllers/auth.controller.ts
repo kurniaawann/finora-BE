@@ -1,250 +1,125 @@
 import type { Request, Response } from 'express';
-import { env } from '../config/env.js';
-import { logger } from '../config/logger.js';
-import { getCurrentUser, login, logout, refreshAccessToken, register } from '../services/auth.service.js';
-import { toProfileDTO, toUserDTO } from '../dtos/user.dto.js';
-import { loginSchema, registerSchema } from '../validators/auth.validator.js';
-import { getAuthenticatedUserId } from '../utils/auth.js'
-import { fail, success } from '../utils/response.js'
 
-export const registerController = async (
-  req: Request,
-  res: Response,
-) => {
-  const validation = registerSchema.safeParse(req.body);
+import { toMeDTO } from '../dtos/user.dto.js';
+import {
+  changePassword,
+  deleteAccount,
+  getCurrentUser,
+  login,
+  logout,
+  logoutAll,
+  refreshTokens,
+  register,
+  requestPasswordReset,
+  resendEmailVerification,
+  resetPassword,
+  verifyEmail,
+} from '../services/auth.service.js';
+import { getAuthenticatedUserId } from '../utils/auth.js';
+import { success } from '../utils/response.js';
 
-  if (!validation.success) {
-    return fail(res, 422, 'Data yang dikirim tidak valid', {
-      errors: validation.error.flatten().fieldErrors,
-    });
-  }
+export const registerController = async (req: Request, res: Response) => {
+  const { user, tokens } = await register(req.body);
 
-  try {
-    await register(validation.data);
-
-    return success(res, 201, 'Registrasi berhasil');
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'EMAIL_ALREADY_EXISTS'
-    ) {
-      return fail(res, 409, 'Email sudah terdaftar');
-    }
-
-    logger.error(error);
-
-    return fail(res, 500, 'Terjadi kesalahan pada server');
-  }
-};
-export const loginController = async (
-  req: Request,
-  res: Response,
-) => {
-  const validation = loginSchema.safeParse(req.body);
-
-  if (!validation.success) {
-    return fail(res, 422, 'Data yang dikirim tidak valid', {
-      errors: validation.error.flatten().fieldErrors,
-    });
-  }
-
-  try {
-    const result = await login(validation.data);
-
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: env.nodeEnv === 'production',
-      sameSite: env.nodeEnv === 'production'
-        ? 'none'
-        : 'lax',
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      path: '/api/auth',
-    });
-
-    return success(res, 200, 'Login berhasil', {
-      data: {
-        access_token: result.accessToken,
-        user: toUserDTO(result.user),
-      },
-    });
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'INVALID_CREDENTIALS'
-    ) {
-      return fail(res, 401, 'Email atau password salah');
-    }
-
-    if (
-      error instanceof Error &&
-      error.message === 'USER_INACTIVE'
-    ) {
-      return fail(res, 403, 'Akun Anda tidak aktif');
-    }
-
-    logger.error(error);
-
-    return fail(res, 500, 'Terjadi kesalahan pada server');
-  }
-};
-
-export const meController = async (
-  req: Request,
-  res: Response,
-) => {
-  const userId = getAuthenticatedUserId(req);
-
-  if (!userId) {
-    return fail(res, 401, 'Autentikasi diperlukan');
-  }
-
-  try {
-    const user = await getCurrentUser(userId);
-
-    return success(res, 200, 'Data user berhasil diambil', {
-      data: {
-        user: {
-          ...toUserDTO(user),
-          profile: user.profile
-            ? toProfileDTO(user.profile)
-            : null,
-        },
-      },
-    });
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'USER_NOT_FOUND'
-    ) {
-      return fail(res, 404, 'User tidak ditemukan');
-    }
-
-    if (
-      error instanceof Error &&
-      error.message === 'USER_INACTIVE'
-    ) {
-      return fail(res, 403, 'Akun Anda tidak aktif');
-    }
-
-    logger.error(error);
-
-    return fail(res, 500, 'Terjadi kesalahan pada server');
-  }
-};
-
-export const refreshController = async (
-  req: Request,
-  res: Response,
-) => {
-  const refreshToken = req.cookies.refreshToken;
-
-  if (!refreshToken) {
-    return fail(res, 401, 'Refresh token tidak ditemukan');
-  }
-
-  try {
-    const result = await refreshAccessToken(
-      refreshToken,
-    );
-
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: env.nodeEnv === 'production',
-      sameSite:
-        env.nodeEnv === 'production'
-          ? 'none'
-          : 'lax',
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      path: '/api/auth',
-    });
-
-    return success(res, 200, 'Access token berhasil diperbarui', {
-      data: {
-        access_token: result.accessToken,
-      },
-    });
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'REFRESH_TOKEN_REUSED'
-    ) {
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: env.nodeEnv === 'production',
-        sameSite:
-          env.nodeEnv === 'production'
-            ? 'none'
-            : 'lax',
-        path: '/api/auth',
-      });
-
-      return fail(
-        res,
-        401,
-        'Refresh token sudah tidak dapat digunakan',
-      );
-    }
-
-    if (
-      error instanceof Error &&
-      error.message === 'REFRESH_TOKEN_EXPIRED'
-    ) {
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: env.nodeEnv === 'production',
-        sameSite:
-          env.nodeEnv === 'production'
-            ? 'none'
-            : 'lax',
-        path: '/api/auth',
-      });
-
-      return fail(
-        res,
-        401,
-        'Refresh token sudah kedaluwarsa',
-      );
-    }
-
-    if (
-      error instanceof Error &&
-      error.message === 'INVALID_REFRESH_TOKEN'
-    ) {
-      return fail(
-        res,
-        401,
-        'Refresh token tidak valid',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(res, 500, 'Terjadi kesalahan pada server');
-  }
-};
-
-export const logoutController = async (
-  req: Request,
-  res: Response,
-) => {
-  const refreshToken = req.cookies.refreshToken;
-
-  if (refreshToken) {
-    try {
-      await logout(refreshToken);
-    } catch (error) {
-      logger.error(error);
-    }
-  }
-
-  res.clearCookie('refreshToken', {
-    httpOnly: true,
-    secure: env.nodeEnv === 'production',
-    sameSite: env.nodeEnv === 'production'
-      ? 'none'
-      : 'lax',
-    path: '/api/auth',
+  return success(res, 201, 'Registrasi berhasil', {
+    data: { ...tokens, user: toMeDTO(user) },
   });
+};
+
+export const loginController = async (req: Request, res: Response) => {
+  const { user, tokens } = await login(req.body);
+
+  return success(res, 200, 'Login berhasil', {
+    data: { ...tokens, user: toMeDTO(user) },
+  });
+};
+
+export const refreshController = async (req: Request, res: Response) => {
+  const tokens = await refreshTokens(req.body.refresh_token);
+
+  return success(res, 200, 'Token berhasil diperbarui', {
+    data: tokens,
+  });
+};
+
+export const logoutController = async (req: Request, res: Response) => {
+  await logout(req.body.refresh_token);
 
   return success(res, 200, 'Logout berhasil');
+};
+
+export const logoutAllController = async (req: Request, res: Response) => {
+  await logoutAll(getAuthenticatedUserId(req));
+
+  return success(res, 200, 'Berhasil keluar dari semua perangkat');
+};
+
+export const meController = async (req: Request, res: Response) => {
+  const user = await getCurrentUser(getAuthenticatedUserId(req));
+
+  return success(res, 200, 'Data user berhasil diambil', {
+    data: toMeDTO(user),
+  });
+};
+
+export const changePasswordController = async (
+  req: Request,
+  res: Response,
+) => {
+  const tokens = await changePassword(
+    getAuthenticatedUserId(req),
+    req.body,
+  );
+
+  return success(res, 200, 'Password berhasil diubah', {
+    data: tokens,
+  });
+};
+
+export const deleteAccountController = async (
+  req: Request,
+  res: Response,
+) => {
+  await deleteAccount(getAuthenticatedUserId(req), req.body);
+
+  return success(res, 200, 'Akun berhasil dihapus');
+};
+
+export const forgotPasswordController = async (
+  req: Request,
+  res: Response,
+) => {
+  await requestPasswordReset(req.body.email);
+
+  return success(
+    res,
+    200,
+    'Jika email terdaftar, kode reset password sudah dikirim',
+  );
+};
+
+export const resetPasswordController = async (
+  req: Request,
+  res: Response,
+) => {
+  await resetPassword(req.body);
+
+  return success(res, 200, 'Password berhasil direset, silakan login');
+};
+
+export const resendVerificationController = async (
+  req: Request,
+  res: Response,
+) => {
+  await resendEmailVerification(getAuthenticatedUserId(req));
+
+  return success(res, 200, 'Kode verifikasi sudah dikirim ke email kamu');
+};
+
+export const verifyEmailController = async (req: Request, res: Response) => {
+  const user = await verifyEmail(getAuthenticatedUserId(req), req.body.code);
+
+  return success(res, 200, 'Email berhasil diverifikasi', {
+    data: toMeDTO(user),
+  });
 };

@@ -1,180 +1,109 @@
 import { prisma } from '../config/database.js';
+import { accountRefSelect } from '../dtos/common.dto.js';
 import type { Prisma } from '../generated/prisma/client.js';
 import type { payment_methods_type } from '../generated/prisma/enums.js';
+import type { PaginationParams } from '../utils/pagination.js';
 
-const includeAccount = {
-  accounts: {
-    select: {
-      id: true,
-      name: true,
-    },
-  },
-};
+type Db = Prisma.TransactionClient;
 
-export const clearDefaultPaymentMethods = async (
-  userId: string,
-  db: Prisma.TransactionClient = prisma,
-) => {
-  return db.payment_methods.updateMany({
-    where: {
-      user_id: userId,
-      is_default: true,
-    },
-    data: {
-      is_default: false,
-    },
-  });
-};
+const paymentMethodInclude = {
+  accounts: { select: accountRefSelect },
+} satisfies Prisma.payment_methodsInclude;
 
-export const createPaymentMethod = async (
-  data: {
-    userId: string;
-    name: string;
-    type: payment_methods_type;
-    provider: string | null;
-    accountId: string | null;
-    isDefault: boolean;
-  },
-  db: Prisma.TransactionClient = prisma,
-) => {
-  return db.payment_methods.create({
-    data: {
-      user_id: data.userId,
-      name: data.name,
-      type: data.type,
-      provider: data.provider,
-      account_id: data.accountId,
-      is_default: data.isDefault,
-    },
-    include: includeAccount,
-  });
-};
-
-export const findPaymentMethodsByUser = async (params: {
-  userId: string;
-  page: number;
-  perPage: number;
-  type?: payment_methods_type;
+export interface PaymentMethodFilters {
   search?: string;
+  type?: payment_methods_type;
   isActive?: boolean;
-  isDefault?: boolean;
-}) => {
-  const skip = (params.page - 1) * params.perPage;
+}
 
+export const findPaymentMethods = async (
+  userId: string,
+  { page, perPage }: PaginationParams,
+  filters: PaymentMethodFilters,
+) => {
   const where: Prisma.payment_methodsWhereInput = {
-    user_id: params.userId,
-    is_active: params.isActive ?? true,
+    user_id: userId,
+    is_active: filters.isActive ?? true,
+    ...(filters.type && { type: filters.type }),
+    ...(filters.search && {
+      OR: [
+        { name: { contains: filters.search } },
+        { provider: { contains: filters.search } },
+      ],
+    }),
   };
-
-  if (params.type) {
-    where.type = params.type;
-  }
-
-  if (params.search) {
-    const contains = {
-      contains: params.search,
-    };
-
-    where.OR = [
-      { name: contains },
-      { provider: contains },
-    ];
-  }
-
-  if (params.isDefault !== undefined) {
-    where.is_default = params.isDefault;
-  }
 
   const [data, total] = await prisma.$transaction([
     prisma.payment_methods.findMany({
       where,
-      orderBy: [
-        {
-          is_default: 'desc',
-        },
-        {
-          name: 'asc',
-        },
-      ],
-      skip,
-      take: params.perPage,
-      include: includeAccount,
+      orderBy: [{ is_default: 'desc' }, { name: 'asc' }],
+      skip: (page - 1) * perPage,
+      take: perPage,
+      include: paymentMethodInclude,
     }),
-
-    prisma.payment_methods.count({
-      where,
-    }),
+    prisma.payment_methods.count({ where }),
   ]);
 
-  return {
+  return { data, total };
+};
+
+export const findPaymentMethodById = (methodId: string, userId: string) =>
+  prisma.payment_methods.findFirst({
+    where: { id: methodId, user_id: userId },
+    include: paymentMethodInclude,
+  });
+
+export const countActivePaymentMethods = (userId: string, db: Db) =>
+  db.payment_methods.count({
+    where: { user_id: userId, is_active: true },
+  });
+
+export const clearDefaultPaymentMethods = (
+  userId: string,
+  db: Db,
+  exceptId?: string,
+) =>
+  db.payment_methods.updateMany({
+    where: {
+      user_id: userId,
+      is_default: true,
+      ...(exceptId && { id: { not: exceptId } }),
+    },
+    data: { is_default: false },
+  });
+
+export const createPaymentMethod = (
+  data: Prisma.payment_methodsUncheckedCreateInput,
+  db: Db,
+) =>
+  db.payment_methods.create({
     data,
-    total,
-    page: params.page,
-    perPage: params.perPage,
-  };
-};
-
-export const findPaymentMethodByIdAndUser = async (
-  methodId: string,
-  userId: string,
-) => {
-  return prisma.payment_methods.findFirst({
-    where: {
-      id: methodId,
-      user_id: userId,
-    },
-    include: includeAccount,
+    include: paymentMethodInclude,
   });
-};
 
-export const findAccountByIdAndUser = async (
-  accountId: string,
-  userId: string,
-) => {
-  return prisma.accounts.findFirst({
-    where: {
-      id: accountId,
-      user_id: userId,
-      is_active: true,
-    },
-  });
-};
-
-export const updatePaymentMethod = async (
+export const updatePaymentMethod = (
   methodId: string,
-  userId: string,
-  data: {
-    name?: string;
-    type?: payment_methods_type;
-    provider?: string | null;
-    account_id?: string | null;
-    is_default?: boolean;
-    is_active?: boolean;
-  },
-  db: Prisma.TransactionClient = prisma,
-) => {
-  return db.payment_methods.updateMany({
-    where: {
-      id: methodId,
-      user_id: userId,
-    },
+  data: Prisma.payment_methodsUncheckedUpdateInput,
+  db: Db,
+) =>
+  db.payment_methods.update({
+    where: { id: methodId },
     data,
+    include: paymentMethodInclude,
   });
-};
 
-export const deactivatePaymentMethod = async (
-  methodId: string,
-  userId: string,
-  db: Prisma.TransactionClient = prisma,
-) => {
-  return db.payment_methods.updateMany({
-    where: {
-      id: methodId,
-      user_id: userId,
-    },
-    data: {
-      is_active: false,
-      is_default: false,
-    },
-  });
+export const deletePaymentMethod = (methodId: string, db: Db) =>
+  db.payment_methods.delete({ where: { id: methodId } });
+
+/** Jumlah catatan pembayaran/pelunasan/setoran yang memakai metode ini. */
+export const countPaymentMethodUsage = async (methodId: string, db: Db) => {
+  const where = { payment_method_id: methodId };
+
+  const [payments, settlements, contributions] = await Promise.all([
+    db.expense_payments.count({ where }),
+    db.settlements.count({ where }),
+    db.savings_contributions.count({ where }),
+  ]);
+
+  return payments + settlements + contributions;
 };

@@ -1,165 +1,150 @@
 import { prisma } from '../config/database.js';
-
 import {
   clearDefaultPaymentMethods,
+  countActivePaymentMethods,
+  countPaymentMethodUsage,
   createPaymentMethod,
-  deactivatePaymentMethod,
-  findAccountByIdAndUser,
-  findPaymentMethodByIdAndUser,
-  findPaymentMethodsByUser,
+  deletePaymentMethod,
+  findPaymentMethodById,
+  findPaymentMethods,
+  type PaymentMethodFilters,
   updatePaymentMethod,
 } from '../repositories/payment-method.repository.js';
-
+import { notFound, unprocessable } from '../utils/app-error.js';
+import type { PaginationParams } from '../utils/pagination.js';
 import type {
   CreatePaymentMethodInput,
   UpdatePaymentMethodInput,
 } from '../validators/payment-method.validator.js';
+import { requireOwnedAccount } from './ownership.service.js';
 
-import type { payment_methods_type } from '../generated/prisma/enums.js';
-
-const validateAccount = async (
-  userId: string,
-  accountId: string | null,
-) => {
-  if (!accountId) {
-    return;
-  }
-
-  const account = await findAccountByIdAndUser(
-    accountId,
-    userId,
-  );
-
-  if (!account) {
-    throw new Error('ACCOUNT_NOT_FOUND');
-  }
-};
-
-export const create = async (
-  userId: string,
-  input: CreatePaymentMethodInput,
-) => {
-  const accountId = input.account_id ?? null;
-
-  await validateAccount(userId, accountId);
-
-  return prisma.$transaction(async (tx) => {
-    if (input.is_default) {
-      await clearDefaultPaymentMethods(userId, tx);
-    }
-
-    return createPaymentMethod(
-      {
-        userId,
-        name: input.name,
-        type: input.type,
-        provider: input.provider ?? null,
-        accountId,
-        isDefault: input.is_default,
-      },
-      tx,
-    );
-  });
-};
-
-export const getAll = async (params: {
-  userId: string;
-  page: number;
-  perPage: number;
-  type?: payment_methods_type;
-  search?: string;
-  isActive?: boolean;
-  isDefault?: boolean;
-}) => {
-  return findPaymentMethodsByUser(params);
-};
-
-export const getById = async (
-  userId: string,
-  methodId: string,
-) => {
-  const method = await findPaymentMethodByIdAndUser(
-    methodId,
-    userId,
-  );
+const requirePaymentMethod = async (userId: string, methodId: string) => {
+  const method = await findPaymentMethodById(methodId, userId);
 
   if (!method) {
-    throw new Error('PAYMENT_METHOD_NOT_FOUND');
+    throw notFound(
+      'PAYMENT_METHOD_NOT_FOUND',
+      'Metode pembayaran tidak ditemukan',
+    );
   }
 
   return method;
 };
 
-export const update = async (
+/** `undefined` = tidak diubah, `null` = lepas tautan rekening. */
+const resolveAccountId = async (
   userId: string,
-  methodId: string,
-  input: UpdatePaymentMethodInput,
+  accountId: string | null | undefined,
 ) => {
-  const method = await findPaymentMethodByIdAndUser(
-    methodId,
-    userId,
-  );
-
-  if (!method) {
-    throw new Error('PAYMENT_METHOD_NOT_FOUND');
+  if (!accountId) {
+    return accountId;
   }
 
-  if (input.account_id !== undefined) {
-    await validateAccount(userId, input.account_id);
-  }
+  return (await requireOwnedAccount(accountId, userId)).id;
+};
 
-  const deactivating = input.is_active === false;
-  const isDefault = deactivating
-    ? false
-    : (input.is_default ?? method.is_default);
+export const listPaymentMethods = (
+  userId: string,
+  pagination: PaginationParams,
+  filters: PaymentMethodFilters,
+) => findPaymentMethods(userId, pagination, filters);
 
-  await prisma.$transaction(async (tx) => {
+export const getPaymentMethod = (userId: string, methodId: string) =>
+  requirePaymentMethod(userId, methodId);
+
+export const addPaymentMethod = async (
+  userId: string,
+  input: CreatePaymentMethodInput,
+) => {
+  const accountId = await resolveAccountId(userId, input.account_id);
+
+  return prisma.$transaction(async (tx) => {
+    // Metode aktif pertama milik user otomatis menjadi default.
+    const isDefault =
+      input.is_default === true ||
+      (await countActivePaymentMethods(userId, tx)) === 0;
+
     if (isDefault) {
       await clearDefaultPaymentMethods(userId, tx);
     }
 
-    await updatePaymentMethod(
-      methodId,
-      userId,
+    return createPaymentMethod(
       {
-        ...(input.name !== undefined
-          ? { name: input.name }
-          : {}),
-        ...(input.type !== undefined
-          ? { type: input.type }
-          : {}),
-        ...(input.provider !== undefined
-          ? { provider: input.provider }
-          : {}),
-        ...(input.account_id !== undefined
-          ? { account_id: input.account_id }
-          : {}),
-        ...(input.is_active !== undefined
-          ? { is_active: input.is_active }
-          : {}),
+        user_id: userId,
+        name: input.name,
+        type: input.type,
+        provider: input.provider ?? null,
+        account_id: accountId ?? null,
         is_default: isDefault,
       },
       tx,
     );
   });
-
-  return findPaymentMethodByIdAndUser(methodId, userId);
 };
 
-export const remove = async (
+export const editPaymentMethod = async (
   userId: string,
   methodId: string,
+  input: UpdatePaymentMethodInput,
 ) => {
-  const method = await findPaymentMethodByIdAndUser(
-    methodId,
-    userId,
-  );
+  const method = await requirePaymentMethod(userId, methodId);
+  const accountId = await resolveAccountId(userId, input.account_id);
+  const isActive = input.is_active ?? method.is_active;
 
-  if (!method) {
-    throw new Error('PAYMENT_METHOD_NOT_FOUND');
+  if (input.is_default === true && !isActive) {
+    throw unprocessable(
+      'PAYMENT_METHOD_INACTIVE',
+      'Metode pembayaran nonaktif tidak bisa dijadikan default',
+    );
   }
 
-  await deactivatePaymentMethod(methodId, userId);
+  // Metode yang dinonaktifkan otomatis kehilangan status default.
+  const isDefault = isActive && (input.is_default ?? method.is_default);
 
-  return true;
+  return prisma.$transaction(async (tx) => {
+    if (isDefault) {
+      await clearDefaultPaymentMethods(userId, tx, methodId);
+    }
+
+    return updatePaymentMethod(
+      methodId,
+      {
+        name: input.name,
+        type: input.type,
+        provider: input.provider,
+        account_id: accountId,
+        is_active: isActive,
+        is_default: isDefault,
+      },
+      tx,
+    );
+  });
+};
+
+/**
+ * Metode yang sudah tercatat di pembayaran patungan, pelunasan, atau
+ * setoran tabungan hanya dinonaktifkan agar riwayatnya tetap utuh;
+ * yang belum pernah dipakai dihapus permanen.
+ */
+export const removePaymentMethod = async (
+  userId: string,
+  methodId: string,
+): Promise<{ archived: boolean }> => {
+  await requirePaymentMethod(userId, methodId);
+
+  return prisma.$transaction(async (tx) => {
+    if ((await countPaymentMethodUsage(methodId, tx)) > 0) {
+      await updatePaymentMethod(
+        methodId,
+        { is_active: false, is_default: false },
+        tx,
+      );
+
+      return { archived: true };
+    }
+
+    await deletePaymentMethod(methodId, tx);
+
+    return { archived: false };
+  });
 };

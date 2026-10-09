@@ -1,309 +1,154 @@
 import { prisma } from '../config/database.js';
-// import type { accounts_type } from '../generated/prisma/enums.js';
-// import { prisma } from '../config/database.js';
 import { Prisma } from '../generated/prisma/client.js';
 import type { accounts_type } from '../generated/prisma/enums.js';
-export const createAccount = async (data: {
-  userId: string;
-  name: string;
-  type: accounts_type;
-  initial_balance: number;
-  currency: string;
-}) => {
-  return prisma.accounts.create({
-    data: {
-      user_id: data.userId,
-      name: data.name,
-      type: data.type,
-      initial_balance: data.initial_balance,
-      currency: data.currency,
-    },
-  });
-};
 
-export const findAccountsByUserId = async (params: {
-  userId: string;
-  page: number;
-  perPage: number;
+export interface AccountFilters {
   search?: string;
   type?: accounts_type;
   isActive?: boolean;
+}
+
+export const createAccount = (data: Prisma.accountsUncheckedCreateInput) =>
+  prisma.accounts.create({ data });
+
+export const findAccounts = async (params: {
+  userId: string;
+  page: number;
+  perPage: number;
+  filters: AccountFilters;
 }) => {
-  const skip = (params.page - 1) * params.perPage;
+  const { search, type, isActive } = params.filters;
 
   const where: Prisma.accountsWhereInput = {
     user_id: params.userId,
-    is_active: params.isActive ?? true,
+    is_active: isActive ?? true,
+    ...(type ? { type } : {}),
+    ...(search
+      ? {
+          OR: [
+            { name: { contains: search } },
+            { institution_name: { contains: search } },
+            { account_number_masked: { contains: search } },
+          ],
+        }
+      : {}),
   };
-
-  if (params.search) {
-    const contains = {
-      contains: params.search,
-    };
-
-    where.OR = [
-      { name: contains },
-      { institution_name: contains },
-      { account_number_masked: contains },
-    ];
-  }
-
-  if (params.type) {
-    where.type = params.type;
-  }
 
   const [data, total] = await prisma.$transaction([
     prisma.accounts.findMany({
       where,
-      orderBy: {
-        created_at: 'desc',
-      },
-      skip,
+      orderBy: [{ name: 'asc' }, { created_at: 'desc' }],
+      skip: (params.page - 1) * params.perPage,
       take: params.perPage,
     }),
-
-    prisma.accounts.count({
-      where,
-    }),
+    prisma.accounts.count({ where }),
   ]);
 
-  const balances = await getAccountBalances(
-    params.userId,
-    data.map((account) => account.id),
-  );
-
-  const accounts = data.map((account) => ({
-    ...account,
-    current_balance: new Prisma.Decimal(
-      account.initial_balance,
-    ).add(
-      balances.get(account.id) ??
-        new Prisma.Decimal(0),
-    ),
-  }));
-
-  return {
-    data: accounts,
-    total,
-    page: params.page,
-    perPage: params.perPage,
-  };
+  return { data, total };
 };
 
-export const findAccountByIdAndUserId = async (
-  accountId: string,
-  userId: string,
-) => {
-  const account = await prisma.accounts.findFirst({
-    where: {
-      id: accountId,
-      user_id: userId,
-    },
+export const findAccountById = (accountId: string, userId: string) =>
+  prisma.accounts.findFirst({
+    where: { id: accountId, user_id: userId },
   });
 
-  if (!account) {
-    return null;
-  }
-
-  const balances = await getAccountBalances(
-    userId,
-    [account.id],
-  );
-
-  return {
-    ...account,
-    current_balance: new Prisma.Decimal(
-      account.initial_balance,
-    ).add(
-      balances.get(account.id) ??
-        new Prisma.Decimal(0),
-    ),
-  };
-};
-
-export const updateAccount = async (
+export const updateAccount = (
   accountId: string,
-  userId: string,
-  data: {
-    name?: string;
-    type?: accounts_type;
-    currency?: string;
-    is_active?: boolean;
-    include_in_total_balance?: boolean;
-  },
-) => {
-  return prisma.accounts.updateMany({
-    where: {
-      id: accountId,
-      user_id: userId,
-    },
+  data: Prisma.accountsUpdateInput,
+) =>
+  prisma.accounts.update({
+    where: { id: accountId },
     data,
   });
-};
 
-export const deleteAccount = async (
-  accountId: string,
-  userId: string,
-) => {
-  return prisma.accounts.deleteMany({
-    where: {
-      id: accountId,
-      user_id: userId,
-    },
-  });
-};
+export const deleteAccount = (accountId: string) =>
+  prisma.accounts.delete({ where: { id: accountId } });
 
-export const countAccountReferences = async (
-  accountId: string,
-) => {
-  const [
-    transactions,
-    transfersFrom,
-    transfersTo,
-    expensePayments,
-    paymentMethods,
-    settlements,
-    recurring,
-    savings,
-  ] = await prisma.$transaction([
-    prisma.transactions.count({
+/** Rekening sudah punya mutasi saldo (transaksi atau transfer). */
+export const hasAccountActivity = async (accountId: string) => {
+  const [transaction, transfer] = await Promise.all([
+    prisma.transactions.findFirst({
       where: { account_id: accountId },
+      select: { id: true },
     }),
-    prisma.transfers.count({
-      where: { from_account_id: accountId },
-    }),
-    prisma.transfers.count({
-      where: { to_account_id: accountId },
-    }),
-    prisma.expense_payments.count({
-      where: { account_id: accountId },
-    }),
-    prisma.payment_methods.count({
-      where: { account_id: accountId },
-    }),
-    prisma.settlements.count({
-      where: { account_id: accountId },
-    }),
-    prisma.recurring_transactions.count({
-      where: { account_id: accountId },
-    }),
-    prisma.savings_contributions.count({
-      where: { account_id: accountId },
+    prisma.transfers.findFirst({
+      where: {
+        OR: [{ from_account_id: accountId }, { to_account_id: accountId }],
+      },
+      select: { id: true },
     }),
   ]);
 
-  return (
-    transactions +
-    transfersFrom +
-    transfersTo +
-    expensePayments +
-    paymentMethods +
-    settlements +
-    recurring +
-    savings
-  );
+  return Boolean(transaction || transfer);
 };
 
+/** Rekening direferensikan data lain sehingga tidak boleh dihapus permanen. */
+export const isAccountReferenced = async (accountId: string) => {
+  if (await hasAccountActivity(accountId)) {
+    return true;
+  }
+
+  const where = { account_id: accountId };
+  const select = { id: true };
+
+  const references = await Promise.all([
+    prisma.payment_methods.findFirst({ where, select }),
+    prisma.expense_payments.findFirst({ where, select }),
+    prisma.settlements.findFirst({ where, select }),
+    prisma.recurring_transactions.findFirst({ where, select }),
+    prisma.savings_contributions.findFirst({ where, select }),
+  ]);
+
+  return references.some(Boolean);
+};
+
+/**
+ * Perubahan saldo tiap rekening dari transaksi `completed`, TANPA
+ * initial_balance. Arah transaksi transfer ditentukan dari tabel
+ * transfers: kaki `from_transaction_id` mengurangi saldo, kaki
+ * `to_transaction_id` menambah saldo. Adjustment memakai tanda nominalnya.
+ */
 export const getAccountBalances = async (
   userId: string,
   accountIds: string[],
   db: Prisma.TransactionClient = prisma,
-) => {
+): Promise<Map<string, Prisma.Decimal>> => {
+  const balances = new Map<string, Prisma.Decimal>(
+    accountIds.map((id) => [id, new Prisma.Decimal(0)]),
+  );
+
   if (accountIds.length === 0) {
-    return new Map<string, Prisma.Decimal>();
+    return balances;
   }
 
-  const transactions = await db.transactions.findMany({
-    where: {
-      user_id: userId,
-      account_id: { in: accountIds },
-      status: 'completed',
-    },
-    select: {
-      account_id: true,
-      type: true,
-      amount: true,
-      transfers_transfers_from_transaction_idTotransactions: {
-        select: {
-          id: true,
-          from_account_id: true,
-          to_account_id: true,
-        },
-      },
-      transfers_transfers_to_transaction_idTotransactions: {
-        select: {
-          id: true,
-          from_account_id: true,
-          to_account_id: true,
-        },
-      },
-    },
-  });
+  const rows = await db.$queryRaw<
+    { account_id: string; delta: { toString(): string } | null }[]
+  >`
+    SELECT t.account_id,
+      SUM(
+        CASE
+          WHEN t.type = 'expense' THEN -t.amount
+          WHEN t.type <> 'transfer' THEN t.amount
+          WHEN EXISTS (
+            SELECT 1 FROM transfers tf WHERE tf.from_transaction_id = t.id
+          ) THEN -t.amount
+          WHEN EXISTS (
+            SELECT 1 FROM transfers tf WHERE tf.to_transaction_id = t.id
+          ) THEN t.amount
+          ELSE 0
+        END
+      ) AS delta
+    FROM transactions t
+    WHERE t.user_id = ${userId}
+      AND t.status = 'completed'
+      AND t.account_id IN (${Prisma.join(accountIds)})
+    GROUP BY t.account_id
+  `;
 
-  const balances = new Map<string, Prisma.Decimal>();
-
-  for (const accountId of accountIds) {
-    balances.set(accountId, new Prisma.Decimal(0));
-  }
-
-  for (const transaction of transactions) {
-    const currentBalance =
-      balances.get(transaction.account_id) ??
-      new Prisma.Decimal(0);
-
-    let adjustment = new Prisma.Decimal(0);
-
-    switch (transaction.type) {
-      case 'income':
-      case 'refund':
-        adjustment = transaction.amount;
-        break;
-
-      case 'expense':
-        adjustment = transaction.amount.negated();
-        break;
-
-      case 'adjustment':
-        adjustment = transaction.amount;
-        break;
-
-      case 'transfer':
-        /*
-         * Transfer memiliki dua transaksi:
-         * - from_transaction = uang keluar
-         * - to_transaction = uang masuk
-         *
-         * Arah ditentukan dengan mencocokkan akun transaksi terhadap
-         * akun asal/tujuan pada record transfer, bukan hanya dari
-         * kolom FK mana yang mereferensikannya.
-         */
-        if (
-          transaction
-            .transfers_transfers_from_transaction_idTotransactions
-            .some(
-              (transfer) =>
-                transfer.from_account_id ===
-                transaction.account_id,
-            )
-        ) {
-          adjustment = transaction.amount.negated();
-        } else if (
-          transaction
-            .transfers_transfers_to_transaction_idTotransactions
-            .some(
-              (transfer) =>
-                transfer.to_account_id ===
-                transaction.account_id,
-            )
-        ) {
-          adjustment = transaction.amount;
-        }
-        break;
-    }
-
+  for (const row of rows) {
     balances.set(
-      transaction.account_id,
-      currentBalance.add(adjustment),
+      row.account_id,
+      new Prisma.Decimal(row.delta?.toString() ?? '0'),
     );
   }
 

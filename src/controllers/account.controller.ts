@@ -1,237 +1,89 @@
 import type { Request, Response } from 'express';
 
+import { toAccountDTO } from '../dtos/account.dto.js';
 import {
-  create,
-  getAll,
-  getById,
-  remove,
-  update,
+  createAccount,
+  deleteAccount,
+  getAccount,
+  listAccounts,
+  updateAccount,
 } from '../services/account.service.js';
-
-import { getAuthenticatedUserId } from '../utils/auth.js';
-import {
-  buildPaginationMeta,
-  parsePagination,
-} from '../utils/pagination.js';
+import { getAuthenticatedUserId, getParam } from '../utils/auth.js';
 import {
   parseBooleanFilter,
   parseEnumFilter,
   parseSearchQuery,
 } from '../utils/filters.js';
-import { toAccountDTO } from '../dtos/account.dto.js';
-import { fail, success } from '../utils/response.js';
-import { logger } from '../config/logger.js';
+import { buildPaginationMeta, parsePagination } from '../utils/pagination.js';
+import { success } from '../utils/response.js';
+import { ACCOUNT_TYPES } from '../validators/account.validator.js';
 
-const ACCOUNTS_TYPES = [
-  'cash',
-  'bank',
-  'e_wallet',
-  'credit_card',
-  'investment',
-  'other',
-] as const;
+export const listAccountsController = async (req: Request, res: Response) => {
+  const pagination = parsePagination(req.query);
+
+  const result = await listAccounts(getAuthenticatedUserId(req), pagination, {
+    search: parseSearchQuery(req.query),
+    type: parseEnumFilter(req.query, 'type', ACCOUNT_TYPES),
+    isActive: parseBooleanFilter(req.query, 'is_active'),
+  });
+
+  return success(res, 200, 'Daftar rekening berhasil diambil', {
+    data: result.data.map(toAccountDTO),
+    pagination: buildPaginationMeta(pagination, result.total),
+  });
+};
+
+export const getAccountController = async (req: Request, res: Response) => {
+  const account = await getAccount(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+  );
+
+  return success(res, 200, 'Rekening berhasil diambil', {
+    data: toAccountDTO(account),
+  });
+};
 
 export const createAccountController = async (
   req: Request,
   res: Response,
 ) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
+  const account = await createAccount(getAuthenticatedUserId(req), req.body);
 
-    await create(
-      userId,
-      req.body,
-    );
-
-    return success(
-      res,
-      201,
-      'Account berhasil dibuat',
-    );
-  } catch (error) {
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal membuat account',
-    );
-  }
-};
-
-export const getAccountsController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-
-    const { page, perPage } = parsePagination(
-      req.query,
-    );
-
-    const result = await getAll(userId, page, perPage, {
-      search: parseSearchQuery(req.query),
-      type: parseEnumFilter(
-        req.query,
-        'type',
-        ACCOUNTS_TYPES,
-      ),
-      isActive: parseBooleanFilter(
-        req.query,
-        'is_active',
-      ),
-    });
-
-    return success(
-      res,
-      200,
-      'Data account berhasil diambil',
-      {
-        data: result.data.map(toAccountDTO),
-        pagination: buildPaginationMeta(
-          { page, perPage },
-          result.total,
-        ),
-      },
-    );
-  } catch (error) {
-    if (error instanceof TypeError) {
-      return fail(
-        res,
-        422,
-        'Parameter filter tidak valid',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal mengambil account',
-    );
-  }
-};
-
-export const getAccountController = async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const accountId = req.params.id as string;
-
-    const account = await getById(
-      userId,
-      accountId,
-    );
-
-    return success(
-      res,
-      200,
-      'Data account berhasil diambil',
-      { data: toAccountDTO(account) },
-    );
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'ACCOUNT_NOT_FOUND'
-    ) {
-      return fail(
-        res,
-        404,
-        'Account tidak ditemukan',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal mengambil account',
-    );
-  }
+  return success(res, 201, 'Rekening berhasil dibuat', {
+    data: toAccountDTO(account),
+  });
 };
 
 export const updateAccountController = async (
   req: Request,
   res: Response,
 ) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const accountId = req.params.id as string;
+  const account = await updateAccount(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+    req.body,
+  );
 
-    await update(
-      userId,
-      accountId,
-      req.body,
-    );
-
-    return success(
-      res,
-      200,
-      'Account berhasil diperbarui',
-    );
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'ACCOUNT_NOT_FOUND'
-    ) {
-      return fail(
-        res,
-        404,
-        'Account tidak ditemukan',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal memperbarui account',
-    );
-  }
+  return success(res, 200, 'Rekening berhasil diperbarui', {
+    data: toAccountDTO(account),
+  });
 };
 
 export const deleteAccountController = async (
   req: Request,
   res: Response,
 ) => {
-  try {
-    const userId = getAuthenticatedUserId(req);
-    const accountId = req.params.id as string;
+  const { archived } = await deleteAccount(
+    getAuthenticatedUserId(req),
+    getParam(req, 'id'),
+  );
 
-    await remove(
-      userId,
-      accountId,
-    );
-
-    return success(
-      res,
-      200,
-      'Account berhasil dinonaktifkan',
-    );
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'ACCOUNT_NOT_FOUND'
-    ) {
-      return fail(
-        res,
-        404,
-        'Account tidak ditemukan',
-      );
-    }
-
-    logger.error(error);
-
-    return fail(
-      res,
-      500,
-      'Gagal menghapus account',
-    );
-  }
+  return success(
+    res,
+    200,
+    archived
+      ? 'Rekening sudah memiliki riwayat, jadi dinonaktifkan dan tidak dihitung di total saldo'
+      : 'Rekening berhasil dihapus',
+  );
 };

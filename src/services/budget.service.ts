@@ -1,351 +1,231 @@
+import { toBudgetDTO } from '../dtos/budget.dto.js';
 import {
+  type DecimalLike,
+  toDateOnly,
+  toNumber,
+} from '../dtos/common.dto.js';
+import { Prisma } from '../generated/prisma/client.js';
+import {
+  type BudgetDetailRecord,
+  type BudgetPeriod,
   createBudget,
   deleteBudget,
-  findBudgetByIdAndUser,
-  findBudgetsByUser,
-  findCategoriesByIdsForUser,
-  sumExpenseByCategory,
+  findActiveBudgetsOn,
+  findBudgetById,
+  findBudgets,
+  findUserProfileSettings,
+  sumSpending,
+  sumSpendingByCategory,
+  sumSpendingByDate,
   updateBudget,
 } from '../repositories/budget.repository.js';
-
-import type { BudgetFilters } from '../repositories/budget.repository.js';
-
+import { notFound, unprocessable } from '../utils/app-error.js';
+import type { PaginationParams } from '../utils/pagination.js';
 import type {
   CreateBudgetInput,
   UpdateBudgetInput,
 } from '../validators/budget.validator.js';
+import { requireUsableCategory } from './ownership.service.js';
+import { todayInTimeZone } from '../utils/date.js';
 
-import { Prisma } from '../generated/prisma/client.js';
+const parseDate = (value: string) => new Date(`${value}T00:00:00.000Z`);
 
-type BudgetWithCategories = NonNullable<
-  Awaited<ReturnType<typeof findBudgetByIdAndUser>>
->;
+/** Samakan Date apa pun ke tengah malam UTC seperti kolom DATE. */
+const toDateValue = (date: Date) => parseDate(toDateOnly(date));
 
-const ALLOCATION_EPSILON = 0.005;
+const toCents = (value: DecimalLike) => Math.round(toNumber(value) * 100);
 
-const toDate = (value: string): Date =>
-  new Date(`${value}T00:00:00.000Z`);
+const requireBudget = async (userId: string, budgetId: string) => {
+  const budget = await findBudgetById(budgetId, userId);
 
-const assertDateRange = (
-  startDate: Date,
-  endDate: Date,
-) => {
-  if (startDate.getTime() > endDate.getTime()) {
-    throw new Error('INVALID_DATE_RANGE');
+  if (!budget) {
+    throw notFound('BUDGET_NOT_FOUND', 'Anggaran tidak ditemukan');
   }
+
+  return budget;
 };
 
-const assertCategories = async (
+const assertExpenseCategories = async (
   userId: string,
-  categories: { category_id: string }[],
+  allocations: { category_id: string }[],
 ) => {
-  if (categories.length === 0) {
-    return;
-  }
-
-  const ids = [
-    ...new Set(
-      categories.map(
-        (category) => category.category_id,
-      ),
+  const categories = await Promise.all(
+    allocations.map((allocation) =>
+      requireUsableCategory(allocation.category_id, userId),
     ),
-  ];
-
-  const found = await findCategoriesByIdsForUser(
-    userId,
-    ids,
   );
 
-  if (found.length !== ids.length) {
-    throw new Error('CATEGORY_NOT_FOUND');
-  }
-
-  // Budget hanya untuk kategori pengeluaran.
-  if (found.some((category) => category.type !== 'expense')) {
-    throw new Error('INVALID_CATEGORY_TYPE');
+  if (categories.some((category) => category.type !== 'expense')) {
+    throw unprocessable(
+      'INVALID_CATEGORY_TYPE',
+      'Anggaran hanya bisa memakai kategori pengeluaran',
+    );
   }
 };
 
 const assertAllocationWithinAmount = (
-  categories: { amount: number }[],
-  amount: number,
+  allocations: { amount: DecimalLike }[],
+  amount: DecimalLike,
 ) => {
-  const total = categories.reduce(
-    (sum, category) => sum + category.amount,
+  const allocated = allocations.reduce(
+    (sum, allocation) => sum + toCents(allocation.amount),
     0,
   );
 
-  if (total - amount > ALLOCATION_EPSILON) {
-    throw new Error('ALLOCATION_EXCEEDS_BUDGET');
-  }
-};
-
-const getSpentByCategory = async (
-  userId: string,
-  budget: {
-    start_date: Date;
-    end_date: Date;
-    budget_categories: { category_id: string }[];
-  },
-) => {
-  const categoryIds = budget.budget_categories.map(
-    (budgetCategory) => budgetCategory.category_id,
-  );
-
-  const rows = await sumExpenseByCategory({
-    userId,
-    categoryIds,
-    from: budget.start_date,
-    to: budget.end_date,
-  });
-
-  const spentByCategory = new Map<
-    string,
-    Prisma.Decimal
-  >();
-
-  for (const row of rows) {
-    if (!row.category_id) {
-      continue;
-    }
-
-    spentByCategory.set(
-      row.category_id,
-      row._sum.amount ?? new Prisma.Decimal(0),
+  if (allocated > toCents(amount)) {
+    throw unprocessable(
+      'ALLOCATION_EXCEEDS_BUDGET',
+      'Total alokasi kategori melebihi total anggaran',
     );
   }
-
-  return spentByCategory;
 };
 
-const getSpentForBudgets = async (
+/** Hitung `spent` banyak anggaran sekaligus dengan satu query. */
+const withSpent = async <
+  T extends { start_date: Date; end_date: Date },
+>(
   userId: string,
-  budgets: {
-    id: string;
-    start_date: Date;
-    end_date: Date;
-    budget_categories: { category_id: string }[];
-  }[],
+  budgets: T[],
 ) => {
-  const spentMap = new Map<
-    string,
-    Map<string, Prisma.Decimal>
-  >();
+  if (budgets.length === 0) {
+    return [];
+  }
 
-  await Promise.all(
-    budgets.map(async (budget) => {
-      const spent = await getSpentByCategory(
-        userId,
-        budget,
-      );
-      spentMap.set(budget.id, spent);
-    }),
+  const from = new Date(
+    Math.min(...budgets.map((budget) => budget.start_date.getTime())),
   );
+  const to = new Date(
+    Math.max(...budgets.map((budget) => budget.end_date.getTime())),
+  );
+  const daily = await sumSpendingByDate(userId, from, to);
 
-  return spentMap;
+  return budgets.map((budget) => ({
+    budget,
+    spent: daily.reduce(
+      (sum, row) =>
+        row.date >= budget.start_date && row.date <= budget.end_date
+          ? sum.add(row.amount)
+          : sum,
+      new Prisma.Decimal(0),
+    ),
+  }));
 };
 
-export const create = async (
+const withDetailSpent = async (
   userId: string,
-  input: CreateBudgetInput,
+  budget: BudgetDetailRecord,
 ) => {
-  const startDate = toDate(input.start_date);
-  const endDate = toDate(input.end_date);
+  const [spent, spentByCategory] = await Promise.all([
+    sumSpending(userId, budget.start_date, budget.end_date),
+    sumSpendingByCategory(
+      userId,
+      budget.budget_categories.map((allocation) => allocation.category_id),
+      budget.start_date,
+      budget.end_date,
+    ),
+  ]);
 
-  assertDateRange(startDate, endDate);
+  return { budget, spent, spentByCategory };
+};
 
+export const listBudgets = async (
+  userId: string,
+  pagination: PaginationParams,
+  filters: { search?: string; isActive?: boolean; period?: BudgetPeriod },
+) => {
+  const today = filters.period
+    ? todayInTimeZone((await findUserProfileSettings(userId))?.timezone)
+    : undefined;
+
+  const result = await findBudgets(userId, pagination, { ...filters, today });
+
+  return {
+    data: await withSpent(userId, result.data),
+    total: result.total,
+  };
+};
+
+export const getBudget = async (userId: string, budgetId: string) =>
+  withDetailSpent(userId, await requireBudget(userId, budgetId));
+
+/**
+ * Ringkasan anggaran aktif yang rentangnya mencakup `date` (dibaca
+ * sebagai tanggal UTC, mis. hasil `new Date('2026-10-01')`).
+ */
+export const getActiveBudgetsSummary = async (userId: string, date: Date) => {
+  const budgets = await findActiveBudgetsOn(userId, toDateValue(date));
+  const items = await withSpent(userId, budgets);
+
+  return items.map(({ budget, spent }) => toBudgetDTO(budget, spent));
+};
+
+export const addBudget = async (userId: string, input: CreateBudgetInput) => {
   const categories = input.categories ?? [];
 
-  await assertCategories(userId, categories);
-  assertAllocationWithinAmount(
-    categories,
-    input.amount,
-  );
+  await assertExpenseCategories(userId, categories);
+  assertAllocationWithinAmount(categories, input.amount);
 
-  return createBudget({
+  const budget = await createBudget({
     userId,
     name: input.name,
     amount: input.amount,
-    startDate,
-    endDate,
+    startDate: parseDate(input.start_date),
+    endDate: parseDate(input.end_date),
     isActive: input.is_active ?? true,
-    categories: categories.map((category) => ({
-      categoryId: category.category_id,
-      amount: category.amount,
-    })),
-  });
-};
-
-export const getAll = async (
-  userId: string,
-  page: number,
-  perPage: number,
-  filters: BudgetFilters = {},
-) => {
-  const result = await findBudgetsByUser({
-    userId,
-    page,
-    perPage,
-    filters,
+    categories,
   });
 
-  const spentMap = await getSpentForBudgets(
-    userId,
-    result.data,
-  );
-
-  return {
-    data: result.data,
-    total: result.total,
-    spentMap,
-  };
+  return withDetailSpent(userId, budget);
 };
 
-export const getById = async (
-  userId: string,
-  budgetId: string,
-) => {
-  const budget = await findBudgetByIdAndUser(
-    budgetId,
-    userId,
-  );
-
-  if (!budget) {
-    throw new Error('BUDGET_NOT_FOUND');
-  }
-
-  const spentByCategory = await getSpentByCategory(
-    userId,
-    budget,
-  );
-
-  return {
-    budget,
-    spentByCategory,
-  };
-};
-
-export const update = async (
+/** `categories` bila dikirim menggantikan seluruh alokasi lama. */
+export const editBudget = async (
   userId: string,
   budgetId: string,
   input: UpdateBudgetInput,
 ) => {
-  const budget = await findBudgetByIdAndUser(
-    budgetId,
-    userId,
+  const budget = await requireBudget(userId, budgetId);
+
+  const startDate = input.start_date
+    ? parseDate(input.start_date)
+    : budget.start_date;
+  const endDate = input.end_date ? parseDate(input.end_date) : budget.end_date;
+
+  if (endDate < startDate) {
+    throw unprocessable(
+      'INVALID_DATE_RANGE',
+      'Tanggal selesai tidak boleh sebelum tanggal mulai',
+    );
+  }
+
+  if (input.categories) {
+    await assertExpenseCategories(userId, input.categories);
+  }
+
+  assertAllocationWithinAmount(
+    input.categories ?? budget.budget_categories,
+    input.amount ?? budget.amount,
   );
 
-  if (!budget) {
-    throw new Error('BUDGET_NOT_FOUND');
-  }
-
-  const startDate =
-    input.start_date !== undefined
-      ? toDate(input.start_date)
-      : budget.start_date;
-
-  const endDate =
-    input.end_date !== undefined
-      ? toDate(input.end_date)
-      : budget.end_date;
-
-  assertDateRange(startDate, endDate);
-
-  const effectiveAmount =
-    input.amount ?? Number(budget.amount.toString());
-
-  if (input.categories !== undefined) {
-    await assertCategories(userId, input.categories);
-    assertAllocationWithinAmount(
-      input.categories,
-      effectiveAmount,
-    );
-  } else if (input.amount !== undefined) {
-    const existing = budget.budget_categories.map(
-      (budgetCategory) => ({
-        amount: Number(
-          budgetCategory.amount.toString(),
-        ),
-      }),
-    );
-
-    assertAllocationWithinAmount(
-      existing,
-      effectiveAmount,
-    );
-  }
-
-  const data: Prisma.budgetsUpdateInput = {};
-
-  if (input.name !== undefined) {
-    data.name = input.name;
-  }
-
-  if (input.amount !== undefined) {
-    data.amount = input.amount;
-  }
-
-  if (input.start_date !== undefined) {
-    data.start_date = startDate;
-  }
-
-  if (input.end_date !== undefined) {
-    data.end_date = endDate;
-  }
-
-  if (input.is_active !== undefined) {
-    data.is_active = input.is_active;
-  }
-
-  if (input.categories !== undefined) {
-    data.budget_categories = {
+  const updated = await updateBudget(budgetId, {
+    name: input.name,
+    amount: input.amount,
+    start_date: input.start_date ? startDate : undefined,
+    end_date: input.end_date ? endDate : undefined,
+    is_active: input.is_active,
+    budget_categories: input.categories && {
       deleteMany: {},
-      create: input.categories.map(
-        (category) => ({
-          category_id: category.category_id,
-          amount: category.amount,
-        }),
-      ),
-    };
-  }
+      create: input.categories,
+    },
+  });
 
-  const updated = await updateBudget(
-    budgetId,
-    data,
-  );
-
-  const spentByCategory = await getSpentByCategory(
-    userId,
-    updated,
-  );
-
-  return {
-    budget: updated,
-    spentByCategory,
-  };
+  return withDetailSpent(userId, updated);
 };
 
-export const remove = async (
-  userId: string,
-  budgetId: string,
-) => {
-  const budget = await findBudgetByIdAndUser(
-    budgetId,
-    userId,
-  );
-
-  if (!budget) {
-    throw new Error('BUDGET_NOT_FOUND');
-  }
-
-  const result = await deleteBudget(
-    budgetId,
-    userId,
-  );
+export const removeBudget = async (userId: string, budgetId: string) => {
+  const result = await deleteBudget(budgetId, userId);
 
   if (result.count === 0) {
-    throw new Error('BUDGET_NOT_FOUND');
+    throw notFound('BUDGET_NOT_FOUND', 'Anggaran tidak ditemukan');
   }
-
-  return true;
 };

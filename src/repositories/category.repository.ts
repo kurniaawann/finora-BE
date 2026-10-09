@@ -2,233 +2,109 @@ import { prisma } from '../config/database.js';
 import type { Prisma } from '../generated/prisma/client.js';
 import type { categories_type } from '../generated/prisma/enums.js';
 
-export const createCategory = async (data: {
-  userId: string;
-  name: string;
-  type: categories_type;
-  parentId: string | null;
-  icon: string | null;
-  color: string | null;
-}) => {
-  return prisma.categories.create({
-    data: {
-      user_id: data.userId,
-      name: data.name,
-      type: data.type,
-      parent_id: data.parentId,
-      icon: data.icon,
-      color: data.color,
-    },
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-        },
-      },
-    },
-  });
-};
+export interface CategoryFilters {
+  type?: categories_type;
+  /** `null` = hanya kategori level atas. */
+  parentId?: string | null;
+  search?: string;
+}
 
-export const findCategoriesByUser = async (params: {
+const categoryInclude = {
+  categories: { select: { id: true, name: true } },
+} satisfies Prisma.categoriesInclude;
+
+/** Kategori yang boleh dipakai user: milik sendiri atau bawaan sistem. */
+const usableBy = (userId: string): Prisma.categoriesWhereInput => ({
+  OR: [{ user_id: userId }, { is_system: true }],
+});
+
+export const findCategories = async (params: {
   userId: string;
   page: number;
   perPage: number;
-  type?: categories_type;
-  parentId?: string | null;
-  search?: string;
+  filters: CategoryFilters;
 }) => {
-  const skip = (params.page - 1) * params.perPage;
-
-  const conditions: Prisma.categoriesWhereInput[] = [
-    {
-      OR: [
-        { user_id: params.userId },
-        { is_system: true },
-      ],
-    },
-  ];
-
-  if (params.type) {
-    conditions.push({ type: params.type });
-  }
-
-  if (params.parentId !== undefined) {
-    conditions.push({ parent_id: params.parentId });
-  }
-
-  if (params.search) {
-    conditions.push({
-      name: {
-        contains: params.search,
-      },
-    });
-  }
+  const { type, parentId, search } = params.filters;
 
   const where: Prisma.categoriesWhereInput = {
-    AND: conditions,
-  };
-
-  const include = {
-    categories: {
-      select: {
-        id: true,
-        name: true,
-        type: true,
-      },
-    },
+    AND: [
+      usableBy(params.userId),
+      ...(type ? [{ type }] : []),
+      ...(parentId !== undefined ? [{ parent_id: parentId }] : []),
+      ...(search ? [{ name: { contains: search } }] : []),
+    ],
   };
 
   const [data, total] = await prisma.$transaction([
     prisma.categories.findMany({
       where,
-      orderBy: [
-        {
-          is_system: 'asc',
-        },
-        {
-          name: 'asc',
-        },
-      ],
-      skip,
+      include: categoryInclude,
+      orderBy: [{ is_system: 'asc' }, { name: 'asc' }],
+      skip: (params.page - 1) * params.perPage,
       take: params.perPage,
-      include,
     }),
-
-    prisma.categories.count({
-      where,
-    }),
+    prisma.categories.count({ where }),
   ]);
 
-  return {
+  return { data, total };
+};
+
+export const findUsableCategory = (categoryId: string, userId: string) =>
+  prisma.categories.findFirst({
+    where: { id: categoryId, ...usableBy(userId) },
+    include: categoryInclude,
+  });
+
+/** Cari kategori bernama sama (tidak peka huruf) di tingkat yang sama. */
+export const findCategoryByName = (params: {
+  userId: string;
+  name: string;
+  type: categories_type;
+  parentId: string | null;
+}) =>
+  prisma.categories.findFirst({
+    where: {
+      ...usableBy(params.userId),
+      name: params.name,
+      type: params.type,
+      parent_id: params.parentId,
+    },
+    select: { id: true },
+  });
+
+export const createCategory = (data: Prisma.categoriesUncheckedCreateInput) =>
+  prisma.categories.create({ data, include: categoryInclude });
+
+export const updateCategory = (
+  categoryId: string,
+  data: Prisma.categoriesUncheckedUpdateInput,
+) =>
+  prisma.categories.update({
+    where: { id: categoryId },
     data,
-    total,
-    page: params.page,
-    perPage: params.perPage,
-  };
-};
-
-export const findCategoryByIdAndUser = async (
-  categoryId: string,
-  userId: string,
-) => {
-  return prisma.categories.findFirst({
-    where: {
-      id: categoryId,
-      OR: [
-        { user_id: userId },
-        { is_system: true },
-      ],
-    },
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-        },
-      },
-    },
+    include: categoryInclude,
   });
-};
 
-export const findOwnCategoryById = async (
-  categoryId: string,
-  userId: string,
-) => {
-  return prisma.categories.findFirst({
-    where: {
-      id: categoryId,
-      user_id: userId,
-      is_system: false,
-    },
-    include: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          type: true,
-        },
-      },
-    },
-  });
-};
+export const deleteCategory = (categoryId: string) =>
+  prisma.categories.delete({ where: { id: categoryId } });
 
-export const findUserCategoryByName = async (
-  userId: string,
-  name: string,
-  type: categories_type,
-  parentId: string | null,
-) => {
-  return prisma.categories.findFirst({
-    where: {
-      user_id: userId,
-      name,
-      type,
-      parent_id: parentId,
-    },
-  });
-};
+export const hasChildCategories = async (categoryId: string) =>
+  Boolean(
+    await prisma.categories.findFirst({
+      where: { parent_id: categoryId },
+      select: { id: true },
+    }),
+  );
 
-export const updateCategory = async (
-  categoryId: string,
-  userId: string,
-  data: {
-    name?: string;
-    parent_id?: string | null;
-    icon?: string | null;
-    color?: string | null;
-  },
-) => {
-  return prisma.categories.updateMany({
-    where: {
-      id: categoryId,
-      user_id: userId,
-      is_system: false,
-    },
-    data,
-  });
-};
+export const isCategoryInUse = async (categoryId: string) => {
+  const where = { category_id: categoryId };
+  const select = { id: true };
 
-export const deleteCategory = async (
-  categoryId: string,
-  userId: string,
-) => {
-  return prisma.categories.deleteMany({
-    where: {
-      id: categoryId,
-      user_id: userId,
-      is_system: false,
-    },
-  });
-};
+  const references = await Promise.all([
+    prisma.transactions.findFirst({ where, select }),
+    prisma.budget_categories.findFirst({ where, select }),
+    prisma.recurring_transactions.findFirst({ where, select }),
+  ]);
 
-export const countChildCategories = async (
-  categoryId: string,
-) => {
-  return prisma.categories.count({
-    where: {
-      parent_id: categoryId,
-    },
-  });
-};
-
-export const countCategoryReferences = async (
-  categoryId: string,
-) => {
-  const [transactions, budgets, recurring] =
-    await prisma.$transaction([
-      prisma.transactions.count({
-        where: { category_id: categoryId },
-      }),
-      prisma.budget_categories.count({
-        where: { category_id: categoryId },
-      }),
-      prisma.recurring_transactions.count({
-        where: { category_id: categoryId },
-      }),
-    ]);
-
-  return transactions + budgets + recurring;
+  return references.some(Boolean);
 };

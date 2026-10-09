@@ -17,8 +17,9 @@ model User {
   created_at                                  DateTime                 @default(now()) @db.DateTime(0)
   updated_at                                  DateTime                 @updatedAt @db.DateTime(0)
   accounts                                    accounts[]
-  audit_logs                                  audit_logs[]
   budgets                                     budgets[]
+  device_tokens                               device_tokens[]
+  verification_codes                          verification_codes[]
   categories                                  categories[]
   event_members                               event_members[]
   events                                      events[]
@@ -80,6 +81,35 @@ model RefreshToken {
   @@index([user_id], map: "idx_refresh_tokens_user_id")
   @@index([replaced_by_token_id], map: "fk_refresh_tokens_replaced_by")
   @@map("refresh_tokens")
+}
+
+/// Token FCM perangkat untuk push notification. Satu token hanya milik
+/// satu user (perangkat yang ganti akun dipindahkan ke user terbaru).
+model device_tokens {
+  id           String          @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  user_id      String          @db.VarChar(36)
+  token        String          @unique(map: "uk_device_tokens_token") @db.VarChar(512)
+  platform     device_platform
+  last_used_at DateTime        @default(now()) @db.DateTime(0)
+  created_at   DateTime        @default(now()) @db.DateTime(0)
+  users        User            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_device_tokens_user")
+
+  @@index([user_id], map: "idx_device_tokens_user_id")
+}
+
+/// Kode OTP 6 digit (disimpan sebagai HMAC) untuk verifikasi email dan reset password.
+model verification_codes {
+  id         String               @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
+  user_id    String               @db.VarChar(36)
+  purpose    verification_purpose
+  code_hash  String               @db.VarChar(64)
+  attempts   Int                  @default(0)
+  expires_at DateTime             @db.DateTime(0)
+  used_at    DateTime?            @db.DateTime(0)
+  created_at DateTime             @default(now()) @db.DateTime(0)
+  users      User                 @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_verification_codes_user")
+
+  @@index([user_id, purpose], map: "idx_verification_codes_user_purpose")
 }
 
 model accounts {
@@ -212,6 +242,7 @@ model expense_items {
   name                 String                 @db.VarChar(255)
   quantity             Decimal                @default(1.0000) @db.Decimal(18, 4)
   unit_price           Decimal                @db.Decimal(18, 2)
+  /// Kolom STORED GENERATED di MySQL (quantity * unit_price): hanya dibaca, jangan ditulis.
   total_amount         Decimal?               @db.Decimal(18, 2)
   created_at           DateTime               @default(now()) @db.DateTime(0)
   expense_item_members expense_item_members[]
@@ -400,31 +431,13 @@ model settlements {
   groups                                groups             @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_settlements_group")
   payment_methods                       payment_methods?   @relation(fields: [payment_method_id], references: [id], onUpdate: NoAction, map: "fk_settlements_pm")
   users_settlements_to_user_idTousers   User               @relation("settlements_to_user_idTousers", fields: [to_user_id], references: [id], onUpdate: NoAction, map: "fk_settlements_to_user")
-  transactions                          transactions?
+  transactions                          transactions[]
 
   @@index([account_id], map: "fk_settlements_account")
   @@index([payment_method_id], map: "fk_settlements_pm")
   @@index([to_user_id], map: "fk_settlements_to_user")
   @@index([group_id], map: "idx_settlements_group_id")
   @@index([from_user_id, to_user_id], map: "idx_settlements_users")
-}
-
-model audit_logs {
-  id         String   @id @default(dbgenerated("(uuid())")) @db.VarChar(36)
-  user_id    String?  @db.VarChar(36)
-  action     String   @db.VarChar(255)
-  table_name String   @db.VarChar(255)
-  record_id  String?  @db.VarChar(36)
-  old_data   Json?
-  new_data   Json?
-  ip_address String?  @db.VarChar(45)
-  user_agent String?  @db.Text
-  created_at DateTime @default(now()) @db.DateTime(0)
-  users      User?    @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "fk_audit_logs_user")
-
-  @@index([created_at], map: "idx_audit_logs_created_at")
-  @@index([table_name, record_id], map: "idx_audit_logs_table_record")
-  @@index([user_id], map: "idx_audit_logs_user_id")
 }
 
 model budget_categories {
@@ -550,8 +563,10 @@ model transactions {
   description                                           String?             @db.Text
   merchant                                              String?             @db.VarChar(255)
   reference_number                                      String?             @db.VarChar(255)
+  /// Foto struk/nota transaksi pribadi (path relatif di folder upload).
+  receipt_url                                           String?             @db.Text
   expense_payment_id                                    String?             @unique(map: "expense_payment_id") @db.VarChar(36)
-  settlement_id                                         String?             @unique(map: "settlement_id") @db.VarChar(36)
+  settlement_id                                         String?             @db.VarChar(36)
   savings_contribution_id                               String?             @unique(map: "savings_contribution_id") @db.VarChar(36)
   created_at                                            DateTime            @default(now()) @db.DateTime(0)
   updated_at                                            DateTime            @updatedAt @db.DateTime(0)
@@ -566,6 +581,7 @@ model transactions {
 
   @@index([account_id], map: "fk_transactions_account")
   @@index([category_id], map: "fk_transactions_category")
+  @@index([settlement_id], map: "idx_transactions_settlement_id")
   @@index([user_id, transaction_date], map: "idx_transactions_user_date")
 }
 
@@ -577,6 +593,8 @@ model transfers {
   amount                                                   Decimal       @db.Decimal(18, 2)
   transfer_date                                            DateTime      @default(dbgenerated("(curdate())")) @db.Date
   note                                                     String?       @db.Text
+  /// Foto bukti transfer antar rekening (path relatif di folder upload).
+  proof_url                                                String?       @db.Text
   from_transaction_id                                      String?       @db.VarChar(36)
   to_transaction_id                                        String?       @db.VarChar(36)
   created_at                                               DateTime      @default(now()) @db.DateTime(0)
@@ -591,6 +609,17 @@ model transfers {
   @@index([to_account_id], map: "fk_transfers_to_acc")
   @@index([to_transaction_id], map: "fk_transfers_to_tx")
   @@index([user_id, transfer_date], map: "idx_transfers_date")
+}
+
+enum device_platform {
+  android
+  ios
+  web
+}
+
+enum verification_purpose {
+  email_verification
+  password_reset
 }
 
 enum accounts_type {
